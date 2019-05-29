@@ -1,7 +1,37 @@
-version: 1.0.0-{build}
-configuration: Release
-cache: 
-    - packages -> **\packages.config
-before_build: nuget restore
-build: 
-    publish_wap: true
+version: '1.0.{build}'
+image: Visual Studio 2017
+branches:
+    only:
+    - master
+init:
+    # Good practice, cause windows...
+    - cmd: git config --global core.autocrlf true
+install:
+    # I promise set this later, if we need it
+before_build:
+    #- cd src
+    # Display .net core version
+    - cmd: donet --version
+    # Display normal restore text
+    #- dotnet restore ./src/src.csproj
+    # Display minimal restore text
+    - cmd: dotnet restore ./src/src.csproj --verbosity m
+build_script:
+  # output will be in ./src/bin/debug/netcoreapp1.1/publish
+  - cmd: dotnet publish ./src/src.csproj
+after_build:
+  # For once the build has completed
+# artifacts:
+#  - path: '\src\bin\Debug\netcoreapp1.1\publish'
+#    name: WebSite
+#    type: WebDeployPackage
+# clone_depth: 1
+# test_script:
+#   # restore packages for our unit tests
+#   - cmd: dotnet restore ./tests/tests.csproj --verbosity m
+#   # run the unit tests (requires changing into the test directory)
+#   - cmd: cd tests
+#   - cmd: dotnet xunit
+on_finish :
+  # any cleanup in here
+deploy: off
