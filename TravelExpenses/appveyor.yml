@@ -3,16 +3,15 @@ version: 1.0.{build}
 image: Visual Studio 2019
 configuration: Release
 init:
-- cmd: git config --global core.autocrlf true
+    - cmd: git config --global core.autocrlf true
 before_build:
-- cmd: dotnet --version
-- cmd: dotnet restore ./src/src.csproj --verbosity m
-- cmd: nuget restore
+    - cmd: dotnet --version
+    - cmd: dotnet restore ./TravelExpenses/TravelExpenses.csproj --verbosity m
 build:
   verbosity: minimal
 test: off
 artifacts:
-- path: TravelExpenses/bin/Release/netcoreapp2.2/publish
+- path: ./TravelExpenses/bin/Release/netcoreapp2.2/publish
   name: TravelExpensesSites
   type: WebDeployPackage
 deploy: off
