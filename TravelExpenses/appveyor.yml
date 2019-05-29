@@ -5,7 +5,9 @@ configuration: Release
 init:
 - cmd: git config --global core.autocrlf true
 before_build:
-- cmd: donet --version
+- cmd: dotnet --version
+- cmd: dotnet restore ./src/src.csproj --verbosity m
+- cmd: nuget restore
 build:
   verbosity: minimal
 test: off
