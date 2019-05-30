@@ -1,12 +1,13 @@
-
 version: 1.0.{build}
 image: Visual Studio 2019
 configuration: Release
 init:
-    - cmd: git config --global core.autocrlf true
+- cmd: git config --global core.autocrlf true
 before_build:
-    - cmd: dotnet --version
-    - cmd: dotnet restore ./TravelExpenses/TravelExpenses.csproj --verbosity m
+- cmd: >-
+    dotnet --version
+
+    dotnet restore ./TravelExpenses/TravelExpenses.csproj --verbosity m
 build:
   verbosity: minimal
 test: off
