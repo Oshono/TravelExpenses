@@ -32,7 +32,13 @@ namespace TravelExpenses {
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app,IHostingEnvironment env) {
-			if(env.IsDevelopment()) {
+
+            DefaultFilesOptions DefaultFile = new DefaultFilesOptions();
+            DefaultFile.DefaultFileNames.Clear();
+            DefaultFile.DefaultFileNames.Add("login.cshtml");
+            app.UseDefaultFiles(DefaultFile);
+
+            if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 			} else {
 				app.UseExceptionHandler("/Error");

@@ -1,10 +1,45 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Main Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Solicitudes</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Tipo Solicitud</th>
+                            <th>Solicitante</th>
+                            <th>Cantidad Solicitada</th>
+                            <th>Cantidad Comprobada</th>
+                            <th>Estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F001</td>
+                            <td>Anticipo</td>
+                            <td>Luis Mario Diaz</td>
+                            <td class="text-danger"> $5000 <i class="mdi mdi-arrow-down"></i></td>
+                            <td class="text-danger"> 0 <i class="mdi mdi-arrow-down"></i></td>
+                            <td><label class="badge badge-danger">Pending</label></td>
+                        </tr>
+                        <tr>
+                            <td>F0012</td>
+                            <td>Anticipo</td>
+                            <td>Luis Mario Diaz</td>
+                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                            <td><label class="badge badge-success">Completed</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
