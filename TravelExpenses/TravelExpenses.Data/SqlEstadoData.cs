@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TravelExpenses.Core;
 using System.Linq;
+using TravelExpenses.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace TravelExpenses.Data
@@ -27,6 +28,8 @@ namespace TravelExpenses.Data
                         select r;
             return query;
         }
+
+
         public int Commit()
         {
             return db.SaveChanges();

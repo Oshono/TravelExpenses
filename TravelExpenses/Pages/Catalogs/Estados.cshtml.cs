@@ -12,18 +12,32 @@ namespace TravelExpenses.Pages.Catalogs
 {
     public class EstadosModel : PageModel
     {
-        private readonly IEstado estadoData;
+        //private readonly IEstado estadoData;
+        //public IEnumerable<Estado> Estados { get; set; }
+        //[BindProperty(SupportsGet = true)]
+        //public string SearchTerm { get; set; }
+
+        //public EstadosModel(IEstado estadoData)
+        //{
+        //    this.estadoData = estadoData;
+        //}
+        //public void OnGet()
+        //{
+        //    Estados = estadoData.GetEstados(SearchTerm);
+        //}
+
+        private readonly IUbicacion Ubicacion;
         public IEnumerable<Estado> Estados { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchTerm { get; set; }
 
-        public EstadosModel(IEstado estadoData)
+        public EstadosModel(IUbicacion ubicacionData)
         {
-            this.estadoData = estadoData;
+            this.Ubicacion = ubicacionData;
         }
         public void OnGet()
         {
-            Estados = estadoData.GetEstados(SearchTerm);
+            Estados = Ubicacion.ObtenerEstados();
         }
     }
 }

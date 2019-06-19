@@ -1,0 +1,8 @@
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\bin\Debug\netcoreapp2.2\TravelExpenses.Models.deps.json
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\bin\Debug\netcoreapp2.2\TravelExpenses.Models.dll
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\bin\Debug\netcoreapp2.2\TravelExpenses.Models.pdb
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\obj\Debug\netcoreapp2.2\TravelExpenses.Models.csproj.CoreCompileInputs.cache
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\obj\Debug\netcoreapp2.2\TravelExpenses.Models.AssemblyInfoInputs.cache
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\obj\Debug\netcoreapp2.2\TravelExpenses.Models.AssemblyInfo.cs
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\obj\Debug\netcoreapp2.2\TravelExpenses.Models.dll
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Models\obj\Debug\netcoreapp2.2\TravelExpenses.Models.pdb
