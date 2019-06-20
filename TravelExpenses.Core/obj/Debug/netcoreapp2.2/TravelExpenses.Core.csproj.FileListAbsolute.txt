@@ -6,3 +6,4 @@ C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Core\
 C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.AssemblyInfo.cs
 C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.dll
 C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.pdb
+C:\Users\jose.garcia\Documents\GitHub\Oshono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.csprojAssemblyReference.cache

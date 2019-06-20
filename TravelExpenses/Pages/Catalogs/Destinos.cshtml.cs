@@ -14,7 +14,11 @@ namespace TravelExpenses.Pages.Catalogs
     {
         private readonly IUbicacion Ubicacion;
         public IEnumerable<Ciudades> Ciudades { get; set; }
-        [BindProperty(SupportsGet = true)]
+        //[BindProperty(SupportsGet = true)]
+
+        [BindProperty]
+        public Ciudades Ciudad { get; set; }
+
         public string SearchTerm { get; set; }
         public CiudadesModel(IUbicacion ubicacionData)
         {

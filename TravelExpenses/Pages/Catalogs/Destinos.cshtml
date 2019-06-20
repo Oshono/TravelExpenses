@@ -1,0 +1,40 @@
+﻿@page
+@model TravelExpenses.Pages.Catalogs.CiudadesModel
+@{
+    ViewData["Title"] = "Destinos";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Destinos</h1>
+<form method="post">
+
+    <input type="hidden" asp-for="Ciudad.IdCiudad" />
+    <div class="form-group">
+        <label asp-for="Ciudad.Ciudad"></label>
+        <input asp-for="Ciudad.Ciudad" class="form-control" />
+        <span class="text-danger" asp-validation-for="Ciudad.Ciudad"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Ciudad.Estado"></label>
+        <select class="form-control" asp-for="Ciudad.Estado"
+               ></select>
+        <span class="text-danger" asp-validation-for="Ciudad.Estado"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+<table class="table">
+    <th>
+       <td>Estado</td>
+        <td>Clave Ciudad</td>
+        <td>Ciudad</td>
+    </th>
+    @foreach (var ciudad in Model.Ciudades)
+    {
+        <tr>
+            <td>@ciudad.Estado.NombreEstado</td>
+            <td>@ciudad.IdCiudad</td>
+            <td>@ciudad.Ciudad</td>
+        </tr>
+    }
+</table>
