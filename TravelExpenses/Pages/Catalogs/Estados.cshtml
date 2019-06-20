@@ -8,11 +8,14 @@
 <h1>Estados</h1>
 
 <table class="table">
+    <th>
+    <td>Clave Estado</td>
+    <td>Estado</td>
     @foreach (var estado in Model.Estados)
     {
         <tr>
             <td>@estado.IdEstado</td>
-            <td>@estado.NombreEstado</td>            
+            <td>@estado.NombreEstado</td>
         </tr>
     }
 </table>
