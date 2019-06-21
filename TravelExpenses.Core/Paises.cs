@@ -9,7 +9,6 @@ namespace TravelExpenses.Core
     {
         [Required, Key]
         public string ClavePais { get; set; }
-
         public string Nombre { get; set; }
     }
 }

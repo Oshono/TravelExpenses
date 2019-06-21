@@ -28,5 +28,6 @@ namespace TravelExpenses.Pages.Catalogs
         {
             Ciudades = Ubicacion.ObtenerCiudades(0);
         }
+        
     }
 }

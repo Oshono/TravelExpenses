@@ -23,6 +23,22 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
+        public List<Paises> ObtenerPaises()
+        {
+            var list = new List<Paises>();
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    var reader = Connection.Query<Paises>("Paises_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Nombre).AsList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public List<Estado> ObtenerEstados()
         {
             var list = new List<Estado>();
