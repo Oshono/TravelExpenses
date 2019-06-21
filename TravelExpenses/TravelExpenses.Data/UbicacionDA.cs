@@ -39,14 +39,16 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-        public List<Estado> ObtenerEstados()
+        public List<Estado> ObtenerEstados(string ClavePais)
         {
             var list = new List<Estado>();
             try
             {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@ClavePais", ClavePais, DbType.String, ParameterDirection.Input);
                 using (IDbConnection conn = Connection)
                 {
-                    var reader = Connection.Query<Estado>("Estado_Sel", null, commandType: CommandType.StoredProcedure);
+                    var reader = Connection.Query<Estado>("Estado_Sel", parameters, commandType: CommandType.StoredProcedure);
                     return reader.OrderBy(x => x.NombreEstado).AsList();
                 }
             }

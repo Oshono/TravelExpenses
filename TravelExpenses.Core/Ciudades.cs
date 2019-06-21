@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TravelExpenses.Core
@@ -11,6 +12,5 @@ namespace TravelExpenses.Core
         public string Ciudad { get; set; }
         public Estado Estado { get; set; }
         public bool Activo { get; set; }
-
     }
 }

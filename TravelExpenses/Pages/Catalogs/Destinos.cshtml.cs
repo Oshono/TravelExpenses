@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
+
 
 namespace TravelExpenses.Pages.Catalogs
 {
@@ -14,6 +15,8 @@ namespace TravelExpenses.Pages.Catalogs
     {
         private readonly IUbicacion Ubicacion;
         public IEnumerable<Ciudades> Ciudades { get; set; }
+        public IEnumerable<Estado> Estados { get; set; }
+        public IEnumerable<Paises> Paises { get; set; }
         //[BindProperty(SupportsGet = true)]
 
         [BindProperty]
@@ -27,7 +30,10 @@ namespace TravelExpenses.Pages.Catalogs
         public void OnGet()
         {
             Ciudades = Ubicacion.ObtenerCiudades(0);
+            Paises = Ubicacion.ObtenerPaises();
+            Estados = Ubicacion.ObtenerEstados("MEX");
         }
-        
+         
+
     }
 }
