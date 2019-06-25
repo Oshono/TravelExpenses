@@ -19,4 +19,9 @@
     <ProjectReference Include="..\TravelExpenses.Core\TravelExpenses.Core.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Pages\Solicitudes\" />
+  </ItemGroup>
+
 </Project>
