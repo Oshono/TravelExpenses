@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+
+    tr th {
+        color: #272525;
+        font-size: 15px !important;
+    }
+
+    table, td {
+        border: 2px double #D9D7D7;
+    }
+
+        table thead tr th {
+            border: 2px solid #D9D7D7;
+        }
+
+        table thead {
+            background-color: #F0EFEF;
+        }
+
+    #Solicitudes {
+        color: #272525;
+    }
+
+    #EnviarSolicitud {
+        margin-bottom: 5px;
+        margin-left: -4px;
+        color: #272525;
+        font-weight: 400;
+        font-size: 15px !important;
+        background-color: #F0EFEF;
+        border: 1px solid #DEDCDC;
+    }
+
+        #EnviarSolicitud:hover {
+            background-color: #BFBDBD;
+        }
+</style>
+
+
+
+<div class="text-center">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Tipo Solicitud</th>
+                    <th>Solicitante</th>
+                    <th>Cantidad Solicitada</th>
+                    <th>Cantidad Comprobada</th>
+                    <th>Estatus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>F001</td>
+                    <td>Anticipo</td>
+
+                    <td>Luis Mario Diaz</td>
+                    <td class="text-danger"> $5000 <i class="mdi mdi-arrow-down"></i></td>
+                    <td class="text-danger"> 0 <i class="mdi mdi-arrow-down"></i></td>
+                    <td><label class="badge badge-danger">Pending</label></td>
+                </tr>
+                <tr>
+                    <td>F0012</td>
+                    <td>Anticipo</td>
+                    <td>Luis Mario Diaz</td>
+                    <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                    <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                    <td><label class="badge badge-success">Completed</label></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
