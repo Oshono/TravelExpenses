@@ -1,0 +1,34 @@
+﻿@page
+@model TravelExpenses.Pages.Catalogs.EmpresasModel
+@{
+    ViewData["Title"] = "Empresas";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Empresas</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Empresa.RFC" class="control-label"></label>
+                <input asp-for="Empresa.RFC" class="form-control" />
+                <span asp-validation-for="Empresa.RFC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Empresa.Nombre" class="control-label"></label>
+                <input asp-for="Empresa.Nombre" class="form-control" />
+                <span asp-validation-for="Empresa.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Empresa.FechaAlta" class="control-label"></label>
+                <input asp-for="Empresa.FechaAlta" class="form-control" />
+                <span asp-validation-for="Empresa.FechaAlta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>

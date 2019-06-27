@@ -1,7 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@page
+@model TravelExpenses.Views.Home.IndexModel
+@{
+ 
 }
-
 <style>
 
     tr th {
@@ -39,41 +40,57 @@
             background-color: #BFBDBD;
         }
 </style>
-
-
-
 <div class="text-center">
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Folio</th>
-                    <th>Tipo Solicitud</th>
-                    <th>Solicitante</th>
-                    <th>Cantidad Solicitada</th>
-                    <th>Cantidad Comprobada</th>
-                    <th>Estatus</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>F001</td>
-                    <td>Anticipo</td>
+    <div class="card">
+        <div class="card-header" id="Solicitudes"><h3>Solicitudes</h3></div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row" id="seccionBtn">
+                    <div class="col-2"><a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes"><i class="mdi  mdi-pencil"></i>Agregar</a></div>
+                    <div class="col-2">
+                        <a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes">
+                            <i class="mdi  mdi-comment-text-outline
+"></i>Editar
+                        </a>
+                    </div>
+                    <div class="col-2"><a id="EnviarSolicitud" class="btn"><i class="mdi  mdi-close-circle-outline"></i>Eliminar</a></div>
+                    <div class="col-6"></div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Tipo Solicitud</th>
+                            <th>Solicitante</th>
+                            <th>Cantidad Solicitada</th>
+                            <th>Cantidad Comprobada</th>
+                            <th>Estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F001</td>
+                            <td>Anticipo</td>
 
-                    <td>Luis Mario Diaz</td>
-                    <td class="text-danger"> $5000 <i class="mdi mdi-arrow-down"></i></td>
-                    <td class="text-danger"> 0 <i class="mdi mdi-arrow-down"></i></td>
-                    <td><label class="badge badge-danger">Pending</label></td>
-                </tr>
-                <tr>
-                    <td>F0012</td>
-                    <td>Anticipo</td>
-                    <td>Luis Mario Diaz</td>
-                    <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
-                    <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
-                    <td><label class="badge badge-success">Completed</label></td>
-                </tr>
-            </tbody>
-        </table>
+                            <td>Luis Mario Diaz</td>
+                            <td class="text-danger"> $5000 <i class="mdi mdi-arrow-down"></i></td>
+                            <td class="text-danger"> 0 <i class="mdi mdi-arrow-down"></i></td>
+                            <td><label class="badge badge-danger">Pending</label></td>
+                        </tr>
+                        <tr>
+                            <td>F0012</td>
+                            <td>Anticipo</td>
+                            <td>Luis Mario Diaz</td>
+                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
+                            <td><label class="badge badge-success">Completed</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
 </div>

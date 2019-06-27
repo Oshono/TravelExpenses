@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace TravelExpenses.Pages.Requests
 {
-    public class SolicitudesModel1 : PageModel
+    public class SolicitudesModel : PageModel
     {
         public void OnGet()
         {
