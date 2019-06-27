@@ -12,6 +12,5 @@ namespace TravelExpenses.Data
         }
 
         public DbSet<Estado> Estados { get; set; }
-        public DbSet<Empresas> CatEmpresas { get; set; }
     }
 }
