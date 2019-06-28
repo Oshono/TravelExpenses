@@ -1,0 +1,64 @@
+﻿tr th {
+    color: #272525;
+    font-size: 15px !important;
+}
+
+table, td {
+    border: 2px double #D9D7D7;
+}
+
+    table thead tr th {
+        border: 2px solid #D9D7D7;
+    }
+
+    table thead {
+        background-color: #F0EFEF;
+    }
+
+#Button {
+    margin-bottom: 5px;
+    margin-left: -4px;
+    color: #272525;
+    font-weight: 400;
+    font-size: 15px !important;
+    background-color: #F0EFEF;
+    border: 1px solid #DEDCDC;
+    margin-left: 5px;
+}
+
+#btnCancelar {
+    margin-bottom: 5px;
+    margin-left: -4px;
+    color: #F0EDED;
+    font-weight: 400;
+    font-size: 15px !important;
+    background-color: #F89C9C;
+    border: 1px solid #F7F3F3;
+    margin-left: 5px;
+}
+
+#fechas {
+    margin-left: -58px;
+    height: 34px;
+    background-color: #F1EFEF;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #C9C9C9;
+}
+
+.form-control {
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 34px;
+    background-color: #F1EFEF;
+    border: 1px solid #C9C9C9;
+}
+
+#textarea {
+    padding-top: 10px;
+    margin-left: -58px;
+}
+
+#disabled {
+    cursor: not-allowed;
+}
