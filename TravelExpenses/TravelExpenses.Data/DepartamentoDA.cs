@@ -13,16 +13,13 @@ namespace TravelExpenses.Data
     {
         private readonly TravelExpensesContext db;
 
-        public DepartamentoDA(TravelExpensesContext db)
-        {
-            this.db = db;
-        }
-
         private readonly IConfiguration _configuration;
-        public DepartamentoDA(IConfiguration configuration)
+        public DepartamentoDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
+            this.db = db;
         }
+        
         public IDbConnection Connection
         {
             get

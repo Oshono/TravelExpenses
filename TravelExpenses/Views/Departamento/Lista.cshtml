@@ -1,28 +1,24 @@
-﻿ 
-@model TravelExpenses.ViewModels.EmpresaViewModel
+﻿@model TravelExpenses.ViewModels.DepartamentoViewModel
 @{
-    ViewData["Title"] = "Empresas";
+    ViewData["Title"] = "Departamentos";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Empresas</h1>
+<h1>Departamentos</h1>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Empresa" asp-action="AddEmpresas" class="btn btn-primary">Agregar Nueva Empresa</a>        
+        <a asp-controller="Departamento" asp-action="Add" class="btn btn-primary">Agregar Nuevo Departamento</a>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>
-                                RFC
+                                Clave Departamento
                             </th>
                             <th>
                                 Nombre
-                            </th>
-                            <th>
-                                Fecha Alta
                             </th>
                             <th>
                                 Editar
@@ -30,16 +26,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var empresa in Model.Empresas)
+                        @foreach (var depto in Model.Departamentos)
                         {
 
                             <tr>
-                                <td>@empresa.RFC</td>
-                                <td>@empresa.Nombre</td>
-                                <td>@empresa.FechaAlta</td>
+                                <td>@depto.IdDepto</td>
+                                <td>@depto.Nombre</td>
                                 <td>
-                                    <a class="btn btn-lg"
-                                       asp-route-rfc="@empresa.RFC">
+                                    <a class="btn btn-lg">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>

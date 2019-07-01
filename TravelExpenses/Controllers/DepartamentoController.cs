@@ -12,43 +12,44 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class EmpresaController : Controller
+    public class DepartamentoController : Controller
     {
-        private readonly IEmpresa _empresa;
+        private readonly IDepartamento _departamento;
         private readonly TravelExpensesContext _context;
 
-        public EmpresaController(IEmpresa empresa)
+        public DepartamentoController(IDepartamento departamento)
         {
-            _empresa = empresa;
+            _departamento = departamento;
         }
-        // GET: Empresa
+
+        // GET: Departamentos
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult ListaEmpresas()
+        public ActionResult Lista()
         {
-            var empresas = _empresa.ObtenerEmpresas();
-            var empresaModel = new EmpresaViewModel();
-            empresaModel.Empresas = empresas;
+            var departamentos = _departamento.ObtenerDepartamentos();
+            var departamentoModel = new DepartamentoViewModel();
+            departamentoModel.Departamentos = departamentos;
 
-            return View(empresaModel);
+            return View(departamentoModel);
         }
 
-        // GET: Empresa/Details/5
+        // GET: Departamentos/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Empresa/Create
-        public ActionResult AddEmpresas()
+        // GET: Departamentos/Create
+        public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Empresa/Create
+        // POST: Departamentos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -65,13 +66,13 @@ namespace TravelExpenses.Controllers
             }
         }
 
-        // GET: Empresa/Edit/5
+        // GET: Departamentos/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
-        
-        // POST: Empresa/Edit/5
+
+        // POST: Departamentos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -88,13 +89,13 @@ namespace TravelExpenses.Controllers
             }
         }
 
-        // GET: Empresa/Delete/5
+        // GET: Departamentos/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Empresa/Delete/5
+        // POST: Departamentos/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

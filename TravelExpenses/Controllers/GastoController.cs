@@ -4,51 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
-using TravelExpenses.Core;
-using TravelExpenses.Data;
-using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class EmpresaController : Controller
+    public class GastoController : Controller
     {
-        private readonly IEmpresa _empresa;
-        private readonly TravelExpensesContext _context;
-
-        public EmpresaController(IEmpresa empresa)
-        {
-            _empresa = empresa;
-        }
-        // GET: Empresa
+        // GET: Gasto
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult ListaEmpresas()
-        {
-            var empresas = _empresa.ObtenerEmpresas();
-            var empresaModel = new EmpresaViewModel();
-            empresaModel.Empresas = empresas;
-
-            return View(empresaModel);
-        }
-
-        // GET: Empresa/Details/5
+        // GET: Gasto/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Empresa/Create
-        public ActionResult AddEmpresas()
+        // GET: Gasto/Create
+        public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Empresa/Create
+        // POST: Gasto/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -65,13 +44,13 @@ namespace TravelExpenses.Controllers
             }
         }
 
-        // GET: Empresa/Edit/5
+        // GET: Gasto/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
-        
-        // POST: Empresa/Edit/5
+
+        // POST: Gasto/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -88,13 +67,13 @@ namespace TravelExpenses.Controllers
             }
         }
 
-        // GET: Empresa/Delete/5
+        // GET: Gasto/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Empresa/Delete/5
+        // POST: Gasto/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
