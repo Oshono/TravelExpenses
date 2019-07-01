@@ -4,15 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
+using TravelExpenses.Core;
+using TravelExpenses.Data;
+using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
     public class EmpresaController : Controller
     {
+        private readonly IEmpresa _empresa;
+        private readonly TravelExpensesContext _context;
+
+        public EmpresaController(IEmpresa empresa)
+        {
+            _empresa = empresa;
+        }
         // GET: Empresa
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult ListaEmpresas()
+        {
+            var empresas = _empresa.ObtenerEmpresas();
+            var empresaModel = new EmpresaViewModel();
+            empresaModel.Empresas = empresas;
+
+            return View(empresaModel);
         }
 
         // GET: Empresa/Details/5
@@ -49,7 +70,7 @@ namespace TravelExpenses.Controllers
         {
             return View();
         }
-
+        
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
