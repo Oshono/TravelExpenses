@@ -8,13 +8,12 @@ using TravelExpenses.Data;
 
 namespace TravelExpenses.Pages.Catalogs
 {
-    public class EmpresasModel : PageModel
+    public class AddEmpresasModel : PageModel
     {
         private readonly IEmpresa empresa;
         private readonly TravelExpensesContext _context;
-        public IEnumerable<Empresas> Empresas { get; set; }
 
-        public EmpresasModel(TravelExpensesContext context, IEmpresa miempresa)
+        public AddEmpresasModel(TravelExpensesContext context, IEmpresa miempresa)
         {
             _context = context;
             this.empresa = miempresa;
@@ -22,9 +21,21 @@ namespace TravelExpenses.Pages.Catalogs
 
         [BindProperty]
         public Empresas Empresa { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            Empresas = empresa.ObtenerEmpresas();
+            //if (RFC !="")
+            //{
+            //    Empresa = empresa.ObtenerEmpresa(RFC);
+            //}
+            //else
+            //{
+            //    Empresa = new Empresas();
+            //}
+            //if (Empresa == null)
+            //{
+            //    return RedirectToPage("./NotFound");
+            //}
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()

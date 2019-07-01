@@ -38,6 +38,7 @@ namespace TravelExpenses
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TravelExDb"));
             });
+            services.AddScoped<IEmpresa, EmpresaDA>();
             services.AddScoped<IEstado, SqlEstadoData>();
             services.AddScoped<IUbicacion, UbicacionDA>();
             services.AddScoped<IDepartamento, DepartamentoDA>();
