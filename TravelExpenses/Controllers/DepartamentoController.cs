@@ -15,8 +15,7 @@ namespace TravelExpenses.Controllers
     public class DepartamentoController : Controller
     {
         private readonly IDepartamento _departamento;
-        private readonly TravelExpensesContext _context;
-
+        
         public DepartamentoController(IDepartamento departamento)
         {
             _departamento = departamento;
@@ -37,18 +36,7 @@ namespace TravelExpenses.Controllers
             return View(departamentoModel);
         }
 
-        // GET: Departamentos/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Departamentos/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
+         
         // POST: Departamentos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -67,49 +55,43 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Departamentos/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int idDepto)
         {
-            return View();
+            var deptoModel = new DepartamentoViewModel();
+            if (idDepto >0)
+            {
+                var depto = _departamento.ObtenerDepartamentos()
+                            .Where( x => x.IdDepto == idDepto)
+                            .FirstOrDefault();
+                deptoModel.Departamento = depto;
+            }
+            return View(deptoModel);
         }
 
-        // POST: Departamentos/Edit/5
+        // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(DepartamentoViewModel depto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (depto.Departamento.IdDepto < 1)
+            {
+                return NotFound();
+            }
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                _departamento.Guardar(depto.Departamento);
             }
             catch
             {
-                return View();
-            }
-        }
 
-        // GET: Departamentos/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Departamentos/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            return Redirect("/Departamento/Lista");
         }
+              
     }
 }

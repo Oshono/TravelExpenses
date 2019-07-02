@@ -9,5 +9,6 @@ namespace TravelExpenses.ViewModels
     public class DepartamentoViewModel
     {
         public IEnumerable<Departamentos> Departamentos { get; set; }
+        public Departamentos Departamento { get; set; }
     }
 }

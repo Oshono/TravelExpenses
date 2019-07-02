@@ -15,7 +15,6 @@ namespace TravelExpenses.Controllers
     public class EmpresaController : Controller
     {
         private readonly IEmpresa _empresa;
-        private readonly TravelExpensesContext _context;
 
         public EmpresaController(IEmpresa empresa)
         {
@@ -35,19 +34,7 @@ namespace TravelExpenses.Controllers
 
             return View(empresaModel);
         }
-
-        // GET: Empresa/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Empresa/Create
-        public ActionResult AddEmpresas()
-        {
-            return View();
-        }
-
+         
         // POST: Empresa/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,29 +87,6 @@ namespace TravelExpenses.Controllers
             }
 
             return Redirect("/Empresa/ListaEmpresas");
-        }
-
-        // GET: Empresa/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Empresa/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }      
     }
 }

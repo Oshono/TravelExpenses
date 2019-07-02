@@ -31,12 +31,38 @@ namespace TravelExpenses.Data
         {
             return db.CatDepartamentos;
         }
-        public Departamentos Add(Departamentos newDepartamento)
+        public int Guardar(Departamentos Depto)
         {
-            db.Add(newDepartamento);
-            return newDepartamento;
+            try
+            {
+                int result = 0;
+                if (Depto != null)
+                {
+                    if (Exists(Depto.IdDepto))
+                    {
+                        db.Update(Depto);
+                    }
+                    else
+                    {
+                        db.Add(Depto);
+                    }
+
+                    result = Commit();
+
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        private bool Exists(int IdDepto)
+        {
+            return db.CatDepartamentos.Any(e => e.IdDepto == IdDepto);
+        }
         public int Commit()
         {
             return db.SaveChanges();

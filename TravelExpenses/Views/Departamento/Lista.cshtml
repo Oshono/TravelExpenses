@@ -33,7 +33,7 @@
                                 <td>@depto.IdDepto</td>
                                 <td>@depto.Nombre</td>
                                 <td>
-                                    <a class="btn btn-lg">
+                                    <a class="btn btn-lg" asp-controller="Departamento" asp-action="Edit" asp-route-idDepto="@depto.IdDepto">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
