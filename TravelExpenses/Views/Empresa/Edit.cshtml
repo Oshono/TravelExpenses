@@ -1,5 +1,5 @@
 ﻿
-@model TravelExpenses.Pages.Catalogs.EmpresasModel
+@model TravelExpenses.ViewModels.EmpresaViewModel
 @{
     ViewData["Title"] = "Empresas";
     Layout = "/Pages/Shared/_Layout.cshtml";
@@ -26,6 +26,10 @@
                     <label class="control-label">Fecha Alta</label>
                     <input asp-for="Empresa.FechaAlta" class="form-control" />
                     <span asp-validation-for="Empresa.FechaAlta" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Activo <input asp-for="Empresa.Activo" class="form-check" type="checkbox" />
+                    <span asp-validation-for="Empresa.Activo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Guardar" class="btn btn-primary" />

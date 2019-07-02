@@ -83,16 +83,17 @@ namespace TravelExpenses.Data
                 int result = 0;
                 if (Empresa != null)
                 {
-                    var queryParameters = new DynamicParameters();
-                    queryParameters.Add("@RFC", Empresa.RFC);
-                    queryParameters.Add("@Nombre", Empresa.Nombre);
-                    queryParameters.Add("@FechaAlta", Empresa.FechaAlta);
-                    queryParameters.Add("@Activo", Empresa.Activo);
-
-                    using (IDbConnection conn = Connection)
+                    if (Exists(Empresa.RFC))
                     {
-                        result = Connection.ExecuteScalar<int>("Empresa_Save", queryParameters, commandType: CommandType.StoredProcedure);
+                        db.Update(Empresa);
                     }
+                    else
+                    {
+                        db.Add(Empresa);
+                    }
+                     
+                    result = Commit();
+                    
                 }
                 return result;
 
@@ -102,6 +103,11 @@ namespace TravelExpenses.Data
                 throw ex;
             }
 
+        }
+
+        private bool Exists(string RFC)
+        {
+            return db.CatEmpresas.Any(e => e.RFC == RFC);
         }
     }
 }

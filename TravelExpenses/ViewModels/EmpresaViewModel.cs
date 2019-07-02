@@ -9,5 +9,6 @@ namespace TravelExpenses.ViewModels
     public class EmpresaViewModel
     {
         public IEnumerable<Empresas> Empresas { get; set; }
+        public Empresas Empresa { get; set; }
     }
 }

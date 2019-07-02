@@ -65,27 +65,41 @@ namespace TravelExpenses.Controllers
             }
         }
 
-        // GET: Empresa/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Empresa/Edit/RFC
+        public ActionResult Edit(string RFC)
         {
-            return View();
+            var empresaModel = new EmpresaViewModel();
+            if (RFC != "")
+            { 
+                var empresa = _empresa.ObtenerEmpresa(RFC);                
+                empresaModel.Empresa = empresa;
+            }
+            return View(empresaModel);
         }
         
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public   ActionResult Edit(EmpresaViewModel miempresa)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (miempresa.Empresa.RFC == "")
+            {
+                return NotFound();
+            }
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                _empresa.Guardar(miempresa.Empresa);
             }
-            catch
+            catch  
             {
-                return View();
+               
             }
+
+            return Redirect("/Empresa/ListaEmpresas");
         }
 
         // GET: Empresa/Delete/5

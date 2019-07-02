@@ -38,8 +38,7 @@
                                 <td>@empresa.Nombre</td>
                                 <td>@empresa.FechaAlta</td>
                                 <td>
-                                    <a class="btn btn-lg"
-                                       asp-route-rfc="@empresa.RFC">
+                                    <a class="btn btn-lg" asp-controller="Empresa" asp-action="Edit" asp-route-RFC="@empresa.RFC">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
