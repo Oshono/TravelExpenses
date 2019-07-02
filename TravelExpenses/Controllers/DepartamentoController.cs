@@ -58,6 +58,7 @@ namespace TravelExpenses.Controllers
         public ActionResult Edit(int idDepto)
         {
             var deptoModel = new DepartamentoViewModel();
+            deptoModel.Departamento = new Departamentos();
             if (idDepto >0)
             {
                 var depto = _departamento.ObtenerDepartamentos()

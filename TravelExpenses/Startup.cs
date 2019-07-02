@@ -43,6 +43,7 @@ namespace TravelExpenses
             services.AddScoped<IUbicacion, UbicacionDA>();
             services.AddScoped<IDepartamento, DepartamentoDA>();
             services.AddScoped<ISolicitudes, SolicitudesDA>();
+            services.AddScoped<IGasto, GastoDA>();
 
             services.Configure<CookiePolicyOptions>(options => {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.                

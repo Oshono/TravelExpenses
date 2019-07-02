@@ -56,9 +56,10 @@ namespace TravelExpenses.Controllers
         public ActionResult Edit(string RFC)
         {
             var empresaModel = new EmpresaViewModel();
-            if (RFC != "")
-            { 
-                var empresa = _empresa.ObtenerEmpresa(RFC);                
+            empresaModel.Empresa = new Empresas();
+            if (!string.IsNullOrEmpty(RFC))
+            {
+                var empresa = _empresa.ObtenerEmpresa(RFC);
                 empresaModel.Empresa = empresa;
             }
             return View(empresaModel);

@@ -8,7 +8,7 @@ namespace TravelExpenses.Core
     public class Gastos
     {
         [Required, Key]
-        public int IdDepto { get; set; }
+        public int IdGasto { get; set; }
         public string Nombre { get; set; }
         public bool Activo { get; set; }
     }

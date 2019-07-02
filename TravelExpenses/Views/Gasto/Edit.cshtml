@@ -1,0 +1,32 @@
+﻿@model TravelExpenses.ViewModels.GastoViewModel
+
+
+
+<h1>@Model.Gasto.Nombre</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">                    
+                    <input asp-for=@Model.Gasto.IdGasto class="form-control" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción Empresa</label>
+                    <input asp-for=@Model.Gasto.Nombre class="form-control" />
+                    <span asp-validation-for=@Model.Gasto.Nombre class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Activo <input asp-for=@Model.Gasto.Activo class="form-check" type="checkbox" />
+                    <span asp-validation-for=@Model.Gasto.Activo class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+

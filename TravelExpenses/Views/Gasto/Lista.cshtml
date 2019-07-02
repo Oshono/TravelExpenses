@@ -1,28 +1,24 @@
-﻿ 
-@model TravelExpenses.ViewModels.EmpresaViewModel
+﻿@model TravelExpenses.ViewModels.GastoViewModel
 @{
-    ViewData["Title"] = "Empresas";
+    ViewData["Title"] = "Gastos";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Empresas</h1>
+<h1>Departamentos</h1>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Empresa" asp-action="Edit" class="btn btn-primary">Agregar Nueva Empresa</a>        
+        <a asp-controller="Gasto" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Gasto</a>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>
-                                RFC
+                                Clave Gasto
                             </th>
                             <th>
                                 Nombre
-                            </th>
-                            <th>
-                                Fecha Alta
                             </th>
                             <th>
                                 Editar
@@ -30,15 +26,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var empresa in Model.Empresas)
+                        @foreach (var gasto in Model.Gastos)
                         {
 
                             <tr>
-                                <td>@empresa.RFC</td>
-                                <td>@empresa.Nombre</td>
-                                <td>@empresa.FechaAlta</td>
+                                <td>@gasto.IdGasto</td>
+                                <td>@gasto.Nombre</td>
                                 <td>
-                                    <a class="btn btn-lg" asp-controller="Empresa" asp-action="Edit" asp-route-RFC="@empresa.RFC">
+                                    <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-idGasto="@gasto.IdGasto">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
