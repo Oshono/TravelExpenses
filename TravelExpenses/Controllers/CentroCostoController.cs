@@ -12,16 +12,16 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class GastoController : Controller
+    public class CentroCostoController : Controller
     {
-        private readonly IGasto _gasto;
+        private readonly ICentroCosto _centro;
 
-        public GastoController(IGasto gasto)
+        public CentroCostoController(ICentroCosto centro)
         {
-            _gasto = gasto;
+            _centro = centro;
         }
 
-        // GET: Gasto
+        // GET: Centro Costos
         public ActionResult Index()
         {
             return View();
@@ -29,11 +29,11 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var gastos = _gasto.ObtenerGastos();
-            var gastoModel = new GastoViewModel();
-            gastoModel.Gastos = gastos;
+            var centros = _centro.ObtenerCentroCostos("");
+            var centroModel = new CentroCostoViewModel();
+            centroModel.CentrosCostos = centros;
 
-            return View(gastoModel);
+            return View(centroModel);
         }
 
 
@@ -55,24 +55,24 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(int idGasto)
+        public ActionResult Edit(string ClaveCentroCosto, string RFC)
         {
-            var gastoModel = new GastoViewModel();
-            gastoModel.Gasto = new Gastos();
-            if (idGasto > 0)
+            var centroModel = new CentroCostoViewModel();
+            centroModel.CentroCosto = new CentroCosto();
+            if (!string.IsNullOrEmpty(ClaveCentroCosto))
             {
-                var gasto = _gasto.ObtenerGastos()
-                            .Where(x => x.IdGasto == idGasto)
+                var centro = _centro.ObtenerCentroCostos(RFC)
+                            .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
                             .FirstOrDefault();
-                gastoModel.Gasto = gasto;
+                centroModel.CentroCosto = centro;
             }
-            return View(gastoModel);
+            return View(centroModel);
         }
 
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(GastoViewModel gastomdl)
+        public ActionResult Edit(CentroCostoViewModel centroCostoModel)
         {
             if (!ModelState.IsValid)
             {
@@ -80,14 +80,14 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                _gasto.Guardar(gastomdl.Gasto);
+                _centro.Guardar(centroCostoModel.CentroCosto);
             }
             catch
             {
 
             }
 
-            return Redirect("/Gasto/Lista");
+            return Redirect("/CentroCosto/Lista");
         }
 
     }

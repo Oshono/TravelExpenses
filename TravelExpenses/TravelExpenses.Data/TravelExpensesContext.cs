@@ -15,5 +15,6 @@ namespace TravelExpenses.Data
         public DbSet<Empresas> CatEmpresas { get; set; }
         public DbSet<Departamentos> CatDepartamentos { get; set; }
         public DbSet<Gastos> CatGastos { get; set; }
+        public DbSet<CentroCosto> CatCentroCostos { get; set; }
     }
 }
