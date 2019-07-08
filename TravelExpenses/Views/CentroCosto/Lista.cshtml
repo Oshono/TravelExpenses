@@ -1,0 +1,56 @@
+﻿@model TravelExpenses.ViewModels.CentroCostoViewModel
+@{
+    ViewData["Title"] = "Centro de Costos";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Centro de Costos</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <a asp-controller="CentroCosto" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Centro de Costo</a>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                RFC Empresa
+                            </th>
+                            <th>
+                                Nombre Empresa
+                            </th>
+                            <th>
+                                Clave Centro de Costo
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Editar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var centro in Model.CentrosCostos)
+                        {
+
+                        <tr>
+                            <td>@centro.RFC</td>
+                            <td>Nombre</td>
+                            <td>@centro.ClaveCentroCosto</td>
+                            <td>@centro.Nombre</td>
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-clavecentrocosto="@centro.ClaveCentroCosto" asp-route-rfc="@centro.RFC">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

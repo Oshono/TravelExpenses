@@ -38,10 +38,13 @@ namespace TravelExpenses
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TravelExDb"));
             });
+            services.AddScoped<IEmpresa, EmpresaDA>();
             services.AddScoped<IEstado, SqlEstadoData>();
             services.AddScoped<IUbicacion, UbicacionDA>();
             services.AddScoped<IDepartamento, DepartamentoDA>();
             services.AddScoped<ISolicitudes, SolicitudesDA>();
+            services.AddScoped<IGasto, GastoDA>();
+            services.AddScoped<ICentroCosto, CentroCostoDA>();
 
             services.Configure<CookiePolicyOptions>(options => {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.                
@@ -51,6 +54,7 @@ namespace TravelExpenses
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("TravelExDb")));
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

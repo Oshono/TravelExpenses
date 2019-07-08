@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class DepartamentoDA : IDepartamento
+    public class CentroCostoDA : ICentroCosto
     {
         private readonly TravelExpensesContext db;
 
         private readonly IConfiguration _configuration;
-        public DepartamentoDA(TravelExpensesContext db, IConfiguration configuration)
+        public CentroCostoDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;
@@ -27,24 +27,24 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<Departamentos> ObtenerDepartamentos()
+        public IEnumerable<CentroCosto> ObtenerCentroCostos(string RFC)
         {
-            return db.CatDepartamentos;
+            return db.CatCentroCostos.Where(x=>x.RFC == RFC);
         }
-        public int Guardar(Departamentos Depto)
+        public int Guardar(CentroCosto centro)
         {
             try
             {
                 int result = 0;
-                if (Depto != null)
+                if (centro != null)
                 {
-                    if (Exists(Depto.IdDepto))
+                    if (Exists(centro.ClaveCentroCosto))
                     {
-                        db.Update(Depto);
+                        db.Update(centro);
                     }
                     else
                     {
-                        db.Add(Depto);
+                        db.Add(centro );
                     }
 
                     result = Commit();
@@ -59,9 +59,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(int IdDepto)
+        private bool Exists(string ClaveCentroCosto)
         {
-            return db.CatDepartamentos.Any(e => e.IdDepto == IdDepto);
+            return db.CatCentroCostos.Any(e => e.ClaveCentroCosto == ClaveCentroCosto);
         }
         public int Commit()
         {

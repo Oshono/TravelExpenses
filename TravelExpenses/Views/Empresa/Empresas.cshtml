@@ -1,0 +1,54 @@
+﻿@page
+@model TravelExpenses.ViewModels.EmpresaViewModel
+@{
+    ViewData["Title"] = "Empresas";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Empresas</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                RFC
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Fecha Alta
+                            </th>
+                            <th>
+                                Editar
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var empresa in Model.Empresas)
+                        {
+
+                            <tr>
+                                <td>@empresa.RFC</td>
+                                <td>@empresa.Nombre</td>
+                                <td>@empresa.FechaAlta</td>
+                                <td>
+                                    <a class="btn btn-lg"
+                                       asp-page="./AddEmpresas"
+                                       asp-route-rfc="@empresa.RFC">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

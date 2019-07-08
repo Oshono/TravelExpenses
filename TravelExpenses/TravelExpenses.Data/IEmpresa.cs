@@ -5,7 +5,8 @@ namespace TravelExpenses.Data
 {
     public interface IEmpresa
     {
-        List<Empresas> ObtenerEmpresas(string RFC);
+        IEnumerable<Empresas> ObtenerEmpresas();
+        Empresas ObtenerEmpresa(string RFC);
         int Guardar(Empresas Empresa);
         Empresas Add(Empresas newRestaurant);
     }

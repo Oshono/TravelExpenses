@@ -5,15 +5,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TravelExpenses.Core
 {
-    public class Gastos
+    public class CentroCosto
     {
-        public Gastos()
+        public CentroCosto()
         {
-            IdGasto = 0;
+            ClaveCentroCosto = string.Empty;
             Activo = true;
         }
         [Required, Key]
-        public int IdGasto { get; set; }
+        public string ClaveCentroCosto { get; set; }
+        [Required]
+        public string RFC { get; set; }
         public string Nombre { get; set; }
         public bool Activo { get; set; }
     }

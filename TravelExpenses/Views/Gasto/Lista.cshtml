@@ -1,0 +1,48 @@
+﻿@model TravelExpenses.ViewModels.GastoViewModel
+@{
+    ViewData["Title"] = "Gastos";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Departamentos</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <a asp-controller="Gasto" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Gasto</a>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Clave Gasto
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Editar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var gasto in Model.Gastos)
+                        {
+
+                            <tr>
+                                <td>@gasto.IdGasto</td>
+                                <td>@gasto.Nombre</td>
+                                <td>
+                                    <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-idGasto="@gasto.IdGasto">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

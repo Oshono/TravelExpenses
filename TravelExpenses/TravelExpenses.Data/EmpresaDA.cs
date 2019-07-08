@@ -13,15 +13,16 @@ namespace TravelExpenses.Data
     {
         private readonly TravelExpensesContext db;
 
-        public EmpresaDA(TravelExpensesContext db)
-        {
-            this.db = db;
-        }
+        //public EmpresaDA(TravelExpensesContext db)
+        //{
+        //    this.db = db;
+        //}
 
         private readonly IConfiguration _configuration;
-        public EmpresaDA(IConfiguration configuration)
+        public EmpresaDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
+            this.db = db;
         }
         public IDbConnection Connection
         {
@@ -30,7 +31,23 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public List<Empresas> ObtenerEmpresas(string RFC)
+        public IEnumerable<Empresas> ObtenerEmpresas()
+        {
+            var list = new List<Empresas>();
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {                    
+                    var reader = Connection.Query<Empresas>("CatEmpresas_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Nombre);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Empresas ObtenerEmpresa(string RFC)
         {
             var list = new List<Empresas>();
             try
@@ -39,8 +56,8 @@ namespace TravelExpenses.Data
                 {
                     var queryParameters = new DynamicParameters();
                     queryParameters.Add("@RFC", RFC);
-                    var reader = Connection.Query<Empresas>("Empresas_Sel", queryParameters, commandType: CommandType.StoredProcedure);
-                    return reader.OrderBy(x => x.Nombre).AsList();
+                    var reader = Connection.Query<Empresas>("CatEmpresas_Sel", queryParameters, commandType: CommandType.StoredProcedure);
+                    return reader.FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -66,16 +83,17 @@ namespace TravelExpenses.Data
                 int result = 0;
                 if (Empresa != null)
                 {
-                    var queryParameters = new DynamicParameters();
-                    queryParameters.Add("@RFC", Empresa.RFC);
-                    queryParameters.Add("@Nombre", Empresa.Nombre);
-                    queryParameters.Add("@FechaAlta", Empresa.FechaAlta);
-                    queryParameters.Add("@Activo", Empresa.Activo);
-
-                    using (IDbConnection conn = Connection)
+                    if (Exists(Empresa.RFC))
                     {
-                        result = Connection.ExecuteScalar<int>("Empresa_Save", queryParameters, commandType: CommandType.StoredProcedure);
+                        db.Update(Empresa);
                     }
+                    else
+                    {
+                        db.Add(Empresa);
+                    }
+                     
+                    result = Commit();
+                    
                 }
                 return result;
 
@@ -85,6 +103,11 @@ namespace TravelExpenses.Data
                 throw ex;
             }
 
+        }
+
+        private bool Exists(string RFC)
+        {
+            return db.CatEmpresas.Any(e => e.RFC == RFC);
         }
     }
 }

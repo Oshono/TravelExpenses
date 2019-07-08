@@ -7,3 +7,26 @@
 
 <h1>Gastos</h1>
 
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Clave Departamento</label>
+                    <input asp-for="Gasto.IdDepto" class="form-control" />
+                    <span asp-validation-for="Gasto.IdDepto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción</label>
+                    <input asp-for="Gasto.Nombre" class="form-control" />
+                    <span asp-validation-for="Gasto.Nombre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Guardar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

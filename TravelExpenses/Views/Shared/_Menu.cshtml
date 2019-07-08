@@ -8,17 +8,17 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="mdi mdi-circle-outline menu-icon"></i>
+                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>
                     <span class="menu-title">Catálogos</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="ui-basic">
-                    <ul class="nav flex-column sub-menu">                                               
+                    <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" asp-page="/Catalogos/Destinos">Destinos</a></li>
-                        <li class="nav-item"> <a class="nav-link" asp-page="/Catalogos/Empresas">Empresas</a></li>
-                        <li class="nav-item"> <a class="nav-link" asp-page="/Catalogos/Gastos">Conceptos de Gastos</a></li>
-                        <li class="nav-item"> <a class="nav-link" asp-page="/Catalogos/Ciudades">Cuentas Contables/ Centros de Costos</a></li>
-                        <li class="nav-item"> <a class="nav-link" asp-page="/Catalogos/Departamentos">Áreas/Departamentos</a></li>
+                        <li class="nav-item"><a asp-controller="Empresa" asp-action="ListaEmpresas" class="nav-link">Empresas</a></li>
+                        <li class="nav-item"><a asp-controller="Gasto" asp-action="Lista" class="nav-link">Conceptos de Gastos</a></li>
+                        <li class="nav-item"><a asp-controller="CentroCosto" asp-action="Lista" class="nav-link">Cuentas Contables/ Centros de Costos</a></li>
+                        <li class="nav-item"><a asp-controller="Departamento" asp-action="Lista" class="nav-link">Áreas/Departamentos</a></li>
                     </ul>
                 </div>
             </li>
