@@ -1,0 +1,25 @@
+﻿@page
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<h1>Usuarios Roles</h1>
+<head>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<script>
+
+    //$.ajax({
+    //    url: "/UsuariosRoles/Prueba",
+    //    data: { name: 'Deepak' },
+    //    success: success,
+    //    dataType: dataType
+    //});
+
+    $.get("/UsuariosRoles/Prueba", { name: 'Deepak' }, function (data) {
+        alert(data);
+    });
+
+</script>
+
+
