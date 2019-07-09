@@ -12,16 +12,16 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class CentroCostoController : Controller
+    public class MonedaController : Controller
     {
-        private readonly ICentroCosto _centro;
+        private readonly IMoneda _moneda;
 
-        public CentroCostoController(ICentroCosto centro)
+        public MonedaController(IMoneda moneda)
         {
-            _centro = centro;
+            _moneda = moneda;
         }
 
-        // GET: Centro Costos
+        // GET: moneda Costos
         public ActionResult Index()
         {
             return View();
@@ -29,11 +29,11 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var centros = _centro.ObtenerCentroCostos();
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentrosCostos = centros;
+            var monedas = _moneda.ObtenerMonedas();
+            var monedaModel = new MonedaViewModel();
+            monedaModel.Monedas = monedas;
 
-            return View(centroModel);
+            return View(monedaModel);
         }
 
 
@@ -55,24 +55,25 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(string ClaveCentroCosto)
+        public ActionResult Edit(string ClaveMoneda)
         {
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentroCosto = new CentroCosto();
-            if (!string.IsNullOrEmpty(ClaveCentroCosto))
+            var monedaModel = new MonedaViewModel();
+            monedaModel.moneda = new Moneda();
+
+            if (!string.IsNullOrEmpty(ClaveMoneda))
             {
-                var centro = _centro.ObtenerCentroCostos()
-                            .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
+                var moneda = _moneda.ObtenerMonedas()
+                            .Where(x => x.ClaveMoneda == ClaveMoneda)
                             .FirstOrDefault();
-                centroModel.CentroCosto = centro;
+                monedaModel.moneda = moneda;
             }
-            return View(centroModel);
+            return View(monedaModel);
         }
 
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CentroCostoViewModel centroCostoModel)
+        public ActionResult Edit(MonedaViewModel MonedaModel)
         {
             if (!ModelState.IsValid)
             {
@@ -80,14 +81,14 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                _centro.Guardar(centroCostoModel.CentroCosto);
+                _moneda.Guardar(MonedaModel.moneda);
             }
             catch
             {
 
             }
 
-            return Redirect("/CentroCosto/Lista");
+            return Redirect("/Moneda/Lista");
         }
 
     }

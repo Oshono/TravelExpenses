@@ -7,8 +7,13 @@ namespace TravelExpenses.Core
 {
     public class Departamentos
     {
-        [Required, Key]
-        public int IdDepto { get; set; }
+        public Departamentos()
+        {
+            ClaveDepto = string.Empty;
+            Nombre = string.Empty;
+        }
+        [Required, Key, StringLength(10)]
+        public string ClaveDepto { get; set; }
         public string Nombre { get; set; }
         public bool Activo { get; set; }
     }

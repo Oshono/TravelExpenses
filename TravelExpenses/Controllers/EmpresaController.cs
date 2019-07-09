@@ -72,7 +72,7 @@ namespace TravelExpenses.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(miempresa);
             }
             if (miempresa.Empresa.RFC == "")
             {

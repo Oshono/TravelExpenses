@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class CentroCostoDA : ICentroCosto
+    public class CentroCostoEmpresaDA : ICentroCostoEmpresa
     {
         private readonly TravelExpensesContext db;
 
         private readonly IConfiguration _configuration;
-        public CentroCostoDA(TravelExpensesContext db, IConfiguration configuration)
+        public CentroCostoEmpresaDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;
@@ -27,24 +27,20 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<CentroCosto> ObtenerCentroCostos()
+        public IEnumerable<CentroCostoEmpresa> ObtenerCentroCostosEmpresa()
         {
-            return db.CatCentroCostos;
+            return db.CatCentroCosto_Empresa;
         }
-        public int Guardar(CentroCosto centro)
+        public int Guardar(CentroCostoEmpresa centroEmpresa)
         {
             try
             {
                 int result = 0;
-                if (centro != null)
+                if (centroEmpresa != null)
                 {
-                    if (Exists(centro.ClaveCentroCosto))
+                    if (!Exists(centroEmpresa.ClaveCentroCosto, centroEmpresa.RFC))
                     {
-                        db.Update(centro);
-                    }
-                    else
-                    {
-                        db.Add(centro );
+                        db.Add(centroEmpresa);
                     }
 
                     result = Commit();
@@ -59,9 +55,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(string ClaveCentroCosto)
+        private bool Exists(string ClaveCentroCosto, string RFC)
         {
-            return db.CatCentroCostos.Any(e => e.ClaveCentroCosto == ClaveCentroCosto);
+            return db.CatCentroCosto_Empresa.Any(e => e.ClaveCentroCosto == ClaveCentroCosto && e.RFC == RFC);
         }
         public int Commit()
         {

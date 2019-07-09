@@ -38,7 +38,7 @@ namespace TravelExpenses.Data
                 int result = 0;
                 if (Depto != null)
                 {
-                    if (Exists(Depto.IdDepto))
+                    if (Exists(Depto.ClaveDepto))
                     {
                         db.Update(Depto);
                     }
@@ -59,9 +59,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(int IdDepto)
+        private bool Exists(string  ClaveDepto)
         {
-            return db.CatDepartamentos.Any(e => e.IdDepto == IdDepto);
+            return db.CatDepartamentos.Any(e => e.ClaveDepto == ClaveDepto);
         }
         public int Commit()
         {

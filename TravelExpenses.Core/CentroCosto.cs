@@ -12,10 +12,9 @@ namespace TravelExpenses.Core
             ClaveCentroCosto = string.Empty;
             Activo = true;
         }
-        [Required, Key]
+        [Required, Key, StringLength(20)]
         public string ClaveCentroCosto { get; set; }
-        [Required]
-        public string RFC { get; set; }
+        [StringLength (50)]
         public string Nombre { get; set; }
         public bool Activo { get; set; }
     }

@@ -55,14 +55,14 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Departamentos/Edit/5
-        public ActionResult Edit(int idDepto)
+        public ActionResult Edit(string ClaveDepto)
         {
             var deptoModel = new DepartamentoViewModel();
             deptoModel.Departamento = new Departamentos();
-            if (idDepto >0)
+            if (string.IsNullOrEmpty(ClaveDepto))
             {
                 var depto = _departamento.ObtenerDepartamentos()
-                            .Where( x => x.IdDepto == idDepto)
+                            .Where( x => x.ClaveDepto == ClaveDepto)
                             .FirstOrDefault();
                 deptoModel.Departamento = depto;
             }
@@ -78,7 +78,7 @@ namespace TravelExpenses.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (depto.Departamento.IdDepto < 1)
+            if (string.IsNullOrEmpty( depto.Departamento.ClaveDepto))
             {
                 return NotFound();
             }

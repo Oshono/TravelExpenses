@@ -5,7 +5,7 @@ namespace TravelExpenses.Data
 {
     public interface ICentroCosto
     {
-        IEnumerable<CentroCosto> ObtenerCentroCostos(string RFC);
+        IEnumerable<CentroCosto> ObtenerCentroCostos();
         int Guardar(CentroCosto centroCosto);
         int Commit();
     }

@@ -12,13 +12,13 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class CentroCostoController : Controller
+    public class CentroCostoEmpresaController : Controller
     {
-        private readonly ICentroCosto _centro;
+        private readonly ICentroCostoEmpresa _centroEmpresa;
 
-        public CentroCostoController(ICentroCosto centro)
+        public CentroCostoEmpresaController(ICentroCostoEmpresa centroEmpresa)
         {
-            _centro = centro;
+            _centroEmpresa = centroEmpresa;
         }
 
         // GET: Centro Costos
@@ -29,9 +29,9 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var centros = _centro.ObtenerCentroCostos();
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentrosCostos = centros;
+            var centros = _centroEmpresa.ObtenerCentroCostosEmpresa();
+            var centroModel = new CentroCostoEmpresaViewModel();
+            centroModel.CentroCostosEmpresas = centros;
 
             return View(centroModel);
         }
@@ -55,7 +55,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(string ClaveCentroCosto)
+        public ActionResult Edit(string ClaveCentroCosto, string RFC)
         {
             var centroModel = new CentroCostoViewModel();
             centroModel.CentroCosto = new CentroCosto();
