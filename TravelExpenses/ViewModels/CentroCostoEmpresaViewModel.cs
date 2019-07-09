@@ -9,6 +9,8 @@ namespace TravelExpenses.ViewModels
     public class CentroCostoEmpresaViewModel
     {
         public IEnumerable<CentroCostoEmpresa> CentroCostosEmpresas { get; set; }
+        public IEnumerable<Empresas> Empresas { get; set; }
+        public IEnumerable<CentroCosto> CentroCostos { get; set; }
         public CentroCostoEmpresa CentroCostoEmpresa { get; set; }
     }
 }

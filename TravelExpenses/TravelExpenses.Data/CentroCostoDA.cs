@@ -27,6 +27,7 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
+        
         public IEnumerable<CentroCosto> ObtenerCentroCostos()
         {
             return db.CatCentroCostos;

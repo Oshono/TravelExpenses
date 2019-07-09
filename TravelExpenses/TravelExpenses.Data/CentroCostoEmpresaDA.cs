@@ -31,6 +31,14 @@ namespace TravelExpenses.Data
         {
             return db.CatCentroCosto_Empresa;
         }
+        public IEnumerable<CentroCosto> ObtenerCentrosCostos()
+        {
+            return db.CatCentroCostos;
+        }
+        public IEnumerable<Empresas> ObtenerEmpresas()
+        {
+            return db.CatEmpresas;
+        }
         public int Guardar(CentroCostoEmpresa centroEmpresa)
         {
             try

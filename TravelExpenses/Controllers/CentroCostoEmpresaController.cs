@@ -31,8 +31,10 @@ namespace TravelExpenses.Controllers
         {
             var centros = _centroEmpresa.ObtenerCentroCostosEmpresa();
             var centroModel = new CentroCostoEmpresaViewModel();
+            var empresas = _centroEmpresa.ObtenerEmpresas();
             centroModel.CentroCostosEmpresas = centros;
-
+            centroModel.Empresas = empresas;
+            centroModel.CentroCostos = _centroEmpresa.ObtenerCentrosCostos();
             return View(centroModel);
         }
 
@@ -57,14 +59,14 @@ namespace TravelExpenses.Controllers
         // GET: gastos/Edit/5
         public ActionResult Edit(string ClaveCentroCosto, string RFC)
         {
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentroCosto = new CentroCosto();
+            var centroModel = new CentroCostoEmpresaViewModel();
+            centroModel.CentroCostoEmpresa = new CentroCostoEmpresa();
             if (!string.IsNullOrEmpty(ClaveCentroCosto))
             {
-                var centro = _centro.ObtenerCentroCostos()
+                var centro = _centroEmpresa.ObtenerCentroCostosEmpresa()
                             .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
                             .FirstOrDefault();
-                centroModel.CentroCosto = centro;
+                centroModel.CentroCostoEmpresa = centro;
             }
             return View(centroModel);
         }
@@ -72,7 +74,7 @@ namespace TravelExpenses.Controllers
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CentroCostoViewModel centroCostoModel)
+        public ActionResult Edit(CentroCostoEmpresaViewModel centroCostoModel)
         {
             if (!ModelState.IsValid)
             {
@@ -80,15 +82,35 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                _centro.Guardar(centroCostoModel.CentroCosto);
+                _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
             }
             catch
             {
 
             }
 
-            return Redirect("/CentroCosto/Lista");
+            return Redirect("/CentroCostoEmpresa/Lista");
         }
 
+        // POST: Empresa/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Lista(CentroCostoEmpresaViewModel centroCostoModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
+            }
+            catch
+            {
+
+            }
+
+            return Redirect("/CentroCostoEmpresa/Lista");
+        }
     }
 }
