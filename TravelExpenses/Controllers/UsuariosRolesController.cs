@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using TravelExpenses.Models;
 
 namespace TravelExpenses.Controllers
 {
     public class UsuariosRolesController : Controller
     {
+        private readonly UserManager<IdentityUser> userManager;
+        public UsuariosRolesController(UserManager<IdentityUser> userManager)
+        {
+
+        }
         // GET: UsuariosRoles
         public ActionResult Index()
         {
@@ -17,9 +22,10 @@ namespace TravelExpenses.Controllers
 
         // GET: UsuariosRoles/Details/5
         [HttpGet]
+        [Authorize]
         public string Prueba(string name)
         {
-            return "Mamlon";
+            return "Esta Registrado";
         }
 
         // GET: UsuariosRoles/Create
