@@ -21,6 +21,9 @@
                                 Nombre
                             </th>
                             <th>
+                                Cuenta Contable
+                            </th>
+                            <th>
                                 Editar
                             </th>
                         </tr>
@@ -29,15 +32,16 @@
                         @foreach (var gasto in Model.Gastos)
                         {
 
-                            <tr>
-                                <td>@gasto.IdGasto</td>
-                                <td>@gasto.Nombre</td>
-                                <td>
-                                    <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-idGasto="@gasto.IdGasto">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@gasto.IdGasto</td>
+                            <td>@gasto.Nombre</td>
+                            <td>@gasto.CuentaContable</td>
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-idGasto="@gasto.IdGasto">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

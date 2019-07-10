@@ -6,24 +6,22 @@
 
 <h1>Centro de Costos - Empresa</h1>
 
-<form method="post">
+<form asp-action="Edit" method="post" class="form-horizontal" role="form">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="form-group">
                         <label class="control-label">Empresa</label>
-                        @Html.DropDownListFor(x => Model.Empresas, new SelectList(Model.Empresas, "RFC", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Empresa" })
-                        <span class="text-danger" asp-validation-for="Empresas"></span>
+                        <select asp-for="Empresa" class="form-control input-sm"
+                                asp-items="@(new SelectList(Model.Empresas, "RFC", "Nombre"))"></select>
+                        @Html.ValidationMessageFor(x => x.Empresa, "", new { @class = "text-danger" })
+
                         <input type="submit" value="Guardar" class="btn btn-primary" />
                     </div>
-
                     <table id="data-table-basic" class="table table-striped">
                         <thead>
-                            <tr>
-                                <th>
-                                    Clave Centro de Costo
-                                </th>
+                            <tr>                                
                                 <th>
                                     Nombre
                                 </th>
@@ -33,20 +31,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var centro in Model.CentroCostos)
-                            {
-
-                                <tr>
-                                    <td>@centro.ClaveCentroCosto</td>
-                                    <td>@centro.Nombre</td>
-                                    <td>
-                                        <input type="checkbox" value=@centro.Activo/>
-                                    </td>
-                                </tr>
-                            }
+                                @{
+                                    for (int i = 0; i < Model.CentroCostos.Count(); i++)
+                                    {
+                                    <tr>
+                                        <td>
+                                            <input asp-for="@Model.CentroCostos[i].ClaveCentroCosto" type="hidden" />
+                                            @Model.CentroCostos[i].Nombre
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.CentroCostos[i].checkboxAnswer" type="checkbox" />
+                                        </td>
+                                    </tr>
+                                    }
+                                }
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

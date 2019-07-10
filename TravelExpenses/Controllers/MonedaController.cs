@@ -77,7 +77,7 @@ namespace TravelExpenses.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(MonedaModel);
             }             
             try
             {

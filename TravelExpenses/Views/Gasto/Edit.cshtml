@@ -9,13 +9,18 @@
         <div class="card-body">
             <form method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">                    
+                <div class="form-group">
                     <input asp-for=@Model.Gasto.IdGasto class="form-control" type="hidden" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descripción Gasto</label>
                     <input asp-for=@Model.Gasto.Nombre class="form-control" />
                     <span asp-validation-for=@Model.Gasto.Nombre class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Cuenta Contable</label>
+                    <input asp-for=@Model.Gasto.CuentaContable class="form-control" />
+                    <span asp-validation-for=@Model.Gasto.CuentaContable class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     Activo <input asp-for=@Model.Gasto.Activo class="form-check" type="checkbox" />

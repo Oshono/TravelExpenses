@@ -34,7 +34,7 @@ namespace TravelExpenses.Controllers
             var empresas = _centroEmpresa.ObtenerEmpresas();
             centroModel.CentroCostosEmpresas = centros;
             centroModel.Empresas = empresas;
-            centroModel.CentroCostos = _centroEmpresa.ObtenerCentrosCostos();
+            centroModel.CentroCostos = _centroEmpresa.ObtenerCentrosCostos().ToList();
             return View(centroModel);
         }
 
@@ -82,7 +82,13 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
+                foreach (CentroCosto centro in centroCostoModel.CentroCostos.Where(x => x.checkboxAnswer == true).ToList())
+                {
+                    centroCostoModel.CentroCostoEmpresa = new CentroCostoEmpresa();
+                    centroCostoModel.CentroCostoEmpresa.RFC = centroCostoModel.Empresa;
+                    centroCostoModel.CentroCostoEmpresa.ClaveCentroCosto = centro.ClaveCentroCosto;
+                    _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
+                }
             }
             catch
             {
