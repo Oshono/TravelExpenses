@@ -44,6 +44,20 @@ namespace TravelExpenses.Controllers
             return Json(ciudades);
         }
 
+        [HttpPost]
+        public ActionResult CargaCiudades(int IdEstado, string ClavePais)
+        {
+            var ciudades = _ubicacion.ObtenerCiudades(IdEstado, ClavePais);
+            return Json(ciudades);
+        }
+
+        [HttpPost]
+        public ActionResult CargaEstados(string ClavePais)
+        {
+            var estados = _ubicacion.ObtenerEstados(ClavePais);
+            return Json(estados);
+        }
+
         // POST: gastos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -62,24 +76,18 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(string ClaveCentroCosto)
+        public ActionResult Edit()
         {
-            //var centroModel = new CentroCostoViewModel();
-            //centroModel.CentroCosto = new CentroCosto();
-            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
-            //{
-            //    var centro = _ubicacion.ObtenerCentroCostos()
-            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
-            //                .FirstOrDefault();
-            //    centroModel.CentroCosto = centro;
-            //}
-            return View();
+            var destinoModel = new DestinoViewModel();
+            destinoModel.Paises = _ubicacion.ObtenerPaises();
+            
+            return View(destinoModel);
         }
 
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CentroCostoViewModel centroCostoModel)
+        public ActionResult Edit(DestinoViewModel centroCostoModel)
         {
             //if (!ModelState.IsValid)
             //{
