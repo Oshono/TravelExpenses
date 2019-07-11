@@ -3,13 +3,13 @@
     ViewData["Title"] = "create";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
-<div>
+@*<div>
      
         @Html.ActionLink("Link","ListarDestinos","Solicitudes")
     
 
     @*<partial name="ListarDestinos" model="new TravelExpenses.Core.Destinos { }"/>*@
-</div>
+@*</div>*@
 <h1>Create</h1>
 @ViewBag.Script
 
@@ -38,13 +38,13 @@
                         <label asp-for="@Model.Solicitud.Estatus" class="control-label">Estatus</label>
                     </div>
                     <div class="col-2">
-                        <input asp-for="@Model.Solicitud.Estatus" class="form-control" />
+                        <input asp-for="@Model.Solicitud.Estatus" class="form-control" value="Registrada" readonly/>
                         <span asp-validation-for="@Model.Solicitud.Estatus" class="text-danger"></span>
 
                     </div>
                     <div class="col-2"><label asp-for="@Model.Solicitud.Folio" class="control-label"></label></div>
                     <div class="col-2">
-                        <input asp-for="@Model.Solicitud.Folio" class="form-control" readonly value="@ViewBag.Folio"/>
+                        <input asp-for="@Model.Solicitud.Folio" class="form-control" required readonly value="@ViewBag.Folio"/>
                         <span asp-validation-for="@Model.Solicitud.Folio" class="text-danger"></span>
                     </div>
                 </div>
@@ -56,21 +56,23 @@
                     </div>
                     <div class="col-2">
 
-                        <input asp-for="@Model.Solicitud.Departamento" class="form-control" />
+                        <input asp-for="@Model.Solicitud.Departamento" required class="form-control" />
                         <span asp-validation-for="@Model.Solicitud.Departamento" class="text-danger"></span>
 
                     </div>
                     <div class="col-2"><label asp-for="@Model.Solicitud.Id" class="control-label">Solicitante</label></div>
                     <div class="col-2">
 
-                        <input asp-for="@Model.Solicitud.Id" class="form-control" />
+                        <input asp-for="@Model.Solicitud.Id" required class="form-control" readonly value="1e882d25-59f5-4156-bd74-f33ae58a6e5a" />
                         <span asp-validation-for="@Model.Solicitud.Id" class="text-danger"></span>
                     </div>
-                    <div class="col-2"><label asp-for="@Model.Solicitud.RFC" class="control-label">RFC</label></div>
+                    <div class="col-2">
+
+                    </div>
                     <div class="col-2">
                         
-                        <input asp-for="@Model.Solicitud.RFC" class="form-control" />
-                        <span asp-validation-for="@Model.Solicitud.RFC" class="text-danger"></span>
+                        @*<input asp-for="@Model.Solicitud.RFC" required class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.RFC" class="text-danger"></span>*@
                     </div>
                 </div>
                 <br />
@@ -81,14 +83,14 @@
                     </div>
                     <div class="col-2">
 
-                        <input asp-for="@Model.Solicitud.ImporteSolicitado" class="form-control" />
+                        <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" />
                         <span asp-validation-for="@Model.Solicitud.ImporteSolicitado" class="text-danger"></span>
                     </div>
                     <div class="col-2">
                         <label asp-for="@Model.Solicitud.ImporteComprobado" class="control-label">Importe Comprobado</label>
                     </div>
                     <div class="col-2">
-                        <input asp-for="@Model.Solicitud.ImporteComprobado" class="form-control" />
+                        <input asp-for="@Model.Solicitud.ImporteComprobado" required class="form-control" />
                         <span asp-validation-for="@Model.Solicitud.ImporteComprobado" class="text-danger"></span>
                     </div>
 
@@ -97,7 +99,7 @@
                     </div>
 
                     <div class="col-2">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" value="MXN" readonly />
                     </div>
                 </div>
                 <br />
@@ -168,8 +170,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (Model.Destino != null)
-                                                {
+                                                
                                                 @foreach (var destino in Model.Destinos)
                                                 {
                                                 <tr>
@@ -179,7 +180,7 @@
                                                     <td>@destino.FechaLlegada</td>
                                                     <td>@destino.Motivo</td>
                                                 </tr>
-                                                }
+                                                 
                                                 }
                                             </tbody>
                                         </table>

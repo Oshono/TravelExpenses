@@ -40,6 +40,8 @@
             background-color: #BFBDBD;
         }
 </style>
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
 <div class="text-center">
     <div class="card">
         <div class="card-header" id="Solicitudes"><h3>Solicitudes</h3></div>
@@ -72,14 +74,14 @@
                     <tbody>
                         @foreach (var item in Model.Solicitudes)
                         {
-                        <tr>
-                            <td>@item.Folio</td>
-                            <td>@item.Descripcion</td>
-                            <td>@item.UserName</td>
-                            <td > @item.ImporteSolicitado </td>
-                            <td > @item.ImporteComprobado </td>
-                            <td><label>@item.Estatus</label></td>
-                        </tr>
+                            <tr>
+                                <td>@item.Folio</td>
+                                <td>@item.Descripcion</td>
+                                <td>@item.UserName</td>
+                                <td> @item.ImporteSolicitado </td>
+                                <td> @item.ImporteComprobado </td>
+                                <td><label>@item.Estatus</label></td>
+                            </tr>
                         }
                     </tbody>
                 </table>

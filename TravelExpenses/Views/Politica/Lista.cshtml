@@ -1,27 +1,27 @@
-﻿@model TravelExpenses.ViewModels.GastoViewModel
+﻿@model TravelExpenses.ViewModels.PoliticaViewModel
 @{
-    ViewData["Title"] = "Gastos";
+    ViewData["Title"] = "Politicas";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Gastos</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Gasto" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Gasto</a>
+        <a asp-controller="Politica" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Centro de Costo</a>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="data-table-basic" class="table table-striped">
                     <thead>
                         <tr>
                             <th>
-                                Clave Gasto
+                                Clave Politica
                             </th>
                             <th>
-                                Nombre
+                                Descripción
                             </th>
                             <th>
-                                Cuenta Contable
+                                Limite
                             </th>
                             <th>
                                 Editar
@@ -29,15 +29,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var gasto in Model.Gastos)
+                        @foreach (var politica in Model.Politicas)
                         {
 
                         <tr>
-                            <td>@gasto.IdGasto</td>
-                            <td>@gasto.Nombre</td>
-                            <td>@gasto.CuentaContable</td>
+                            <td>@politica.ClavePolitica</td>
+                            <td>@politica.Descripcion</td>
+                            <td>@politica.Limite</td>
                             <td>
-                                <a class="btn btn-lg" asp-controller="Gasto" asp-action="Edit" asp-route-idGasto="@gasto.IdGasto">
+                                <a class="btn btn-lg" asp-controller="Politic" asp-action="Edit" asp-route-clavepolitica="@politica.ClavePolitica">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>

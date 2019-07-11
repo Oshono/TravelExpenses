@@ -17,5 +17,18 @@ namespace TravelExpenses.Data
         public DbSet<Gastos> CatGastos { get; set; } 
         public DbSet<Solicitud> Solicitudes { get; set; }
         public DbSet<Destinos> Destinos { get; set; }
+        //public DbSet<Gastos> CatGastos { get; set; }
+        public DbSet<CentroCosto> CatCentroCostos { get; set; }
+        public DbSet<CentroCostoEmpresa> CatCentroCosto_Empresa { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<CentroCostoEmpresa>().HasKey(table => new {
+                table.ClaveCentroCosto,
+                table.RFC
+            });
+        }
+
+        public DbSet<Moneda> CatMonedas { get; set; }
     }
 }

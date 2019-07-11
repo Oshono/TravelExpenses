@@ -1,0 +1,40 @@
+﻿@model TravelExpenses.ViewModels.MonedaViewModel
+
+
+
+<h1>@Model.moneda.Descripcion</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Clave Moneda</label>
+                    <input asp-for=@Model.moneda.ClaveMoneda class="form-control" />
+                    <span asp-validation-for=@Model.moneda.ClaveMoneda class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción Moneda</label>
+                    <input asp-for=@Model.moneda.Descripcion class="form-control" />
+                    <span asp-validation-for=@Model.moneda.Descripcion class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción Corto</label>
+                    <input asp-for=@Model.moneda.NombreCorto  class="form-control" />
+                    <span asp-validation-for=@Model.moneda.NombreCorto class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Simbolo</label>
+                    <input asp-for=@Model.moneda.Simbolo class="form-control" />
+                    <span asp-validation-for=@Model.moneda.Simbolo class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+

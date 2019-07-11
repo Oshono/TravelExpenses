@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class DepartamentoDA : IDepartamento
+    public class CentroCostoEmpresaDA : ICentroCostoEmpresa
     {
         private readonly TravelExpensesContext db;
 
         private readonly IConfiguration _configuration;
-        public DepartamentoDA(TravelExpensesContext db, IConfiguration configuration)
+        public CentroCostoEmpresaDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;
@@ -27,24 +27,28 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<Departamentos> ObtenerDepartamentos()
+        public IEnumerable<CentroCostoEmpresa> ObtenerCentroCostosEmpresa()
         {
-            return db.CatDepartamentos;
+            return db.CatCentroCosto_Empresa;
         }
-        public int Guardar(Departamentos Depto)
+        public IEnumerable<CentroCosto> ObtenerCentrosCostos()
+        {
+            return db.CatCentroCostos;
+        }
+        public IEnumerable<Empresas> ObtenerEmpresas()
+        {
+            return db.CatEmpresas;
+        }
+        public int Guardar(CentroCostoEmpresa centroEmpresa)
         {
             try
             {
                 int result = 0;
-                if (Depto != null)
+                if (centroEmpresa != null)
                 {
-                    if (Exists(Depto.ClaveDepto))
+                    if (!Exists(centroEmpresa.ClaveCentroCosto, centroEmpresa.RFC))
                     {
-                        db.Update(Depto);
-                    }
-                    else
-                    {
-                        db.Add(Depto);
+                        db.Add(centroEmpresa);
                     }
 
                     result = Commit();
@@ -59,9 +63,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(string  ClaveDepto)
+        private bool Exists(string ClaveCentroCosto, string RFC)
         {
-            return db.CatDepartamentos.Any(e => e.ClaveDepto == ClaveDepto);
+            return db.CatCentroCosto_Empresa.Any(e => e.ClaveCentroCosto == ClaveCentroCosto && e.RFC == RFC);
         }
         public int Commit()
         {

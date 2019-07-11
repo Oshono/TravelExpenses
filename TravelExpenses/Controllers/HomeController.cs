@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Models;
 using TravelExpenses.Core;
@@ -22,11 +23,13 @@ namespace TravelExpenses.Controllers
             this._DestinosData = DestinosData;
             this._UbicacionData = UbicacionData;
         }
-            public IActionResult Index()
+            //public IActionResult Index()
+        [Authorize]
+        public IActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -40,6 +43,7 @@ namespace TravelExpenses.Controllers
             return View(SolicitudesModel);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Authorize]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

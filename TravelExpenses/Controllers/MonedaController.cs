@@ -12,16 +12,16 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
-    public class GastoController : Controller
+    public class MonedaController : Controller
     {
-        private readonly IGasto _gasto;
+        private readonly IMoneda _moneda;
 
-        public GastoController(IGasto gasto)
+        public MonedaController(IMoneda moneda)
         {
-            _gasto = gasto;
+            _moneda = moneda;
         }
 
-        // GET: Gasto
+        // GET: moneda Costos
         public ActionResult Index()
         {
             return View();
@@ -29,11 +29,11 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var gastos = _gasto.ObtenerGastos();
-            var gastoModel = new GastoViewModel();
-            gastoModel.Gastos = gastos;
+            var monedas = _moneda.ObtenerMonedas();
+            var monedaModel = new MonedaViewModel();
+            monedaModel.Monedas = monedas;
 
-            return View(gastoModel);
+            return View(monedaModel);
         }
 
 
@@ -55,39 +55,40 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(int idGasto)
+        public ActionResult Edit(string ClaveMoneda)
         {
-            var gastoModel = new GastoViewModel();
-            gastoModel.Gasto = new Gastos();
-            if (idGasto > 0)
+            var monedaModel = new MonedaViewModel();
+            monedaModel.moneda = new Moneda();
+
+            if (!string.IsNullOrEmpty(ClaveMoneda))
             {
-                var gasto = _gasto.ObtenerGastos()
-                            .Where(x => x.IdGasto == idGasto)
+                var moneda = _moneda.ObtenerMonedas()
+                            .Where(x => x.ClaveMoneda == ClaveMoneda)
                             .FirstOrDefault();
-                gastoModel.Gasto = gasto;
+                monedaModel.moneda = moneda;
             }
-            return View(gastoModel);
+            return View(monedaModel);
         }
 
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(GastoViewModel gastomdl)
+        public ActionResult Edit(MonedaViewModel MonedaModel)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(MonedaModel);
             }             
             try
             {
-                _gasto.Guardar(gastomdl.Gasto);
+                _moneda.Guardar(MonedaModel.moneda);
             }
             catch
             {
 
             }
 
-            return Redirect("/Gasto/Lista");
+            return Redirect("/Moneda/Lista");
         }
 
     }

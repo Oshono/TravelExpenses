@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class DepartamentoDA : IDepartamento
+    public class MonedaDA : IMoneda
     {
         private readonly TravelExpensesContext db;
 
         private readonly IConfiguration _configuration;
-        public DepartamentoDA(TravelExpensesContext db, IConfiguration configuration)
+        public MonedaDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;
@@ -27,24 +27,24 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<Departamentos> ObtenerDepartamentos()
+        public IEnumerable<Moneda> ObtenerMonedas()
         {
-            return db.CatDepartamentos;
+            return db.CatMonedas;
         }
-        public int Guardar(Departamentos Depto)
+        public int Guardar(Moneda moneda)
         {
             try
             {
                 int result = 0;
-                if (Depto != null)
+                if (moneda != null)
                 {
-                    if (Exists(Depto.ClaveDepto))
+                    if (Exists(moneda.ClaveMoneda))
                     {
-                        db.Update(Depto);
+                        db.Update(moneda);
                     }
                     else
                     {
-                        db.Add(Depto);
+                        db.Add(moneda);
                     }
 
                     result = Commit();
@@ -59,9 +59,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(string  ClaveDepto)
+        private bool Exists(string ClaveMoneda)
         {
-            return db.CatDepartamentos.Any(e => e.ClaveDepto == ClaveDepto);
+            return db.CatMonedas.Any(e => e.ClaveMoneda == ClaveMoneda);
         }
         public int Commit()
         {

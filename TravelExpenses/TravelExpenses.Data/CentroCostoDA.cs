@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class DepartamentoDA : IDepartamento
+    public class CentroCostoDA : ICentroCosto
     {
         private readonly TravelExpensesContext db;
 
         private readonly IConfiguration _configuration;
-        public DepartamentoDA(TravelExpensesContext db, IConfiguration configuration)
+        public CentroCostoDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;
@@ -27,24 +27,25 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<Departamentos> ObtenerDepartamentos()
+        
+        public IEnumerable<CentroCosto> ObtenerCentroCostos()
         {
-            return db.CatDepartamentos;
+            return db.CatCentroCostos;
         }
-        public int Guardar(Departamentos Depto)
+        public int Guardar(CentroCosto centro)
         {
             try
             {
                 int result = 0;
-                if (Depto != null)
+                if (centro != null)
                 {
-                    if (Exists(Depto.ClaveDepto))
+                    if (Exists(centro.ClaveCentroCosto))
                     {
-                        db.Update(Depto);
+                        db.Update(centro);
                     }
                     else
                     {
-                        db.Add(Depto);
+                        db.Add(centro );
                     }
 
                     result = Commit();
@@ -59,9 +60,9 @@ namespace TravelExpenses.Data
             }
         }
 
-        private bool Exists(string  ClaveDepto)
+        private bool Exists(string ClaveCentroCosto)
         {
-            return db.CatDepartamentos.Any(e => e.ClaveDepto == ClaveDepto);
+            return db.CatCentroCostos.Any(e => e.ClaveCentroCosto == ClaveCentroCosto);
         }
         public int Commit()
         {

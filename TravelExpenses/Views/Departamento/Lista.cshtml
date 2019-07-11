@@ -8,10 +8,10 @@
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Departamento" asp-action="Add" class="btn btn-primary">Agregar Nuevo Departamento</a>
+        <a asp-controller="Departamento" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Departamento</a>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table id="data-table-basic" class="table table-striped">
                     <thead>
                         <tr>
                             <th>
@@ -30,10 +30,10 @@
                         {
 
                             <tr>
-                                <td>@depto.IdDepto</td>
+                                <td>@depto.ClaveDepto</td>
                                 <td>@depto.Nombre</td>
                                 <td>
-                                    <a class="btn btn-lg" asp-controller="Departamento" asp-action="Edit" asp-route-idDepto="@depto.IdDepto">
+                                    <a class="btn btn-lg" asp-controller="Departamento" asp-action="Edit" asp-route-clavedepto="@depto.ClaveDepto">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>

@@ -1,0 +1,28 @@
+﻿@model TravelExpenses.ViewModels.CentroCostoViewModel
+
+
+
+<h1>@Model.CentroCosto.Nombre</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for=@Model.CentroCosto.ClaveCentroCosto class="form-control" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción moneda</label>
+                    <input asp-for=@Model.CentroCosto.Nombre class="form-control" />
+                    <span asp-validation-for=@Model.CentroCosto.Nombre class="text-danger"></span>
+                </div>                
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+

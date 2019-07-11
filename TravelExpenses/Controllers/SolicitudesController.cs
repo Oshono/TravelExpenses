@@ -15,12 +15,14 @@ namespace TravelExpenses.Controllers
         private readonly ISolicitudes _SolicitudesData;
         private readonly IDestinos _DestinosData;
         private readonly IUbicacion _UbicacionData;
-
+        Random rd = new Random();
         public SolicitudesController(ISolicitudes SolicitudesData, IDestinos DestinosData, IUbicacion UbicacionData)
         {
             this._SolicitudesData = SolicitudesData;
             this._DestinosData = DestinosData;
             this._UbicacionData = UbicacionData;
+
+
         }
         // GET: Solicitudes
         public ActionResult Index()
@@ -46,14 +48,14 @@ namespace TravelExpenses.Controllers
             var Estado = _UbicacionData.ObtenerEstado("MEX");
             var Ciudad = _UbicacionData.ObtenerCiudad("MEX", 1);
             var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
-            //var Destino = _DestinosData.ObtenerDestinos("13");
+            var Destino = _DestinosData.ObtenerDestinos("13");
 
             var SolicitudModel = new SolicitudesViewModel();
             SolicitudModel.Solicitudes = TipoSolicitud;
             SolicitudModel.Paises = Pais;
             SolicitudModel.Estados = Estado;
             SolicitudModel.Ciudades = Ciudad;
-            //SolicitudModel.Destinos = Destino;
+            SolicitudModel.Destinos = Destino;
             return View(SolicitudModel);
            
         }
@@ -71,6 +73,8 @@ namespace TravelExpenses.Controllers
         public ActionResult Create(SolicitudesViewModel _solicitudes)
         {
             int count = 0;
+           
+             
 
             _DestinosData.ObtenerDestino("13");
             var result = _DestinosData.ObtenerDestinos("13");
@@ -83,24 +87,25 @@ namespace TravelExpenses.Controllers
             try
             {
                 count++;
-                objsolicitudes.Folio = "F_"+count.ToString();
-                objsolicitudes.IdTipoSolicitud = _solicitudes.Solicitud.IdTipoSolicitud;
+                objsolicitudes.Folio = "F_"+ rd.Next(0,1000);
+                objsolicitudes.IdTipoSolicitud = 1;
                 objsolicitudes.Departamento = _solicitudes.Solicitud.Departamento;
                 objsolicitudes.Empresa = _solicitudes.Solicitud.Empresa;
                 objsolicitudes.ImporteSolicitado = _solicitudes.Solicitud.ImporteSolicitado;
                 objsolicitudes.ImporteComprobado = _solicitudes.Solicitud.ImporteComprobado;
-                objsolicitudes.Estatus = _solicitudes.Solicitud.Estatus;
-                objsolicitudes.Estatus = _solicitudes.Solicitud.Estatus;
+                objsolicitudes.Estatus = _solicitudes.Solicitud.Estatus; 
                 objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
                 objsolicitudes.Id = _solicitudes.Solicitud.Id;
-                objsolicitudes.RFC = _solicitudes.Solicitud.RFC;
-
+                objsolicitudes.RFC = "456777";
+                _SolicitudesData.InsertarSolicitud(objsolicitudes);
                 ViewBag.Script = "Datos almacenados";
+
+
                 var Pais = _UbicacionData.ObtenerPais();
                 var Estado = _UbicacionData.ObtenerEstado("MEX");
                 var Ciudad = _UbicacionData.ObtenerCiudad("MEX", 1);
                 var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
-                var Destino = _DestinosData.ObtenerDestinos("13");
+                var Destino = _DestinosData.ObtenerDestinos(objsolicitudes.Folio);
 
                 var SolicitudModel = new SolicitudesViewModel();
                 SolicitudModel.Solicitudes = TipoSolicitud;
@@ -115,7 +120,7 @@ namespace TravelExpenses.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ;
             } 
         }
 
@@ -138,20 +143,20 @@ namespace TravelExpenses.Controllers
                 _DestinosData.InsertarDestino(destinos);
 
 
-                var Pais = _UbicacionData.ObtenerPais();
-                var Estado = _UbicacionData.ObtenerEstado("MEX");
-                var Ciudad = _UbicacionData.ObtenerCiudad("MEX", 1);
-                var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
+                //var Pais = _UbicacionData.ObtenerPais();
+                //var Estado = _UbicacionData.ObtenerEstado("MEX");
+                //var Ciudad = _UbicacionData.ObtenerCiudad("MEX", 1);
+                //var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
                 var Destino = _DestinosData.ObtenerDestinos("13");
 
                 var SolicitudModel = new SolicitudesViewModel();
-                SolicitudModel.Solicitudes = TipoSolicitud;
-                SolicitudModel.Paises = Pais;
-                SolicitudModel.Estados = Estado;
-                SolicitudModel.Ciudades = Ciudad;
+                //SolicitudModel.Solicitudes = TipoSolicitud;
+                //SolicitudModel.Paises = Pais;
+                //SolicitudModel.Estados = Estado;
+                //SolicitudModel.Ciudades = Ciudad;
                 SolicitudModel.Destinos = Destino;
 
-                return View(SolicitudModel);
+                return Redirect("./Create");
             }
             catch (Exception)
             {

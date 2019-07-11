@@ -1,0 +1,54 @@
+﻿@model TravelExpenses.ViewModels.CentroCostoEmpresaViewModel
+@{
+    ViewData["Title"] = "Centro de Costos";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Centro de Costos - Empresa</h1>
+
+<form asp-action="Edit" method="post" class="form-horizontal" role="form">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="form-group">
+                        <label class="control-label">Empresa</label>
+                        <select asp-for="Empresa" class="form-control input-sm"
+                                asp-items="@(new SelectList(Model.Empresas, "RFC", "Nombre"))"></select>
+                        @Html.ValidationMessageFor(x => x.Empresa, "", new { @class = "text-danger" })
+
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+                    <table id="data-table-basic" class="table table-striped">
+                        <thead>
+                            <tr>                                
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Asignar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                @{
+                                    for (int i = 0; i < Model.CentroCostos.Count(); i++)
+                                    {
+                                    <tr>
+                                        <td>
+                                            <input asp-for="@Model.CentroCostos[i].ClaveCentroCosto" type="hidden" />
+                                            @Model.CentroCostos[i].Nombre
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.CentroCostos[i].checkboxAnswer" type="checkbox" />
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

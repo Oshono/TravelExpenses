@@ -1,0 +1,35 @@
+﻿@page
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h1>Usuarios Roles</h1>
+<head>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+
+<div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <label>Usuario</label><br />
+        <imput typeof="TextBox"></imput>
+        <button>Asignar Role</button>
+    }
+</div>
+<script>
+
+
+
+    $.get("/UsuariosRoles/Prueba", { name: 'Deepak' }, function (data) {
+        alert(data);
+    });
+
+</script>
+
+
+
