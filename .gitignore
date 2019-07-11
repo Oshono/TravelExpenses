@@ -5,3 +5,4 @@
 /.vs/TravelExpenses/v15
 /TravelExpenses.Models
 /TravelExpenses.Core/bin/Debug/netcoreapp2.2
+/TravelExpenses.Core/obj
