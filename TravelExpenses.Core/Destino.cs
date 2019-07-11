@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TravelExpenses.Core
 {
-    public class Ciudades
-    {
-        [Required, Key]
+    public class Destino
+    {    
         public int IdCiudad { get; set; }
-        [Required]
-        public string Descripcion { get; set; }
+        public string Ciudad { get; set; }
         public int IdEstado { get; set; }
+        public string DescripcionEstado { get; set; }
+        public string ClavePais { get; set; }
+        public string NombrePais { get; set; }
         public bool Activo { get; set; }
     }
 }

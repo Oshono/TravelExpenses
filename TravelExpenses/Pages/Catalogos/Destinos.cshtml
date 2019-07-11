@@ -7,7 +7,6 @@
 
 <h1>Destinos</h1>
 <form method="post">
-
     <input type="hidden" asp-for="Ciudad.IdCiudad" />
     <div class="form-group">
         <label class="control-label">País</label>
@@ -16,11 +15,11 @@
     </div>
     <div class="form-group">
         <label class="control-label">Estado</label>
-        @Html.DropDownListFor(x => Model.Estados, new SelectList(Model.Estados, "IdEstado", "NombreEstado"), htmlAttributes: new { @class = "form-control", id = "Estado" })
+        @Html.DropDownListFor(x => Model.Estados, new SelectList(Model.Estados, "IdEstado", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Estado" })
         <span class="text-danger" asp-validation-for="Ciudad.Estado"></span>
     </div>   
     <div class="form-group">
-        <label class="control-label"">Ciudad</label>
+        <label class="control-label">Ciudad</label>
         <input asp-for="Ciudad.Ciudad" class="form-control" />
         <span class="text-danger" asp-validation-for="Ciudad.Ciudad"></span>
     </div>
@@ -38,9 +37,8 @@
     @foreach (var ciudad in Model.Ciudades)
     {
         <tr>
-            <td>@ciudad.Estado.NombreEstado</td>
-            <td>@ciudad.IdCiudad</td>
-            <td>@ciudad.Ciudad</td>
+            <td>@ciudad.IdEstado</td>
+            <td>@ciudad.Descripcion</td>
         </tr>
     }
 </table>

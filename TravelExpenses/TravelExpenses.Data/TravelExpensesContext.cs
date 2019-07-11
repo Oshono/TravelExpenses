@@ -17,6 +17,8 @@ namespace TravelExpenses.Data
         public DbSet<Gastos> CatGastos { get; set; }
         public DbSet<CentroCosto> CatCentroCostos { get; set; }
         public DbSet<CentroCostoEmpresa> CatCentroCosto_Empresa { get; set; }
+        public DbSet<Ciudades> Ciudades { get; set; }
+        public DbSet<Paises> Paises { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

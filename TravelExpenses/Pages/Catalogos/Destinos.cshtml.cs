@@ -29,7 +29,7 @@ namespace TravelExpenses.Pages.Catalogs
         }
         public void OnGet()
         {
-            Ciudades = Ubicacion.ObtenerCiudades(0);
+            //Ciudades = Ubicacion.ObtenerCiudades(0,"");
             Paises = Ubicacion.ObtenerPaises();
             Estados = Ubicacion.ObtenerEstados("MEX");
         }

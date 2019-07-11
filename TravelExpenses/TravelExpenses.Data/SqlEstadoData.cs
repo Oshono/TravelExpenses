@@ -23,8 +23,8 @@ namespace TravelExpenses.Data
         public IEnumerable<Estado> GetEstados(string name)
         {
             var query = from r in db.Estados
-                        where r.NombreEstado.StartsWith(name) || string.IsNullOrEmpty(name)
-                        orderby r.NombreEstado
+                        where r.Descripcion.StartsWith(name) || string.IsNullOrEmpty(name)
+                        orderby r.Descripcion
                         select r;
             return query;
         }

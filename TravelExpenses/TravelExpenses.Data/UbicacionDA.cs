@@ -11,10 +11,12 @@ namespace TravelExpenses.Data
 {
     public class UbicacionDA :IUbicacion
     {
+        private readonly TravelExpensesContext db;
         private readonly IConfiguration _configuration;
-        public UbicacionDA(IConfiguration configuration)
+        public UbicacionDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
+            this.db = db;
         }
         public IDbConnection Connection
         {
@@ -28,11 +30,7 @@ namespace TravelExpenses.Data
             var list = new List<Paises>();
             try
             {
-                using (IDbConnection conn = Connection)
-                {
-                    var reader = Connection.Query<Paises>("Paises_Sel", null, commandType: CommandType.StoredProcedure);
-                    return reader.OrderBy(x => x.Nombre).AsList();
-                }
+                return db.Paises.OrderBy(x=>x.Nombre).ToList();                
             }
             catch (Exception ex)
             {
@@ -44,13 +42,7 @@ namespace TravelExpenses.Data
             var list = new List<Estado>();
             try
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@ClavePais", ClavePais, DbType.String, ParameterDirection.Input);
-                using (IDbConnection conn = Connection)
-                {
-                    var reader = Connection.Query<Estado>("Estado_Sel", parameters, commandType: CommandType.StoredProcedure);
-                    return reader.OrderBy(x => x.NombreEstado).AsList();
-                }
+                return db.Estados.Where(x => x.ClavePais == ClavePais).OrderBy(x=>x.Descripcion) .ToList();
             }
             catch (Exception ex)
             {
@@ -58,29 +50,39 @@ namespace TravelExpenses.Data
             }
         }
          
-        public List<Ciudades> ObtenerCiudades(int? IdEstado)
+        public List<Destino> ObtenerCiudades(int? IdEstado, string ClavePais)
         {
-            var list = new List<Ciudades>();
+            var list = new List<Destino>();
             try
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@IdEstado", IdEstado, DbType.String, ParameterDirection.Input);
+                
 
-                using (IDbConnection conn = Connection)
-                {
-                    var reader = Connection.Query<Ciudades, Estado, Ciudades>(
-                        "Ciudad_Sel",
-                        (ciudad, estado) =>
-                        {
-                            ciudad.Estado = estado;
-                            return ciudad;
-                        },
-                        splitOn: "IdEstado",
-                        param: parameters,
-                        commandType: CommandType.StoredProcedure
-                        );
-                    return reader.OrderBy(x => x.Ciudad).AsList();
-                }
+                var ciudades = (from c in db.Ciudades
+                                join e in db.Estados on c.IdEstado equals e.IdEstado
+                                join p in db.Paises on e.ClavePais equals p.ClavePais
+                                where (p.ClavePais == ClavePais || ClavePais == "")
+                                select new
+                                {                                    
+                                    c.IdCiudad,
+                                    c.Activo,
+                                    c.IdEstado,
+                                    c.Descripcion,
+                                    DescripcionEstado = e.Descripcion,
+                                    p.ClavePais,
+                                    NombrePais = p.Nombre
+                                }).ToList();
+
+
+                list = ciudades.ConvertAll(x => new Destino {
+                    Ciudad = x.Descripcion,
+                    IdCiudad = x.IdCiudad,
+                    IdEstado = x.IdEstado,
+                    DescripcionEstado = x.DescripcionEstado,
+                    ClavePais = x.ClavePais,
+                    NombrePais = x.NombrePais,
+                    Activo = x.Activo
+                });
+                return list;
             }
             catch (Exception ex)
             {

@@ -1,0 +1,78 @@
+﻿@model TravelExpenses.ViewModels.DestinoViewModel
+@{
+    ViewData["Title"] = "Lista Ciudades";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Ciudades</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <a asp-controller="Destino" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Destino</a>
+        <div class="card-body">
+            <div class="form-group">
+                <label class="control-label">País</label>
+                @Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Pais" , onchange = "CargaCiudades(this.value);" })
+                <span class="text-danger" asp-validation-for="Paises"></span>
+            </div>
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Pais
+                            </th>
+                            <th>
+                                Estado
+                            </th>
+                            <th>
+                                Clave Ciudad
+                            </th>
+                            <th>
+                                Ciudad
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblCiudades">
+                        @foreach (var ciudad in Model.Destinos)
+                        {
+
+                            <tr>
+                                <td>@ciudad.NombrePais</td>
+                                <td>@ciudad.DescripcionEstado</td>
+                                <td>@ciudad.IdCiudad</td>
+                                <td>@ciudad.Ciudad</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function CargaCiudades(ClavePais) {        
+        var url = "/Destino/CargaCiudades/";
+ 
+
+        $.ajax({
+            url: url,
+            data: { ClavePais: ClavePais },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                console.log(data);                
+                var row = "";
+                $.each(data, function (index, item) {
+                    console.log(item);
+                    row += "<tr><td>" + item.nombrePais + "</td><td>" + item.descripcionEstado + "</td><td>" + item.idCiudad + "</td><td>" + item.ciudad  + "</td></tr>";
+                });
+                $("#tblCiudades").html(row);  
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+</script>

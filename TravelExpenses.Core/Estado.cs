@@ -9,9 +9,9 @@ namespace TravelExpenses.Core
         public int IdEstado { get; set; }
 
         [Required, StringLength(50)]
-        public string NombreEstado { get; set; }
+        public string Descripcion { get; set; }
 
-        public Paises Pais { get; set; }
+        public string ClavePais { get; set; }
         public bool Activo { get; set; }
 
     }
