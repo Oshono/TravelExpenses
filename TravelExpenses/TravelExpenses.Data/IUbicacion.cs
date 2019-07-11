@@ -8,5 +8,8 @@ namespace TravelExpenses.Data
         List<Estado> ObtenerEstados(string ClavePais);
         List<Paises> ObtenerPaises();
         List<Ciudades> ObtenerCiudades(int? IdEstado);
+        IEnumerable<Paises> ObtenerPais();
+        IEnumerable<Estado> ObtenerEstado(string ClavePais);
+        IEnumerable<Ciudades> ObtenerCiudad(string Clave, int IdEstado);
     }
 }

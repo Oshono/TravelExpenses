@@ -39,6 +39,63 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public IEnumerable<Paises> ObtenerPais()
+        {
+            var list = new List<Paises>();
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    var reader = Connection.Query<Paises>("Paises_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.ClavePais);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Estado> ObtenerEstado(string ClavePais)
+        {
+            var list = new List<Estado>();
+            try
+            {
+                var parametros = new DynamicParameters();
+                parametros.Add("@ClavePais", ClavePais);
+                using (IDbConnection conn = Connection)
+                {
+                    var reader = Connection.Query<Estado>("Estado_Sel", parametros, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.NombreEstado);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Ciudades> ObtenerCiudad(string ClavePais,int IdEstado)
+        {
+            var list = new List<Ciudades>();
+            try
+            {
+                var parametros = new DynamicParameters();
+                parametros.Add("@ClavePais", ClavePais);
+                parametros.Add("@IdEstado", IdEstado);
+                using (IDbConnection conn = Connection)
+                {
+                    var reader = Connection.Query<Ciudades>("Ciudad_Sel", parametros, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Ciudad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Estado> ObtenerEstados(string ClavePais)
         {
             var list = new List<Estado>();

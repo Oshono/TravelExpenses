@@ -1,0 +1,68 @@
+﻿@model TravelExpenses.ViewModels.DestinosViewModel
+
+
+@*<select asp-for="Destino" class="form-control input-sm"
+        asp-items="@(new SelectList(Model.Destinos, "Motivo", "IdEstado"))"></select>*@
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                 
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Destinos) {
+        <tr>
+            <td>
+                @item.ClavePais
+            </td>
+            <td>
+                @item.IdEstado
+            </td>
+            <td>
+                @item.IdCiudad
+            </td>
+            <td>
+                @item.Motivo
+            </td>
+            <td>
+                @item.FechaSalida
+            </td>
+            <td>
+                @item.FechaLlegada
+            </td>
+            <td>
+                @item.Folio
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdDestinos">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdDestinos">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdDestinos">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TravelExpenses.Core;
 
 namespace TravelExpenses.Data
 {
@@ -12,5 +13,7 @@ namespace TravelExpenses.Data
             : base(options)
         {
         }
+        public DbSet<TravelExpenses.Core.Destinos> Destinos { get; set; }
+        public DbSet<TravelExpenses.Core.Solicitud> Solicitud { get; set; }
     }
 }

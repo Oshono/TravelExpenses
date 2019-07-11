@@ -1,7 +1,7 @@
-﻿@page
-@model TravelExpenses.Views.Home.IndexModel
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
 @{
- 
+    ViewData["Title"] = "ListarSolicitudes";
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
 <style>
 
@@ -47,7 +47,7 @@
             <div class="container">
                 <div class="row" id="seccionBtn">
                     @*<div class="col-2"><a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes"><i class="mdi  mdi-pencil"></i>Agregar</a></div>*@
-                    <div class="col-2"><a id="EnviarSolicitud" class="btn" asp-controller="Solicitudes" asp-action="create" ><i class="mdi  mdi-pencil"></i>Agregar</a></div>
+                    <div class="col-2"><a id="EnviarSolicitud" class="btn" asp-controller="Solicitudes" asp-action="create"><i class="mdi  mdi-pencil"></i>Agregar</a></div>
                     <div class="col-2">
                         <a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes">
                             <i class="mdi  mdi-comment-text-outline"></i>Editar
@@ -70,23 +70,17 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach (var item in Model.Solicitudes)
+                        {
                         <tr>
-                            <td>F001</td>
-                            <td>Anticipo</td>
-
-                            <td>Luis Mario Diaz</td>
-                            <td class="text-danger"> $5000 <i class="mdi mdi-arrow-down"></i></td>
-                            <td class="text-danger"> 0 <i class="mdi mdi-arrow-down"></i></td>
-                            <td><label class="badge badge-danger">Pending</label></td>
+                            <td>@item.Folio</td>
+                            <td>@item.Descripcion</td>
+                            <td>@item.UserName</td>
+                            <td > @item.ImporteSolicitado </td>
+                            <td > @item.ImporteComprobado </td>
+                            <td><label>@item.Estatus</label></td>
                         </tr>
-                        <tr>
-                            <td>F0012</td>
-                            <td>Anticipo</td>
-                            <td>Luis Mario Diaz</td>
-                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
-                            <td class="text-success"> $12000 <i class="mdi mdi-arrow-up"></i></td>
-                            <td><label class="badge badge-success">Completed</label></td>
-                        </tr>
+                        }
                     </tbody>
                 </table>
             </div>

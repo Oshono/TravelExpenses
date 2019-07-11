@@ -1,0 +1,295 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+@{
+    ViewData["Title"] = "create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<div>
+     
+        @Html.ActionLink("Link","ListarDestinos","Solicitudes")
+    
+
+    @*<partial name="ListarDestinos" model="new TravelExpenses.Core.Destinos { }"/>*@
+</div>
+<h1>Create</h1>
+@ViewBag.Script
+
+<div class="text-left">
+    <div class="card">
+        <div class="card-header">
+            Registro de solicitudes
+        </div>
+        <div class="card-body ">
+            <form asp-action="Create">
+                <div class="row">
+                    <div class="col-2">
+                        <label asp-for="@Model.Solicitud.IdTipoSolicitud" class="control-label">Tipo de Solicitud</label>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+
+                            <select asp-for="Solicitud" class="form-control input-sm"
+                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))">
+                                <option>Selecciona una opción</option>
+                            </select>
+                            <span asp-validation-for="@Model.Solicitud.IdTipoSolicitud" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <label asp-for="@Model.Solicitud.Estatus" class="control-label">Estatus</label>
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="@Model.Solicitud.Estatus" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.Estatus" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-2"><label asp-for="@Model.Solicitud.Folio" class="control-label"></label></div>
+                    <div class="col-2">
+                        <input asp-for="@Model.Solicitud.Folio" class="form-control" readonly value="@ViewBag.Folio"/>
+                        <span asp-validation-for="@Model.Solicitud.Folio" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                @* Another section *@
+                <div class="row">
+                    <div class="col-2">
+                        <label asp-for="@Model.Solicitud.Departamento" class="control-label">Departamento</label>
+                    </div>
+                    <div class="col-2">
+
+                        <input asp-for="@Model.Solicitud.Departamento" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.Departamento" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-2"><label asp-for="@Model.Solicitud.Id" class="control-label">Solicitante</label></div>
+                    <div class="col-2">
+
+                        <input asp-for="@Model.Solicitud.Id" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.Id" class="text-danger"></span>
+                    </div>
+                    <div class="col-2"><label asp-for="@Model.Solicitud.RFC" class="control-label">RFC</label></div>
+                    <div class="col-2">
+                        
+                        <input asp-for="@Model.Solicitud.RFC" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.RFC" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                @* Another section *@
+                <div class="row">
+                    <div class="col-2">
+                        <label asp-for="@Model.Solicitud.ImporteSolicitado" class="control-label">Importe Solicitado</label>
+                    </div>
+                    <div class="col-2">
+
+                        <input asp-for="@Model.Solicitud.ImporteSolicitado" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.ImporteSolicitado" class="text-danger"></span>
+                    </div>
+                    <div class="col-2">
+                        <label asp-for="@Model.Solicitud.ImporteComprobado" class="control-label">Importe Comprobado</label>
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="@Model.Solicitud.ImporteComprobado" class="form-control" />
+                        <span asp-validation-for="@Model.Solicitud.ImporteComprobado" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        Moneda:
+                    </div>
+
+                    <div class="col-2">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-5">
+                            <a href="#" class="btn" id="Button">Cerrar</a>
+
+                            <input type="submit" value="Guardar" class="btn" id="Button" />
+                            <a href="#" class="btn" id="Button">Enviar a autorización</a>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+                </form>
+                <hr />
+                <div class="container">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#Destinos">Destinos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Anticipos">Anticipos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Imputacion">Gastos</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div id="Destinos" class="container tab-pane active">
+                            <br>
+                            <h3>Destinos</h3>
+                            <div class="container">
+                                <div class="row">
+
+                                    <div class="col-5">
+                                        <button class="btn" id="Button" data-toggle="modal"
+                                                data-target="#exampleModal" data-backdrop="static"
+                                                data-keyboard="false">
+                                            Agregar
+                                        </button>
+                                        <button href="#" class="btn" id="Button" data-toggle="modal"
+                                                data-target="#exampleModal" data-backdrop="static"
+                                                data-keyboard="false">
+                                            Editar
+                                        </button>
+                                        <button href="#" class="btn" id="Button" disabled>Eliminar</button>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover text-center">
+                                            <thead>
+
+                                                <tr>
+                                                    <th>País destino</th>
+                                                    <th>Ciudad Destino</th>
+                                                    <th>Fecha de Salida</th>
+                                                    <th>Fecha de Llegada</th>
+                                                    <th>Motivo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.Destino != null)
+                                                {
+                                                @foreach (var destino in Model.Destinos)
+                                                {
+                                                <tr>
+                                                    <td>@destino.Nombre</td>
+                                                    <td>@destino.Descripcion</td>
+                                                    <td>@destino.FechaSalida</td>
+                                                    <td>@destino.FechaLlegada</td>
+                                                    <td>@destino.Motivo</td>
+                                                </tr>
+                                                }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div id="Anticipos" class="container tab-pane fade">
+                            <br>
+                            <h3>Anticipos</h3>
+
+                        </div>
+                        <div id="Imputacion" class="container tab-pane fade">
+                            <br>
+                            <h3>Imputación a centros de Costo</h3>
+
+                        </div>
+                    </div>
+                </div>
+                 
+
+        </div>
+    </div>
+</div>
+
+
+@*---------------MODAL-------------- *@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar destino</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form asp-action="RegistrarDestino">
+                <div class="modal-body">
+                    <div class="container text-left">
+
+                        <div class="row">
+                            <div class="col-2">
+
+                                <label asp-for="@Model.Destino.ClavePais" class="control-label">País de destino</label>
+                            </div>
+                            <div class="col-4">
+                                <select name="ClavePais" asp-for="@Model.Destino.ClavePais" class="form-control input-sm" required
+                                        asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
+                                    <option>Selecciona una opción</option>
+                                </select>
+                                <span asp-validation-for="@Model.Destino.ClavePais" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-2">
+                                <label asp-for="@Model.Destino.IdEstado" class="control-label">Estado</label>
+                            </div>
+                            <div class="col-4">
+                                <select asp-for="Estado" class="form-control input-sm" required
+                                        asp-items="@(new SelectList(Model.Estados, "IdEstado", "NombreEstado"))">
+                                    <option>Selecciona una opción</option>
+                                </select>
+                                <span asp-validation-for="@Model.Destino.IdEstado" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+
+                                <label asp-for=" @Model.Destino.FechaSalida" class="control-label">Fecha Salida</label>
+                            </div>
+                            <div class="col-3">
+                                <input asp-for=" @Model.Destino.FechaSalida" class="form-control" required/>
+                                <span asp-validation-for=" @Model.Destino.FechaSalida" class="text-danger"></span>
+                            </div>
+                            <div class="col-3">
+
+                                <label asp-for=" @Model.Destino.FechaLlegada" class="control-label">Fecha Llegada</label>
+                            </div>
+                            <div class="col-3">
+                                <input asp-for=" @Model.Destino.FechaLlegada" class="form-control" required/>
+                                <span asp-validation-for=" @Model.Destino.FechaLlegada" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                <label asp-for=" @Model.Destino.Motivo" class="control-label" ></label>
+                            </div>
+                            <div class="col-3">
+
+                                <input asp-for=" @Model.Destino.Motivo" class="form-control" required/>
+                                <span asp-validation-for=" @Model.Destino.Motivo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @ViewBag.Error
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    
+                    <input type="submit" value="Guardar" class="btn" id="Button" />
+
+                    <button type="button" class="btn" data-dismiss="modal" id="btnCancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
