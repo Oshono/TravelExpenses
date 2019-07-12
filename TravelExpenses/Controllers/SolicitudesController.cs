@@ -72,10 +72,7 @@ namespace TravelExpenses.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(SolicitudesViewModel _solicitudes)
         {
-            int count = 0;
-           
-             
-
+            
             _DestinosData.ObtenerDestino("13");
             var result = _DestinosData.ObtenerDestinos("13");
             Solicitud objsolicitudes = new Solicitud();
@@ -85,8 +82,7 @@ namespace TravelExpenses.Controllers
                 return BadRequest(ModelState);
             }
             try
-            {
-                count++;
+            { 
                 objsolicitudes.Folio = "F_"+ rd.Next(0,1000);
                 objsolicitudes.IdTipoSolicitud = 1;
                 objsolicitudes.Departamento = _solicitudes.Solicitud.Departamento;
@@ -124,7 +120,7 @@ namespace TravelExpenses.Controllers
             } 
         }
 
-        public ActionResult RegistrarDestino(DestinosViewModel _Destinos)
+        public ActionResult RegistrarDestino(SolicitudesViewModel _Destinos)
         {
             Destinos destinos = new Destinos();
             if (!ModelState.IsValid)
@@ -133,8 +129,8 @@ namespace TravelExpenses.Controllers
             }
             try
             {
-                destinos.ClavePais ="MEX";
-                destinos.IdEstado = 1;
+                destinos.ClavePais = _Destinos.Destino.ClavePais;
+                destinos.IdEstado = _Destinos.Destino.IdEstado;
                 destinos.IdCiudad = 1;
                 destinos.Motivo = _Destinos.Destino.Motivo;
                 destinos.FechaSalida = _Destinos.Destino.FechaSalida;

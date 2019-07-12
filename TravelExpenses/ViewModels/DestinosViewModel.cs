@@ -9,5 +9,7 @@ namespace TravelExpenses.ViewModels
     {
         public IEnumerable<Destinos> Destinos { get; set; }
         public Destinos Destino { get; set; }
+        public string ClavePais { get; set; }
+        public int IdEstado { get; set; }
     }
 }
