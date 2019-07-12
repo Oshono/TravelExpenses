@@ -93,7 +93,7 @@ namespace TravelExpenses.Controllers
                 objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
                 objsolicitudes.Id = _solicitudes.Solicitud.Id;
                 objsolicitudes.RFC = "456777";
-                //_SolicitudesData.InsertarSolicitud(objsolicitudes);
+                _SolicitudesData.InsertarSolicitud(objsolicitudes);
                 ViewBag.Script = "Datos almacenados";
 
 
@@ -136,7 +136,7 @@ namespace TravelExpenses.Controllers
                 destinos.FechaSalida = _Destinos.Destino.FechaSalida;
                 destinos.FechaLlegada = _Destinos.Destino.FechaLlegada;
                 destinos.Folio = _Destinos.Destino.Folio;
-                //_DestinosData.InsertarDestino(destinos);
+                _DestinosData.InsertarDestino(destinos);
 
 
                 //var Pais = _UbicacionData.ObtenerPais();
