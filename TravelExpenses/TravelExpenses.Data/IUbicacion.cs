@@ -7,6 +7,10 @@ namespace TravelExpenses.Data
     {
         List<Estado> ObtenerEstados(string ClavePais);
         List<Paises> ObtenerPaises();
-        List<Destino> ObtenerCiudades(int? IdEstado, string ClavePais);
+        List<Ciudades> ObtenerCiudades(string ClavePais, int? IdEstado);
+        List<Destino> ObtenerDestinos(int? IdEstado, string ClavePais);
+        //IEnumerable<Paises> ObtenerPais();
+        //IEnumerable<Estado> ObtenerEstado(string ClavePais);
+        //IEnumerable<Ciudades> ObtenerCiudad(string Clave, int IdEstado);
     }
 }

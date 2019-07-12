@@ -23,7 +23,7 @@
                     <label class="control-label">Ciudad</label>
                     @Html.DropDownListFor(x => Model.Ciudades, new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Estado", onchange = "" })
                     <input asp-for="Ciudades" class="form-control" />
-                    <span class="text-danger" asp-validation-for="Ciudad.Ciudad"></span>
+                    <span class="text-danger" asp-validation-for="Ciudad.IdCiudad"></span>
                 </div>
 
 

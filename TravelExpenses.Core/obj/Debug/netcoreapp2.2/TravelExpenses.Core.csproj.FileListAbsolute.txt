@@ -1,0 +1,9 @@
+D:\Ozono\TravelExpenses\TravelExpenses.Core\bin\Debug\netcoreapp2.2\TravelExpenses.Core.deps.json
+D:\Ozono\TravelExpenses\TravelExpenses.Core\bin\Debug\netcoreapp2.2\TravelExpenses.Core.dll
+D:\Ozono\TravelExpenses\TravelExpenses.Core\bin\Debug\netcoreapp2.2\TravelExpenses.Core.pdb
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.csprojAssemblyReference.cache
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.csproj.CoreCompileInputs.cache
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.AssemblyInfoInputs.cache
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.AssemblyInfo.cs
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.dll
+D:\Ozono\TravelExpenses\TravelExpenses.Core\obj\Debug\netcoreapp2.2\TravelExpenses.Core.pdb

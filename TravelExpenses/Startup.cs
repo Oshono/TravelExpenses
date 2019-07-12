@@ -44,6 +44,7 @@ namespace TravelExpenses
             services.AddScoped<IDepartamento, DepartamentoDA>();
             services.AddScoped<ISolicitudes, SolicitudesDA>();
             services.AddScoped<IGasto, GastoDA>();
+            services.AddScoped<IDestinos, DestinosDA>();
             services.AddScoped<ICentroCosto, CentroCostoDA>();
             services.AddScoped<IMoneda, MonedaDA>();
             services.AddScoped<ICentroCostoEmpresa, CentroCostoEmpresaDA>();
@@ -120,7 +121,7 @@ namespace TravelExpenses
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=ListarSolicitudes}/{id?}");
             });
         }
     }

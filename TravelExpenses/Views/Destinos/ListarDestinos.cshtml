@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TravelExpenses.Core.Destinos>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClavePais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdEstado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCiudad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Motivo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaSalida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaLlegada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Folio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClavePais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdEstado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCiudad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Motivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaSalida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaLlegada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Folio)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdDestinos">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdDestinos">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdDestinos">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

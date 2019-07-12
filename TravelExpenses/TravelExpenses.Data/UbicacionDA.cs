@@ -49,8 +49,45 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-         
-        public List<Destino> ObtenerCiudades(int? IdEstado, string ClavePais)
+        public List<Ciudades> ObtenerCiudades(string ClavePais, int? IdEstado)
+        {
+            var list = new List<Ciudades>();
+            try
+            {
+
+
+                var ciudades = (from c in db.Ciudades
+                                join e in db.Estados on c.IdEstado equals e.IdEstado
+                                join p in db.Paises on e.ClavePais equals p.ClavePais
+                                where (p.ClavePais == ClavePais || ClavePais == "")
+                                select new
+                                {
+                                    c.IdCiudad,
+                                    c.Activo,
+                                    c.IdEstado,
+                                    c.Descripcion,
+                                    DescripcionEstado = e.Descripcion,
+                                    p.ClavePais,
+                                    NombrePais = p.Nombre
+                                }).ToList();
+
+
+                list = ciudades.ConvertAll(x => new Ciudades
+                {
+                    Descripcion = x.Descripcion,
+                    IdCiudad = x.IdCiudad,
+                    IdEstado = x.IdEstado,                    
+                    Activo = x.Activo
+                });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+ 
+        public List<Destino> ObtenerDestinos(int? IdEstado, string ClavePais)
         {
             var list = new List<Destino>();
             try
@@ -89,7 +126,6 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-
-
     }
 }
+

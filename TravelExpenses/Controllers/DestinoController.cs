@@ -37,17 +37,17 @@ namespace TravelExpenses.Controllers
             return View(ubicacionModel);
         }
 
-        [HttpPost]
-        public ActionResult CargaCiudades(string ClavePais)
-        {
-            var ciudades = _ubicacion.ObtenerCiudades(0, ClavePais);            
-            return Json(ciudades);
-        }
+        //[HttpPost]
+        //public ActionResult CargaCiudades(string ClavePais)
+        //{
+        //    var ciudades = _ubicacion.ObtenerDestinos(0, ClavePais);            
+        //    return Json(ciudades);
+        //}
 
         [HttpPost]
         public ActionResult CargaCiudades(int IdEstado, string ClavePais)
         {
-            var ciudades = _ubicacion.ObtenerCiudades(IdEstado, ClavePais);
+            var ciudades = _ubicacion.ObtenerDestinos(IdEstado, ClavePais);
             return Json(ciudades);
         }
 
@@ -80,7 +80,8 @@ namespace TravelExpenses.Controllers
         {
             var destinoModel = new DestinoViewModel();
             destinoModel.Paises = _ubicacion.ObtenerPaises();
-            
+            destinoModel.Estados = _ubicacion.ObtenerEstados("");
+            destinoModel.Ciudades = _ubicacion.ObtenerCiudades("MEX",0);
             return View(destinoModel);
         }
 
