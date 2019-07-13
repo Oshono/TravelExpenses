@@ -90,21 +90,18 @@ namespace TravelExpenses.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DestinoViewModel Destino)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
             try
             {
                 var IdEstado = 0;
-                if (Destino.Estado.Descripcion != "")
+                if (!string.IsNullOrEmpty(Destino.Estado.Descripcion))
                 {
                     var Estado = new Estado();
                     Estado.ClavePais = Destino.Pais.ClavePais;
                     Estado.Descripcion = Destino.Estado.Descripcion;
                     IdEstado = _ubicacion.GuardarEstado(Estado);
                 }
-                if (Destino.Ciudad.Descripcion != "")
+                if (!string.IsNullOrEmpty(Destino.Ciudad.Descripcion))
                 {
                     var Ciudad = new Ciudades();
                     Ciudad.Descripcion = Destino.Ciudad.Descripcion;
