@@ -52,6 +52,13 @@ namespace TravelExpenses.Controllers
         }
 
         [HttpPost]
+        public ActionResult CargaDestinos(int IdEstado, string ClavePais)
+        {
+            var destinos = _ubicacion.ObtenerDestinos(IdEstado, ClavePais);
+            return Json(destinos);
+        }
+
+        [HttpPost]
         public ActionResult CargaEstados(string ClavePais)
         {
             var estados = _ubicacion.ObtenerEstados(ClavePais);

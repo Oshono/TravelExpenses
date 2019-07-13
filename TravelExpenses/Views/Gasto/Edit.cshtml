@@ -13,12 +13,12 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descripción Gasto</label>
-                    <input asp-for=@Model.Gasto.Nombre class="form-control" />
+                    <input asp-for=@Model.Gasto.Nombre class="form-control" placeholder="Descripción del Gasto" />
                     <span asp-validation-for=@Model.Gasto.Nombre class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Cuenta Contable</label>
-                    <input asp-for=@Model.Gasto.CuentaContable class="form-control" />
+                    <input asp-for=@Model.Gasto.CuentaContable class="form-control" placeholder="Cuenta Contable relacionada al gasto"/>
                     <span asp-validation-for=@Model.Gasto.CuentaContable class="text-danger"></span>
                 </div>
                 <div class="form-group">
