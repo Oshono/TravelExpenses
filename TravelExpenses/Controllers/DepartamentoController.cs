@@ -59,7 +59,8 @@ namespace TravelExpenses.Controllers
         {
             var deptoModel = new DepartamentoViewModel();
             deptoModel.Departamento = new Departamentos();
-            if (string.IsNullOrEmpty(ClaveDepto))
+           
+            if (!string.IsNullOrEmpty(ClaveDepto))
             {
                 var depto = _departamento.ObtenerDepartamentos()
                             .Where( x => x.ClaveDepto == ClaveDepto)

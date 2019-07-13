@@ -47,7 +47,7 @@ namespace TravelExpenses.Controllers
         [HttpPost]
         public ActionResult CargaCiudades(int IdEstado, string ClavePais)
         {
-            var ciudades = _ubicacion.ObtenerDestinos(IdEstado, ClavePais);
+            var ciudades = _ubicacion.ObtenerCiudades(ClavePais, IdEstado);
             return Json(ciudades);
         }
 
@@ -81,29 +81,43 @@ namespace TravelExpenses.Controllers
             var destinoModel = new DestinoViewModel();
             destinoModel.Paises = _ubicacion.ObtenerPaises();
             destinoModel.Estados = _ubicacion.ObtenerEstados("");
-            destinoModel.Ciudades = _ubicacion.ObtenerCiudades("MEX",0);
+            destinoModel.Ciudades = new List<Ciudades> ();
             return View(destinoModel);
         }
 
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(DestinoViewModel centroCostoModel)
+        public ActionResult Edit(DestinoViewModel Destino)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}             
-            //try
-            //{
-            //    _ubicacion.Guardar(centroCostoModel.CentroCosto);
-            //}
-            //catch
-            //{
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var IdEstado = 0;
+                if (Destino.Estado.Descripcion != "")
+                {
+                    var Estado = new Estado();
+                    Estado.ClavePais = Destino.Pais.ClavePais;
+                    Estado.Descripcion = Destino.Estado.Descripcion;
+                    IdEstado = _ubicacion.GuardarEstado(Estado);
+                }
+                if (Destino.Ciudad.Descripcion != "")
+                {
+                    var Ciudad = new Ciudades();
+                    Ciudad.Descripcion = Destino.Ciudad.Descripcion;
+                    Ciudad.IdEstado = Destino.Estado.IdEstado;
+                    _ubicacion.GuardarCiudad(Ciudad);
+                }
+            }
+            catch
+            {
 
-            //}
+            }
 
-            return Redirect("/CentroCosto/Lista");
+            return Redirect("/Destino/Lista");
         }
 
     }

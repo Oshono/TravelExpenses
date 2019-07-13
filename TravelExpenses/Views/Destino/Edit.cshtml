@@ -11,35 +11,77 @@
                 <input type="hidden" asp-for="@Model.Ciudad.IdCiudad" />
                 <div class="form-group">
                     <label class="control-label">País</label>
-                    @Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Pais", onchange = "CargaEstados(this.value);" })
+
+                    <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);"
+                            asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))"></select>
+
+                    @*@Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Pais", onchange = "CargaEstados(this.value);" })*@
                     <span class="text-danger" asp-validation-for="Paises"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Estado</label>
                     @Html.DropDownListFor(x => Model.Estados, new SelectList(Model.Estados, "IdEstado", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Estado", onchange = "CargaCiudades(this.value);" })
+                    <input asp-for="Estado.Descripcion" class="form-control" style="visibility:hidden" id="newEstado" />
                     <span class="text-danger" asp-validation-for="Estados"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Ciudad</label>
-                    @Html.DropDownListFor(x => Model.Ciudades, new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Estado", onchange = "" })
-                    <input asp-for="Ciudades" class="form-control" />
+                    @Html.DropDownListFor(x => Model.Ciudades, new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Ciudad", onchange = "" })
+                    <input asp-for="Ciudad.Descripcion" class="form-control" style="visibility:hidden" id="newCiudad" />
                     <span class="text-danger" asp-validation-for="Ciudad.IdCiudad"></span>
                 </div>
 
-
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <button type="submit" class="btn btn-primary">Cancelar</button>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
             </form>
         </div>
     </div>
 
 </div>
 <script type="text/javascript">
+    function CargaEstados(ClavePais) {
+        var url = "/Destino/CargaEstados/";
+        $('#Estado').css({ visibility: 'hidden' });
+        $('#Ciudad').css({ visibility: 'hidden' });
+
+        $('#newEstado').removeAttr('style');
+        $('#newCiudad').removeAttr('style');
+
+        $.ajax({
+            url: url,
+            data: {
+                ClavePais: ClavePais
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.length > 0) {
+                    $('#Estado').css({ visibility: 'visible ' });
+
+                    var markup = "<option value='0'>Seleccione</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        markup += "<option value=" + data[x].idEstado + ">" + data[x].descripcion + "</option>";
+                    }
+                    $("#Estado").html(markup).show();
+
+                    CargaCiudades(0);
+                }
+                else {
+                    $('#Estado').css({ visibility: 'hidden' });
+                    $('#Ciudad').css({ visibility: 'hidden' });                    
+                }
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
     function CargaCiudades(IdEstado) {
-        var url = "/Destino/Estados/";
-
-        ClavePais = ""
-
+        var url = "/Destino/CargaCiudades/";
+        ClavePais = $("#Pais option:selected").val();
+        $('#Ciudad').css({ visibility: 'hidden' });
+        $('#newCiudad').removeAttr('style');
         $.ajax({
             url: url,
             data: {
@@ -49,11 +91,18 @@
             cache: false,
             type: "POST",
             success: function (data) {
-                var markup = "<option value='0'>Seleccione</option>";
-                for (var x = 0; x < data.length; x++) {
-                    markup += "<option value=" + data[x].IdColonia + ">" + data[x].Colonia + "</option>";
+                if (data.length > 0) {
+                    $('#Ciudad').css({ visibility: 'visible' });
+                    $("#Ciudad").empty();
+                    var markup = "<option value='0'>Seleccione</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        console.log(data[x]);
+                        markup += "<option value=" + data[x].idCiudad + ">" + data[x].descripcion + "</option>";
+                    }
+                    $("#Ciudad").html(markup).show();
+                } else {
+                    $('#Ciudad').css({ visibility: 'hidden' });                    
                 }
-                $("#IdColonia").html(markup).show();
             },
             error: function (reponse) {
                 alert("error : " + reponse);

@@ -59,7 +59,7 @@ namespace TravelExpenses.Data
                 var ciudades = (from c in db.Ciudades
                                 join e in db.Estados on c.IdEstado equals e.IdEstado
                                 join p in db.Paises on e.ClavePais equals p.ClavePais
-                                where (p.ClavePais == ClavePais || ClavePais == "")
+                                where ((p.ClavePais == ClavePais || ClavePais == "") && (c.IdEstado == IdEstado || IdEstado == 0))
                                 select new
                                 {
                                     c.IdCiudad,
@@ -97,7 +97,7 @@ namespace TravelExpenses.Data
                 var ciudades = (from c in db.Ciudades
                                 join e in db.Estados on c.IdEstado equals e.IdEstado
                                 join p in db.Paises on e.ClavePais equals p.ClavePais
-                                where (p.ClavePais == ClavePais || ClavePais == "")
+                                where ((p.ClavePais == ClavePais || ClavePais == "") && (c.IdEstado == IdEstado || IdEstado == 0))
                                 select new
                                 {                                    
                                     c.IdCiudad,
@@ -125,6 +125,71 @@ namespace TravelExpenses.Data
             {
                 throw ex;
             }
+        }
+
+        public int GuardarCiudad(Ciudades ciudad)
+        {
+            try
+            {
+                int result = 0;
+                if (ciudad != null)
+                {
+                    if (ExistsCiudad(ciudad.IdCiudad))
+                    {
+                        db.Update(ciudad);
+                    }
+                    else
+                    {
+                        db.Ciudades.Add(ciudad);
+                    }
+
+                    result = Commit();
+
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int GuardarEstado(Estado estado)
+        {
+            try
+            {
+                int result = 0;
+                if (estado != null)
+                {
+                    if (!ExistsEstado(estado.IdEstado))
+                    {
+                        db.Add(estado);
+                        Commit();
+                        result = estado.IdEstado;                        
+                    }
+
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private bool ExistsEstado(int Id)
+        {
+            return db.Estados.Any(e => e.IdEstado == Id);
+        }
+        private bool ExistsCiudad(int Id)
+        {
+            return db.Ciudades.Any(e => e.IdCiudad == Id);
+        }
+        public int Commit()
+        {
+            return db.SaveChanges();
         }
     }
 }

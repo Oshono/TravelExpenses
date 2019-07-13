@@ -11,6 +11,7 @@ namespace TravelExpenses.Core
         {
             ClaveDepto = string.Empty;
             Nombre = string.Empty;
+            Activo = true;
         }
         [Required, Key, StringLength(10)]
         public string ClaveDepto { get; set; }

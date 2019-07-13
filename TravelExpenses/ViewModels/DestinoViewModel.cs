@@ -13,6 +13,8 @@ namespace TravelExpenses.ViewModels
         public IEnumerable<Estado> Estados { get; set; }
         public IEnumerable<Paises> Paises { get; set; }
 
+        public Estado Estado { get; set; }
+        public Paises Pais { get; set; }
         public Ciudades Ciudad { get; set; }
 
     }
