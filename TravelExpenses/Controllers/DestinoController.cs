@@ -27,12 +27,21 @@ namespace TravelExpenses.Controllers
             return View();
         }
 
-        public ActionResult Lista()
+        public ActionResult Lista(string ClavePais)
         {
-            var ciudades = new List<Destino>();
+            List<Destino> ciudades = new List<Destino>();
             var paises = _ubicacion.ObtenerPaises();
             var ubicacionModel = new DestinoViewModel();
-            ubicacionModel.Destinos = ciudades;
+            if (!string.IsNullOrEmpty(ClavePais))
+            {
+                ubicacionModel.Pais = new Paises();
+                ubicacionModel.Pais.ClavePais = ClavePais;
+                ubicacionModel.Destinos = _ubicacion.ObtenerDestinos(0,ClavePais);
+            }
+            else
+            { 
+                ubicacionModel.Destinos = ciudades;
+            }
             ubicacionModel.Paises = paises;
             return View(ubicacionModel);
         }
@@ -121,7 +130,13 @@ namespace TravelExpenses.Controllers
 
             }
 
-            return Redirect("/Destino/Lista");
+            //var segment = string.Join(" ", "MEX");
+            //var escapedSegment = Uri.EscapeDataString(segment);
+            //var baseFormat = "/Destino/Lista/MEX";
+            //var url = string.Format(baseFormat, escapedSegment);
+            //return Redirect(url);
+
+            return RedirectToAction("Lista", "Destino", new { ClavePais = Destino.Pais.ClavePais });
         }
 
     }

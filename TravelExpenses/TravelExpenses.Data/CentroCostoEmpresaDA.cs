@@ -29,7 +29,7 @@ namespace TravelExpenses.Data
         }
         public IEnumerable<CentroCostoEmpresa> ObtenerCentroCostosEmpresa()
         {
-            return db.CatCentroCosto_Empresa;
+            return db.CentroCosto_Empresa;
         }
         public IEnumerable<CentroCosto> ObtenerCentrosCostos()
         {
@@ -44,13 +44,29 @@ namespace TravelExpenses.Data
             try
             {
                 int result = 0;
-                if (centroEmpresa != null)
+                if (centroEmpresa != null && !Exists(centroEmpresa.ClaveCentroCosto, centroEmpresa.RFC))
                 {
-                    if (!Exists(centroEmpresa.ClaveCentroCosto, centroEmpresa.RFC))
-                    {
-                        db.Add(centroEmpresa);
-                    }
+                    db.Add(centroEmpresa);
+                    result = Commit();
 
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int Borrar(CentroCostoEmpresa centroEmpresa)
+        {
+            try
+            {
+                int result = 0;
+                if (centroEmpresa != null && Exists(centroEmpresa.ClaveCentroCosto, centroEmpresa.RFC))
+                {
+                    db.Remove(centroEmpresa);
                     result = Commit();
 
                 }
@@ -65,7 +81,7 @@ namespace TravelExpenses.Data
 
         private bool Exists(string ClaveCentroCosto, string RFC)
         {
-            return db.CatCentroCosto_Empresa.Any(e => e.ClaveCentroCosto == ClaveCentroCosto && e.RFC == RFC);
+            return db.CentroCosto_Empresa.Any(e => e.ClaveCentroCosto == ClaveCentroCosto && e.RFC == RFC);
         }
         public int Commit()
         {

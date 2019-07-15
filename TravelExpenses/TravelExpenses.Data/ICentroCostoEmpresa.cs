@@ -9,6 +9,7 @@ namespace TravelExpenses.Data
         IEnumerable<Empresas> ObtenerEmpresas();
         IEnumerable<CentroCosto> ObtenerCentrosCostos();
         int Guardar(CentroCostoEmpresa centroCostoEmpresa);
+        int Borrar(CentroCostoEmpresa centroEmpresa);
         int Commit();
     }
 }
