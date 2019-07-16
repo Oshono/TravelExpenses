@@ -109,6 +109,21 @@ namespace TravelExpenses.Data
                                     NombrePais = p.Nombre
                                 }).ToList();
 
+                var ciudades2 = (from c in db.Ciudades                                
+                                join p in db.Paises on c.ClavePais equals p.ClavePais
+                                where ((p.ClavePais == ClavePais || ClavePais == ""))
+                                select new
+                                {
+                                    c.IdCiudad,
+                                    c.Activo,
+                                    c.IdEstado,
+                                    c.Descripcion,
+                                    DescripcionEstado = "Sin Estado",
+                                    p.ClavePais,
+                                    NombrePais = p.Nombre
+                                }).ToList();
+
+                ciudades.AddRange(ciudades2);
 
                 list = ciudades.ConvertAll(x => new Destino {
                     Ciudad = x.Descripcion,
@@ -144,6 +159,7 @@ namespace TravelExpenses.Data
                     }
 
                     result = Commit();
+
 
                 }
                 return result;

@@ -121,7 +121,15 @@ namespace TravelExpenses.Controllers
                 {
                     var Ciudad = new Ciudades();
                     Ciudad.Descripcion = Destino.Ciudad.Descripcion;
-                    Ciudad.IdEstado = Destino.Estado.IdEstado;
+                    if (Destino.Estado.IdEstado > 0)
+                    {
+                        Ciudad.IdEstado = Destino.Estado.IdEstado;
+                    }
+                    else
+                    {
+                        Ciudad.ClavePais = Destino.Pais.ClavePais;
+                        Ciudad.IdEstado = null;
+                    }
                     _ubicacion.GuardarCiudad(Ciudad);
                 }
             }

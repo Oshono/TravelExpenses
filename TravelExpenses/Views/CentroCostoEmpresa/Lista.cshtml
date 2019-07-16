@@ -58,6 +58,14 @@
     function CargaCentroCostoEmpresa(RFC) {
         var url = "/CentroCostoEmpresa/CargaCentroCostoEmpresa/";
 
+        
+            $('#tblCentrosCosto tr').each(function () {
+                var check = $(this).find("input[type=checkbox]")
+                check.prop('checked', false);
+
+            });
+        
+
         $.ajax({
             url: url,
             data: { RFC: RFC },
@@ -68,31 +76,20 @@
                 if (data.length > 0) {
                     var row = "";
 
-                   
+
                     $('#tblCentrosCosto tr').each(function () {
                         var centroCosto = $(this).find(":hidden").val();
                         var check = $(this).find("input[type=checkbox]")
 
                         $.each(data, function (index, item) {
                             if (item.claveCentroCosto == centroCosto && item.checkboxAnswer == true) {
-                                
+
                                 check.prop('checked', true);
                             }
                         });
 
                     });
-                    //$.each(data, function (index, item) {
 
-
-
-                    //    if (item.checkboxAnswer === true) {
-                    //        row += "<tr><td><input asp-for='"+ item.claveCentroCosto +"' type='hidden' />" + item.nombre + "</td><td><input type='checkbox' checked='" + item.checkboxAnswer + "'/></td></tr>";
-                    //    }
-                    //    else {
-                    //        row += "<tr><td>" + item.nombre + "</td><td><input type='checkbox'/></td></tr>";
-                    //    }
-                    //});
-                    //$("#tblCentrosCosto").html(row);
                 }
             },
             error: function (reponse) {
