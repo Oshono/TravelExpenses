@@ -1,10 +1,12 @@
-﻿
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+
+
 @{
-    ViewData["Title"] = "Reembolsos";
+    ViewData["Title"] = "Rembolsos";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Reembolsos</h1>
+<h1>Rembolsos</h1>
 
 
 <div class="col-12 grid-margin stretch-card">
@@ -44,28 +46,30 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
- 
-                        <tr>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>                            
-                                <a class="btn btn-lg" asp-controller="Reembolso" asp-action="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>                            
-                            </td>
-                            <td>
-                                <a class="btn btn-lg" asp-controller="Reembolso" asp-action="Edit">
-                                    <i class="fas fa-eraser"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
+                        <tbody>
+                            @foreach (var item in Model.Solicitudes)
+                            {
+                                <tr>
+                                    <td>@item.Folio</td>
+                                    <td>@item.IdTipoSolicitud</td>
+                                    <td>@item.Empresa</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.FechaSolicitud</td>
+                                    <td>@item.Estatus</td>
+                                    <td>2</td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                            <i class="fas fa-eraser"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                 </table>
 
             </div>

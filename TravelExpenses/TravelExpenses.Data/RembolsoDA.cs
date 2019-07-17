@@ -9,12 +9,12 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class ReembolsoDA: IReembolso
+    public class RembolsoDA: IRembolso
     {
         private readonly IConfiguration _configuration;
 
         private readonly TravelExpensesContext db;
-        public ReembolsoDA(TravelExpensesContext db, IConfiguration configuration)
+        public RembolsoDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
             this.db = db;

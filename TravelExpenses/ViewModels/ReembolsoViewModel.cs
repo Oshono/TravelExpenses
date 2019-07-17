@@ -6,7 +6,7 @@ using TravelExpenses.Core;
 
 namespace TravelExpenses.ViewModels
 {
-    public class ReembolsoViewModel
+    public class RembolsoViewModel
     {
         public IEnumerable<Archivo> Archivos { get; set; }
         public Archivo miArchivo { get; set; }

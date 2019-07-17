@@ -3,7 +3,7 @@ using TravelExpenses.Core;
 
 namespace TravelExpenses.Data
 {
-    public interface IReembolso
+    public interface IRembolso
     {
         int Guardar(Archivo archivo);
         IEnumerable<Archivo> ObtenerArchivos();

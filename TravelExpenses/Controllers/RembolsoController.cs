@@ -14,13 +14,15 @@ using System.IO;
 
 namespace TravelExpenses.Controllers
 {
-    public class ReembolsoController : Controller
+    public class rembolsoController : Controller
     {
-        private readonly ICentroCosto _centro;
+        private readonly IRembolso _rembolso;
+        private readonly ISolicitudes _solicitud;
 
-        public ReembolsoController(ICentroCosto centro)
+        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud)
         {
-            _centro = centro;
+            _rembolso = rembolso;
+            _solicitud = solicitud;
         }
 
         // GET: Centro Costos
@@ -31,11 +33,12 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var centros = _centro.ObtenerCentroCostos();
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentrosCostos = centros;
+            var x = Solicitud.EstatusSolicitud.PorComprobar;
+            
 
-            return View(centroModel);
+            SolicitudesViewModel solicitud = new SolicitudesViewModel();
+            solicitud.Solicitudes = _solicitud.ObtenerSolicitudesXEstatus((int)x);
+            return View(solicitud);
         }
 
 
@@ -59,16 +62,16 @@ namespace TravelExpenses.Controllers
         // GET: gastos/Edit/5
         public ActionResult Edit(string ClaveCentroCosto)
         {
-            var centroModel = new CentroCostoViewModel();
-            centroModel.CentroCosto = new CentroCosto();
-            if (!string.IsNullOrEmpty(ClaveCentroCosto))
-            {
-                var centro = _centro.ObtenerCentroCostos()
-                            .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
-                            .FirstOrDefault();
-                centroModel.CentroCosto = centro;
-            }
-            return View(centroModel);
+            //var centroModel = new CentroCostoViewModel();
+            //centroModel.CentroCosto = new CentroCosto();
+            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
+            //{
+            //    var centro = _centro.ObtenerCentroCostos()
+            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
+            //                .FirstOrDefault();
+            //    centroModel.CentroCosto = centro;
+            //}
+            return View( );
         }
 
         // POST: Empresa/Edit/5
@@ -82,7 +85,7 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                _centro.Guardar(centroCostoModel.CentroCosto);
+                //_centro.Guardar(centroCostoModel.CentroCosto);
             }
             catch
             {

@@ -8,10 +8,21 @@ namespace TravelExpenses.Core
     public class Solicitud
     {
 
-        //public int IdSolicitud { get; set; }
-        
-        public string Folio { get; set; }
+        public enum EstatusSolicitud
+        {
+            Cancelada = 1,
+            PorComprobar=2,
+            SolicitudRechazada=3,
+            SolicitudCapturada=4,
+            SolicitudporAutorizar=5,
+            PendienteAutorizar=6,
+            PorLiberar=7
+        } 
 
+        //public int IdSolicitud { get; set; }
+
+        public string Folio { get; set; }
+        public DateTime  FechaSolicitud { get; set; }
         public int IdTipoSolicitud { get; set; }
         public string Departamento { get; set; }
         public string Empresa { get; set; }
