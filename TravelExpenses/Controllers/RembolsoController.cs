@@ -33,11 +33,9 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var x = Solicitud.EstatusSolicitud.PorComprobar;
             
-
             SolicitudesViewModel solicitud = new SolicitudesViewModel();
-            solicitud.Solicitudes = _solicitud.ObtenerSolicitudesXEstatus((int)x);
+            solicitud.Solicitudes = _solicitud.ObtenerSolicitudesXEstatus("Por Comprobar");
             return View(solicitud);
         }
 
@@ -95,12 +93,11 @@ namespace TravelExpenses.Controllers
             return Redirect("/CentroCosto/Lista");
         }
 
-        [HttpPost("UploadFiles")]
-        public async Task<IActionResult> Post(List<IFormFile> files)
+        [HttpPost]
+        public async Task<IActionResult> FileUpload()
         {
-            long size = files.Sum(f => f.Length);
-
-            // full path to file in temp location
+            IFormFileCollection files = Request.Form.Files;
+            //// full path to file in temp location
             var filePath = Path.GetTempFileName();
 
             foreach (var formFile in files)
@@ -117,7 +114,7 @@ namespace TravelExpenses.Controllers
             // process uploaded files
             // Don't rely on or trust the FileName property without validation.
 
-            return Ok(new { count = files.Count, size, filePath });
+            return Ok();
         }
 
     }

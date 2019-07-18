@@ -1,7 +1,7 @@
 ﻿
 <link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
 
-<h1>Comprobaciones</h1>
+<h1>Rembolso</h1>
 
 <div class="dropzone-area">
     <div class="container">
@@ -13,7 +13,7 @@
                         <p>Solo puede subir archivos XML</p>
                     </div>
                     <div id="dropzone1" class="multi-uploader-cs">
-                        <form action="/Pacientes/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
+                        <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
                             <div class="dz-message needsclick download-custom">
                                 <i class="alert-info"></i>
                                 <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
@@ -36,7 +36,7 @@
         paramName: "file",
         maxFilesize: 2,
         maxFiles: 5,
-        acceptedFiles: "image/*, application/pdf",
+        acceptedFiles: "image/*",
         dictMaxFilesExceeded: "El máximo permitido son 2 Mb",
     };
 
