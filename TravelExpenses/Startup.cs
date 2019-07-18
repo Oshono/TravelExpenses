@@ -66,22 +66,23 @@ namespace TravelExpenses
             {
                 // Password settings.
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 100;
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "PasswordFuerticimo_@+";
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -92,8 +93,24 @@ namespace TravelExpenses
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                options.AddPolicy("ManagerAccess", policy =>
+                    policy.RequireAssertion(context =>
+                                context.User.IsInRole("Admin")
+                                || context.User.IsInRole("Manager")));
+
+                options.AddPolicy("UserAccess", policy =>
+                    policy.RequireAssertion(context =>
+                                context.User.IsInRole("Admin")
+                                || context.User.IsInRole("Manager")
+                                || context.User.IsInRole("User")));
+            });
+
+           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);      
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
