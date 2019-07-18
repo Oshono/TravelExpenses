@@ -28,16 +28,28 @@ namespace TravelExpenses.Controllers
         }
 
         public ActionResult Lista()
-        {
-            var centros = _centroEmpresa.ObtenerCentroCostosEmpresa();
+        {            
             var centroModel = new CentroCostoEmpresaViewModel();
             var empresas = _centroEmpresa.ObtenerEmpresas();
-            centroModel.CentroCostosEmpresas = centros;
             centroModel.Empresas = empresas;
-            centroModel.CentroCostos = _centroEmpresa.ObtenerCentrosCostos().ToList();
+            centroModel.CentroCostos = _centroEmpresa.ObtenerCentrosCostos().OrderBy(x => x.Nombre).ToList();
             return View(centroModel);
         }
 
+        [HttpPost]
+        public ActionResult CargaCentroCostoEmpresa(string RFC)
+        {
+            var centroCostos = _centroEmpresa.ObtenerCentrosCostos().OrderBy(x=>x.Nombre).ToList();
+            var centroCostosEmpresa = _centroEmpresa.ObtenerCentroCostosEmpresa().Where(x => x.RFC == RFC).ToList();
+            centroCostos.ForEach(x=> {
+                                            if (centroCostosEmpresa.Exists( y=> y.ClaveCentroCosto ==  x.ClaveCentroCosto) )
+                                        { x.checkboxAnswer = true; }
+                                      }
+                                );
+
+                
+            return Json(centroCostos);
+        }
 
         // POST: gastos/Create
         [HttpPost]
@@ -82,12 +94,19 @@ namespace TravelExpenses.Controllers
             }             
             try
             {
-                foreach (CentroCosto centro in centroCostoModel.CentroCostos.Where(x => x.checkboxAnswer == true).ToList())
+                foreach (CentroCosto centro in centroCostoModel.CentroCostos)
                 {
                     centroCostoModel.CentroCostoEmpresa = new CentroCostoEmpresa();
                     centroCostoModel.CentroCostoEmpresa.RFC = centroCostoModel.Empresa;
                     centroCostoModel.CentroCostoEmpresa.ClaveCentroCosto = centro.ClaveCentroCosto;
-                    _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
+                    if (centro.checkboxAnswer == true)
+                    {
+                        _centroEmpresa.Guardar(centroCostoModel.CentroCostoEmpresa);
+                    }
+                    else
+                    {
+                        _centroEmpresa.Borrar(centroCostoModel.CentroCostoEmpresa);
+                    }
                 }
             }
             catch

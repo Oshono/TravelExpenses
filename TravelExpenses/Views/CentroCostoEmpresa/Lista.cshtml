@@ -13,15 +13,17 @@
                 <div class="table-responsive">
                     <div class="form-group">
                         <label class="control-label">Empresa</label>
-                        <select asp-for="Empresa" class="form-control input-sm"
-                                asp-items="@(new SelectList(Model.Empresas, "RFC", "Nombre"))"></select>
+                        <select asp-for="Empresa" class="form-control input-sm" onchange="CargaCentroCostoEmpresa(this.value)"
+                                asp-items="@(new SelectList(Model.Empresas, "RFC", "Nombre"))">
+                            <option value="">--Seleccione una Empresa</option>
+                        </select>
                         @Html.ValidationMessageFor(x => x.Empresa, "", new { @class = "text-danger" })
 
                         <input type="submit" value="Guardar" class="btn btn-primary" />
                     </div>
                     <table id="data-table-basic" class="table table-striped">
                         <thead>
-                            <tr>                                
+                            <tr>
                                 <th>
                                     Nombre
                                 </th>
@@ -30,21 +32,21 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                                @{
-                                    for (int i = 0; i < Model.CentroCostos.Count(); i++)
-                                    {
+                        <tbody id="tblCentrosCosto">
+                            @{
+                                for (int i = 0; i < Model.CentroCostos.Count(); i++)
+                                {
                                     <tr>
                                         <td>
-                                            <input asp-for="@Model.CentroCostos[i].ClaveCentroCosto" type="hidden" />
+                                            <input asp-for="@Model.CentroCostos[i].ClaveCentroCosto" type="hidden"  id="CentroCosto"/>
                                             @Model.CentroCostos[i].Nombre
                                         </td>
                                         <td>
-                                            <input asp-for="@Model.CentroCostos[i].checkboxAnswer" type="checkbox" />
+                                            <input asp-for="@Model.CentroCostos[i].checkboxAnswer" type="checkbox"/>
                                         </td>
                                     </tr>
-                                    }
                                 }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -52,3 +54,47 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    function CargaCentroCostoEmpresa(RFC) {
+        var url = "/CentroCostoEmpresa/CargaCentroCostoEmpresa/";
+
+        
+            $('#tblCentrosCosto tr').each(function () {
+                var check = $(this).find("input[type=checkbox]")
+                check.prop('checked', false);
+
+            });
+        
+
+        $.ajax({
+            url: url,
+            data: { RFC: RFC },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                if (data.length > 0) {
+                    var row = "";
+
+
+                    $('#tblCentrosCosto tr').each(function () {
+                        var centroCosto = $(this).find(":hidden").val();
+                        var check = $(this).find("input[type=checkbox]")
+
+                        $.each(data, function (index, item) {
+                            if (item.claveCentroCosto == centroCosto && item.checkboxAnswer == true) {
+
+                                check.prop('checked', true);
+                            }
+                        });
+
+                    });
+
+                }
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+</script>

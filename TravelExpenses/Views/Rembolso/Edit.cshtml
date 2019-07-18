@@ -1,0 +1,44 @@
+﻿
+<link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
+
+<h1>Comprobaciones</h1>
+
+<div class="dropzone-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="dropdone-nk mg-t-30">
+                    <div class="cmp-tb-hd">
+                        <h2>Arrastre y suelte los documentos</h2>
+                        <p>Solo puede subir archivos XML</p>
+                    </div>
+                    <div id="dropzone1" class="multi-uploader-cs">
+                        <form action="/Pacientes/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
+                            <div class="dz-message needsclick download-custom">
+                                <i class="alert-info"></i>
+                                <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
+                                <p>
+                                    <span class="note needsclick">(Los archivos se guardan <strong>temporalmente</strong> hasta que de clic en <strong>Guardar</strong>)</span>
+                                </p>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/vendors/dropzone/dropzone.js"></script>
+<script type="text/javascript">
+    Dropzone.options.UploadFiles = {
+        addRemoveLinks: true,
+        paramName: "file",
+        maxFilesize: 2,
+        maxFiles: 5,
+        acceptedFiles: "image/*, application/pdf",
+        dictMaxFilesExceeded: "El máximo permitido son 2 Mb",
+    };
+
+
+</script>

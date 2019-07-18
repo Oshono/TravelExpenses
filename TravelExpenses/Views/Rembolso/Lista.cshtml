@@ -1,0 +1,78 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+
+
+@{
+    ViewData["Title"] = "Rembolsos";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Rembolsos</h1>
+
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <a asp-controller="Moneda" asp-action="Edit" class="btn btn-primary">Agregar Nueva Moneda</a>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Folio
+                            </th>
+                            <th>
+                                Tipo Solicitud
+                            </th>
+                            <th>
+                                Empresa
+                            </th>
+                            <th>
+                                Solicitante
+                            </th>
+                            <th>
+                                Fecha Solicitud
+                            </th>
+                            <th>
+                                Importe Solicitado
+                            </th>
+                            <th>
+                                Estatus
+                            </th>
+                            <th>
+                                Editar
+                            </th>
+                            <th>
+                                Eliminar
+                            </th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            @foreach (var item in Model.Solicitudes)
+                            {
+                                <tr>
+                                    <td>@item.Folio</td>
+                                    <td>@item.IdTipoSolicitud</td>
+                                    <td>@item.Empresa</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.FechaSolicitud</td>
+                                    <td>@item.Estatus</td>
+                                    <td>2</td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                            <i class="fas fa-eraser"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

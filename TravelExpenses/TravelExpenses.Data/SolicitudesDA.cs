@@ -106,7 +106,28 @@ namespace TravelExpenses.Data
             }
         }
 
-         
+        public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(int TipoSolicitud)
+        {
+
+            try
+            {
+                if (TipoSolicitud > 0)
+                {
+                    return ObtenerSolicitudes().Where(x => x.IdTipoSolicitud == TipoSolicitud);
+                }
+                else
+                {
+                    return ObtenerSolicitudes();
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         //public IEnumerable<Solicitud> ObtenerSolicitudes()
         //{ 
         //    try

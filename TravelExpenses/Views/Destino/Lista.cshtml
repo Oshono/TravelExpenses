@@ -12,7 +12,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="control-label">País</label>
-                @Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Pais" , onchange = "CargaCiudades(this.value);" })
+                @Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), "--Seleccione un país", htmlAttributes: new { @class = "form-control", id = "Pais" , onchange = "CargaCiudades(this.value);" })
                 <span class="text-danger" asp-validation-for="Paises"></span>
             </div>
             <div class="table-responsive">
@@ -51,10 +51,35 @@
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var UrlParameter = getUrlParameter("ClavePais");
+        
+        if (UrlParameter != undefined) {
+            $("#Pais").val(UrlParameter);
+        }
+    });
+
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+
     function CargaCiudades(ClavePais) {        
-        var url = "/Destino/CargaDestinos/";
- 
+        var url = "/Destino/CargaDestinos/"; 
 
         $.ajax({
             url: url,

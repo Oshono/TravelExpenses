@@ -12,23 +12,28 @@
                 <div class="form-group">
                     <label class="control-label">País</label>
 
-                    <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);"
-                            asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))"></select>
-
-                    @*@Html.DropDownListFor(x => Model.Paises, new SelectList(Model.Paises, "ClavePais", "Nombre"), htmlAttributes: new { @class = "form-control", id = "Pais", onchange = "CargaEstados(this.value);" })*@
+                    <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);" title="--Seleccione un país"
+                            asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
+                        <option value="">--Seleccione un País</option>
+                    </select>
                     <span class="text-danger" asp-validation-for="Paises"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Estado</label>
                     <select asp-for="Estado.IdEstado" class="form-control input-sm" onchange="CargaCiudades(this.value);"
-                            asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado"></select>
+                            asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado">
+                        <option value="">--Seleccione un Estado</option>
+                    </select>
                     <input asp-for="Estado.Descripcion" class="form-control" style="visibility:hidden" id="newEstado" placeholder="Agregue un nuevo estado" />
                     <span class="text-danger" asp-validation-for="Estados"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Ciudad</label>
-                    @Html.DropDownListFor(x => Model.Ciudades, new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"), htmlAttributes: new { @class = "form-control", id = "Ciudad", onchange = "" })
-                    <input asp-for="Ciudad.Descripcion" class="form-control" style="visibility:hidden" id="newCiudad" placeholder="Agregue una nueva ciudad"/>
+                    <label class="control-label">Ciudad</label>                    
+                    <select asp-for="Ciudad.IdCiudad" class="form-control input-sm" 
+                            asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
+                        <option value="">--Seleccione una Ciudad</option>                        
+                    </select>
+                    <input asp-for="Ciudad.Descripcion" class="form-control" style="visibility:hidden" id="newCiudad" placeholder="Agregue una nueva ciudad" />
                     <span class="text-danger" asp-validation-for="Ciudad.IdCiudad"></span>
                 </div>
 
@@ -80,7 +85,7 @@
     }
     function CargaCiudades(IdEstado) {
         var url = "/Destino/CargaCiudades/";
-        ClavePais = $("#Pais option:selected").val();
+        var ClavePais = $("#Pais_ClavePais").val();
         $('#Ciudad').css({ visibility: 'hidden' });
         $('#newCiudad').removeAttr('style');
         $.ajax({
