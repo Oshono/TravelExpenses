@@ -11,6 +11,10 @@ using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
 using System.Web;
 using System.IO;
+using System.Xml.Linq;
+using System.Globalization;
+using System.Text;
+
 
 namespace TravelExpenses.Controllers
 {
@@ -33,11 +37,9 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Lista()
         {
-            var x = Solicitud.EstatusSolicitud.PorComprobar;
             
-
             SolicitudesViewModel solicitud = new SolicitudesViewModel();
-            solicitud.Solicitudes = _solicitud.ObtenerSolicitudesXEstatus((int)x);
+            solicitud.Solicitudes = _solicitud.ObtenerSolicitudesXEstatus("PorComprobar");
             return View(solicitud);
         }
 
@@ -62,6 +64,8 @@ namespace TravelExpenses.Controllers
         // GET: gastos/Edit/5
         public ActionResult Edit(string ClaveCentroCosto)
         {
+            var rembolso = new RembolsoViewModel();
+            rembolso.Comprobantes = new List<Comprobante>();
             //var centroModel = new CentroCostoViewModel();
             //centroModel.CentroCosto = new CentroCosto();
             //if (!string.IsNullOrEmpty(ClaveCentroCosto))
@@ -71,7 +75,7 @@ namespace TravelExpenses.Controllers
             //                .FirstOrDefault();
             //    centroModel.CentroCosto = centro;
             //}
-            return View( );
+            return View( rembolso);
         }
 
         // POST: Empresa/Edit/5
@@ -95,30 +99,67 @@ namespace TravelExpenses.Controllers
             return Redirect("/CentroCosto/Lista");
         }
 
-        [HttpPost("UploadFiles")]
-        public async Task<IActionResult> Post(List<IFormFile> files)
+        [HttpPost]
+        public  ActionResult  FileUpload(IEnumerable<IFormFile> filex)
         {
-            long size = files.Sum(f => f.Length);
+            try
+            { 
+                IFormFileCollection files = Request.Form.Files;
+                //// full path to file in temp location
+                var filePath = Path.GetTempFileName();
+                var comprobante = new List<Comprobante>();
 
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
-
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
+                foreach (var formFile in files)
                 {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (formFile.Length > 0)
                     {
-                        await formFile.CopyToAsync(stream);
+
+                        var result = new StringBuilder();
+                        using (var reader = new StreamReader(formFile.OpenReadStream()))
+                        {
+                            while (reader.Peek() >= 0)
+                                result.AppendLine(reader.ReadLine());
+                        }
+
+                         
+
+
+                        XNamespace nsCFDi = "http://www.sat.gob.mx/cfd/3"; // para que pueda identificar el prefijo CFDI
+                            XDocument archivoXML = XDocument.Parse (result.ToString()); // selecciona y abre la factura electrónica xml
+
+                            
+                         
+                            comprobante = (from e in archivoXML.Elements(nsCFDi + "Comprobante")
+                                               let r = e.Element(nsCFDi + "Emisor")
+                                               select new Comprobante
+                                               {
+                                                   Folio = (string)e.Attribute("Folio"),
+                                                   Fecha = (string)e.Attribute("Folio"),
+                                                   Moneda = (string)e.Attribute("Moneda"),
+                                                   SubTotal = (float)e.Attribute("SubTotal"),
+                                                   Total = (float)e.Attribute("Total"),
+                                                   Impuestos = (float)e.Attribute("Total") - (float)e.Attribute("SubTotal"),
+                                                   RFC = (string)r.Attribute("Rfc"),
+                                                   NombreProveedor = (string)r.Attribute("Nombre"),
+                                                   RegimenFiscal = (string)r.Attribute("RegimenFiscal"),
+
+                                               }).ToList();
+
+                       
+
+
+
                     }
-                }
+                } 
+
+                return Json(comprobante);
             }
-
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
-
-            return Ok(new { count = files.Count, size, filePath });
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
+ 
 
     }
 }

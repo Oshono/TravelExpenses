@@ -86,11 +86,10 @@
             data: { ClavePais: ClavePais },
             cache: false,
             type: "POST",
-            success: function (data) {
-                console.log(data);                
+            success: function (data) {           
                 var row = "";
                 $.each(data, function (index, item) {
-                    console.log(item);
+                    
                     row += "<tr><td>" + item.nombrePais + "</td><td>" + item.descripcionEstado + "</td><td>" + item.idCiudad + "</td><td>" + item.ciudad  + "</td></tr>";
                 });
                 $("#tblCiudades").html(row);  
