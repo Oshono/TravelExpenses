@@ -4,8 +4,8 @@ namespace TravelExpenses.Data
 {
     public interface IDestinos
     {
-        IEnumerable<Destinos> ObtenerDestinos(string Folio);
-        Destinos ObtenerDestino(string Folio);
+        IEnumerable<Destinos> ObtenerDestinos(int Folio);
+        Destinos ObtenerDestino(int Folio);
         int InsertarDestino(Destinos Destino);
     }
 }

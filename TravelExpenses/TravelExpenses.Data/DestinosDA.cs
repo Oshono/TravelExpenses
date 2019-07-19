@@ -29,7 +29,7 @@ namespace TravelExpenses.Data
         }
 
 
-        public IEnumerable<Destinos> ObtenerDestinos(string Folio)
+        public IEnumerable<Destinos> ObtenerDestinos(int Folio)
         {
             var list = new List<Destinos>();
             try
@@ -48,7 +48,7 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-        public Destinos ObtenerDestino(string Folio)
+        public Destinos ObtenerDestino(int Folio)
         {
             var lista = new List<Destinos>();
             try

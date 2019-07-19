@@ -21,7 +21,7 @@ namespace TravelExpenses.Core
 
         //public int IdSolicitud { get; set; }
 
-        public string Folio { get; set; }
+        public int Folio { get; set; }
         public DateTime  FechaSolicitud { get; set; }
         public int IdTipoSolicitud { get; set; }
         public string Departamento { get; set; }
@@ -34,6 +34,8 @@ namespace TravelExpenses.Core
         public string RFC { get; set; }
         public string Descripcion { get; set; }
         public string UserName { get; set; }
+        public string ClaveMoneda { get; set; }
+        public int IdFolio { get; set; }
 
     }
 }

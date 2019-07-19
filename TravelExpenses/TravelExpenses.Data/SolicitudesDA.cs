@@ -42,6 +42,7 @@ namespace TravelExpenses.Data
                 parameters.Add("@IdEstado", solicitud.IdEstado);
                 parameters.Add("@Id", solicitud.Id);
                 parameters.Add("@RFC", solicitud.RFC);
+                parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
                 using (IDbConnection conn = connection)
                 {
                     var result = connection.Execute("Solicitudes_Ins", parameters, commandType: CommandType.StoredProcedure);
@@ -54,6 +55,28 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public int ModificarEstatus(int Folio)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio",Folio);
+                 
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("ModificarEstatus", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+
         public IEnumerable<Solicitud> ObtenerTipos()
         { 
             try
@@ -97,6 +120,26 @@ namespace TravelExpenses.Data
                 using (IDbConnection conn = connection)
                 {
                     var reader = connection.Query<Solicitud>("Solicitudes_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Folio);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus)
+        {
+
+            try
+            {
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Estatus", estatus);
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Solicitud>("FiltroEstatus", parameters, commandType: CommandType.StoredProcedure);
                     return reader.OrderBy(x => x.Folio);
                 }
             }
@@ -155,7 +198,7 @@ namespace TravelExpenses.Data
                 parameters.Add("@Motivo", destinos.Motivo);
                 parameters.Add("@FechaSalida", destinos.FechaSalida);
                 parameters.Add("@FechaLlegada", destinos.FechaLlegada);
-                parameters.Add("@Folio", destinos.Folio);
+                //parameters.Add("@Folio", destinos.Folio);
                 using (IDbConnection conn = connection)
                 {
                     var result = connection.Execute("Destinos_Ins", parameters, commandType: CommandType.StoredProcedure);
@@ -177,6 +220,23 @@ namespace TravelExpenses.Data
                 using (IDbConnection conn = connection)
                 {
                     var reader = connection.Query<Solicitud>("TipoSolicitud_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdTipoSolicitud);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Solicitud> ObtenerIdSolicitud()
+        {
+            var list = new List<Solicitud>();
+            try
+            {
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Solicitud>("ObtenerUltimo", null, commandType: CommandType.StoredProcedure);
                     return reader.OrderBy(x => x.IdTipoSolicitud);
                 }
             }
