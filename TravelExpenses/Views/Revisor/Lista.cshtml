@@ -1,0 +1,93 @@
+﻿@model TravelExpenses.Views.Revisor.ListaModel
+@{
+    ViewData["Title"] = "Revisor";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Aprobar revision</h2>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Folio
+            </th>
+            <th>
+                Tipo Solicitud
+            </th>
+            <th>
+                Empresa
+            </th>
+            <th>
+                Solicitante
+            </th>
+            <th>
+                Fecha Solicitud
+            </th>
+            <th>
+                ImporteSolicitud
+            </th>
+            <th>
+                Estatus
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    <tbody>
+        <tr>
+            <td>
+                0001
+            </td>
+            <td>
+                Rembolso
+            </td>
+            <td>
+                Ozono
+            </td>
+            <td>
+                Javier
+            </td>
+            <td>
+                19/07/2019
+            </td>
+            <td>
+                $50000
+            </td>
+            <td>
+                Aprobado
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="IdDestinos">Aceptar</a> |
+                <a asp-action="Details" asp-route-id="IdDestinos">Rechazar</a> |
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0002
+            </td>
+            <td>
+                Rembolso
+            </td>
+            <td>
+                Ozono
+            </td>
+            <td>
+                Juan Perez
+            </td>
+            <td>
+                19/07/2019
+            </td>
+            <td>
+                $5000
+            </td>
+            <td style=" background-color:red;">
+                Rechazado
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="IdDestinos">Aceptar</a> |
+                <a asp-action="Details" asp-route-id="IdDestinos">Rechazar</a> |
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -25,7 +25,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <!--<a class="nav-link" asp-page="/Users/List">-->
+
             <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
 
                 <i class="mdi mdi-account menu-icon"></i>
@@ -34,13 +34,13 @@
             </a>
             <div class="collapse" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" asp-page="/Usuarios/UsuariosRoles">Roles</a></li>
-
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                    </li>
                 </ul>
             </div>
         </li>
         <li class="nav-item">
-            <!--<a class="nav-link" asp-page="/Users/List">-->
             <a class="nav-link" data-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">
 
                 <i class="mdi mdi-backup-restore"></i>
@@ -50,6 +50,34 @@
             <div class="collapse" id="ui-basic3">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"><a asp-controller="Rembolso" asp-action="Lista" class="nav-link">Comprobar/Rembolso</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+
+                <i class="mdi mdi-account menu-icon"></i>
+                <span class="menu-title">Aprobador</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic2">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" asp-controller="Aprobador" asp-action="AprobarSolicitud">Aprobar</a></li>
+
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+
+                <i class="mdi mdi-account menu-icon"></i>
+                <span class="menu-title">Revisor</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic2">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" asp-controller="Revisor" asp-action="Lista">Aprobar</a></li>
+
                 </ul>
             </div>
         </li>

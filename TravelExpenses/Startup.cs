@@ -59,11 +59,7 @@ namespace TravelExpenses
                 options.UseSqlServer(
                     Configuration.GetConnectionString("TravelExDb")));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.Configure<IdentityOptions>(options =>
+            services.AddIdentity<IdentityUser,IdentityRole>(options =>
             {
                 // Password settings.
                 options.Password.RequireDigit = true;
@@ -82,7 +78,11 @@ namespace TravelExpenses
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
-            });
+            } )
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            
 
             services.ConfigureApplicationCookie(options =>
             {
