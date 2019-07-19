@@ -4,24 +4,13 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 <style>
-
-    tr th {
-        color: #272525;
-        font-size: 15px !important;
+    #accion:hover {
+        color: orange; 
     }
-
-    table, td {
-        border: 2px double #D9D7D7;
+    #accion1:hover {
+        color: red;
     }
-
-        table thead tr th {
-            border: 2px solid #D9D7D7;
-        }
-
-        table thead {
-            background-color: #F0EFEF;
-        }
-
+    
     #Solicitudes {
         color: #272525;
     }
@@ -50,17 +39,12 @@
                 <div class="row" id="seccionBtn">
                     @*<div class="col-2"><a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes"><i class="mdi  mdi-pencil"></i>Agregar</a></div>*@
                     <div class="col-2"><a id="EnviarSolicitud" class="btn" asp-controller="Solicitudes" asp-action="create"><i class="mdi  mdi-pencil"></i>Agregar</a></div>
-                    <div class="col-2">
-                        <a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes">
-                            <i class="mdi  mdi-comment-text-outline"></i>Editar
-                        </a>
-                    </div>
-                    <div class="col-2"><a id="EnviarSolicitud" class="btn"><i class="mdi  mdi-close-circle-outline"></i>Eliminar</a></div>
-                    <div class="col-6"></div>
+                     
+                    <div class="col"></div>
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover" >
+                <table id="data-table-basic" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Folio</th>
@@ -69,6 +53,8 @@
                             <th>Cantidad Solicitada</th>
                             <th>Cantidad Comprobada</th>
                             <th>Estatus</th>
+                            <th>Acción</th> 
+                            <th>Enviar a<br />Autorización</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,9 +64,22 @@
                                 <td>@item.Folio</td>
                                 <td>@item.Descripcion</td>
                                 <td>@item.UserName</td>
-                                <td> @item.ImporteSolicitado </td>
-                                <td> @item.ImporteComprobado </td>
-                                <td><label>@item.Estatus</label></td>
+                                <td>$@item.ImporteSolicitado @item.ClaveMoneda </td>
+                                <td>$@item.ImporteComprobado @item.ClaveMoneda </td>
+                                <td>@item.Estatus</td>
+                                <td  >
+                                    <a  class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@item.Folio" id="accion">
+                                        <i class="fas fa-edit"></i>
+                                    </a> 
+                                    <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Crseate" asp-route-Folio="@item.Folio" id="accion1" >
+                                        <i class="fas fa-eraser"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-lg" asp-controller="Home" asp-action="ModificarEstatus" asp-route-Folio="@item.Folio">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </a>
+                                </td>
                             </tr>
                         }
                     </tbody>

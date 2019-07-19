@@ -1,0 +1,154 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h4>Destinos</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Add">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+
+                <label asp-for="ClavePais" class="control-label">País</label>
+                <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);" title="--Seleccione un país"
+                        asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
+                    <option value="">--Seleccione un País</option>
+                </select>
+                @*<input asp-for="ClavePais" class="form-control" />*@
+                <span asp-validation-for="ClavePais" class="text-danger">*</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdEstado" class="control-label">Estado</label>
+                <select asp-for="Estado.IdEstado" class="form-control input-sm" onchange="CargaCiudades(this.value);"
+                        asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado">
+                    <option value="">--Seleccione un Estado</option>
+                </select>
+
+                <span asp-validation-for="IdEstado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
+                <select asp-for="Ciudad.IdCiudad" class="form-control input-sm"
+                        asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
+                    <option value="">--Seleccione una Ciudad</option>
+                </select>
+                <span asp-validation-for="@Model.Destino.IdCiudad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
+                <input asp-for="@Model.Destino.FechaSalida" class="form-control"/>
+                <span asp-validation-for="@Model.Destino.FechaSalida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Destino.FechaLlegada" class="control-label" >Fecha de llegada</label>
+                <input asp-for="Destino.FechaLlegada" class="form-control"/>
+                <span asp-validation-for="@Model.Destino.FechaLlegada" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Destino.Motivo" class="control-label">Motivo</label>
+                <textarea asp-for="@Model.Destino.Motivo" rows="5" cols="50" class="form-control" 
+                                    placeholder="Escribe el motivo del viaje..."></textarea>
+                <span asp-validation-for="@Model.Destino.Motivo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Destino.Folio" class="control-label"></label>
+                <input asp-for="@Model.Destino.Folio" class="form-control" />
+                <span asp-validation-for="@Model.Destino.Folio" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="@Model.Destino.Nombre" class="control-label"></label>
+                <input asp-for="@Model.Destino.Nombre" class="form-control" />
+                <span asp-validation-for="@Model.Destino.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Destino.Descripcion" class="control-label"></label>
+                <input asp-for="@Model.Destino.Descripcion" class="form-control" />
+                <span asp-validation-for="@Model.Destino.Descripcion" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit"  value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function CargaEstados(ClavePais) {
+        var url = "/Solicitudes/CargaEstados/";
+        $('#Estado').css({ visibility: 'hidden' });
+        $('#Ciudad').css({ visibility: 'hidden' });
+
+        $('#newEstado').removeAttr('style');
+        $('#newCiudad').removeAttr('style');
+
+        $.ajax({
+            url: url,
+            data: {
+                ClavePais: ClavePais
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.length > 0) {
+                    $('#Estado').css({ visibility: 'visible ' });
+
+                    var markup = "<option value='0'>Seleccione</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        markup += "<option value=" + data[x].idEstado + ">" + data[x].descripcion + "</option>";
+                    }
+                    $("#Estado").html(markup).show();
+
+                    CargaCiudades(0);
+                }
+                else {
+                    $('#Estado').css({ visibility: 'hidden' });
+                    $('#Ciudad').css({ visibility: 'hidden' });
+                }
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function CargaCiudades(IdEstado) {
+        var url = "/Solicitudes/CargaCiudades/";
+        var ClavePais = $("#Pais_ClavePais").val();
+        $('#Ciudad').css({ visibility: 'hidden' });
+        $('#newCiudad').removeAttr('style');
+        $.ajax({
+            url: url,
+            data: {
+                ClavePais: ClavePais,
+                IdEstado: IdEstado
+            },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                if (data.length > 0) {
+                    $('#Ciudad').css({ visibility: 'visible' });
+                    $("#Ciudad").empty();
+                    var markup = "<option value='0'>Seleccione</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        //console.log(data[x]);
+                        markup += "<option value=" + data[x].idCiudad + ">" + data[x].descripcion + "</option>";
+                    }
+                    $("#Ciudad").html(markup).show();
+                } else {
+                    $('#Ciudad').css({ visibility: 'hidden' });
+                }
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+</script>

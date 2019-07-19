@@ -28,7 +28,7 @@ namespace TravelExpenses.Controllers
         // GET: Destinos/Details/5
         public ActionResult ListarDestinos()
         {
-            var destinos = _DestinosData.ObtenerDestinos("13");
+            var destinos = _DestinosData.ObtenerDestinos(1);
             var empresaModel = new DestinosViewModel();
             empresaModel.Destinos = destinos;
 

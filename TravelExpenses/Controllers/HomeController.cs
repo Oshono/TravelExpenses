@@ -34,8 +34,27 @@ namespace TravelExpenses.Controllers
         {
             return View();
         }
+
+        public IActionResult SolicitudesEstatus(string estatus)
+        {
+            var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
+            var SolicitudesModel = new SolicitudesViewModel();
+            SolicitudesModel.Solicitudes = Solicitud;
+
+            return View(SolicitudesModel);
+        }
+
+        public ActionResult ModificarEstatus(int Folio)
+        {
+
+            _SolicitudesData.ModificarEstatus(Folio);
+            return Redirect("./");
+        }
+
         public IActionResult ListarSolicitudes()
         {
+ 
+
             var Solicitud = _SolicitudesData.ObtenerSolicitudes();
             var SolicitudesModel = new SolicitudesViewModel();
             SolicitudesModel.Solicitudes = Solicitud; 

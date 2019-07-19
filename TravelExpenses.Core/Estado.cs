@@ -11,6 +11,7 @@ namespace TravelExpenses.Core
         [Required, StringLength(50)]
         public string Descripcion { get; set; }
 
+        [Required, StringLength(50)]
         public string ClavePais { get; set; }
         public bool Activo { get; set; }
 

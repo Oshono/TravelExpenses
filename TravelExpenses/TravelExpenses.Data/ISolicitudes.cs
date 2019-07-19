@@ -11,7 +11,14 @@ namespace TravelExpenses.Data
         IEnumerable<Solicitud> ObtenerTipos();
         IEnumerable<Solicitud> ObtenerTipoSolicitud();
         IEnumerable<Solicitud> ObtenerSolicitudes();
+ 
+        //IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(int TipoSolicitud);
+        IEnumerable<Solicitud> ObtenerIdSolicitud();
+        IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus);
+        int ModificarEstatus(int Folio);
+ 
         IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus);
+ 
         //List<Destinos> ObtenerDestinos(int IdDestinos);
         //int Guardar(Solicitud solicitud);
         //Solicitud Add(Solicitud solicitud);

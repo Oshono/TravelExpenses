@@ -1,4 +1,4 @@
-﻿
+﻿@model TravelExpenses.ViewModels.RembolsoViewModel
 <link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
 
 <h1>Rembolso</h1>
@@ -21,7 +21,7 @@
                                     <span class="note needsclick">(Los archivos se guardan <strong>temporalmente</strong> hasta que de clic en <strong>Guardar</strong>)</span>
                                 </p>
                             </div>
-                            
+
                         </form>
                     </div>
                 </div>
@@ -29,16 +29,96 @@
         </div>
     </div>
 </div>
+
+<h1>Comprobantes</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Folio
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                RFC
+                            </th>
+                            <th>
+                                Proveedor
+                            </th>
+                            <th>
+                                Moneda
+                            </th>
+                            <th>
+                                Subtotal
+                            </th>
+                            <th>
+                                Impuestos
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblComprobantes">
+                        @foreach (var comprobante in Model.Comprobantes)
+                        {
+
+                        <tr>
+                            <td>@comprobante.Folio</td>
+                            <td>@comprobante.Fecha</td>
+                            <td>@comprobante.RFC</td>
+                            <td>@comprobante.NombreProveedor</td>
+                            <td>@comprobante.Moneda</td>
+                            <td>@comprobante.SubTotal</td>
+                            <td>@comprobante.Impuestos</td>
+                            <td>@comprobante.Total</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="~/vendors/dropzone/dropzone.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
 <script type="text/javascript">
+
+
     Dropzone.options.UploadFiles = {
         addRemoveLinks: true,
         paramName: "file",
         maxFilesize: 2,
         maxFiles: 5,
-        acceptedFiles: "image/*",
+        acceptedFiles: "text/xml",
+        uploadMultiple: true,
         dictMaxFilesExceeded: "El máximo permitido son 2 Mb",
-    };
+        init: function () {
+            this.on("success", function (data)
+            {
+                alert("Added file.");
+                var args = Array.prototype.slice.call(arguments);
 
+                console.log(args);
+                var row = "";
+                $.each(args[1], function (index, item) {
+                    
+                    row += "<tr><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total +"</td></tr>";
+                });
+                $("#tblComprobantes").html(row);  
+            });
+        }
+    };
+ 
+    
 
 </script>
