@@ -14,7 +14,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Globalization;
 using System.Text;
-
+using Microsoft.AspNetCore.Hosting;
 
 namespace TravelExpenses.Controllers
 {
@@ -22,11 +22,14 @@ namespace TravelExpenses.Controllers
     {
         private readonly IRembolso _rembolso;
         private readonly ISolicitudes _solicitud;
-
-        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud)
+        private readonly IHostingEnvironment _env;
+        public List<Comprobante> lstComprobantes;
+        
+        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env)
         {
             _rembolso = rembolso;
             _solicitud = solicitud;
+            _env = env;
         }
 
         // GET: Centro Costos
@@ -62,7 +65,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
-        public ActionResult Edit(string ClaveCentroCosto)
+        public ActionResult Edit(string Folio)
         {
             var rembolso = new RembolsoViewModel();
             rembolso.Comprobantes = new List<Comprobante>();
@@ -76,6 +79,22 @@ namespace TravelExpenses.Controllers
             //    centroModel.CentroCosto = centro;
             //}
             return View( rembolso);
+        }
+
+        public ActionResult Details(string UUID)
+        {
+            var rembolso = new RembolsoViewModel();
+            rembolso.Comprobantes = new List<Comprobante>();
+            //var centroModel = new CentroCostoViewModel();
+            //centroModel.CentroCosto = new CentroCosto();
+            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
+            //{
+            //    var centro = _centro.ObtenerCentroCostos()
+            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
+            //                .FirstOrDefault();
+            //    centroModel.CentroCosto = centro;
+            //}
+            return View(rembolso);
         }
 
         // POST: Empresa/Edit/5
@@ -99,8 +118,65 @@ namespace TravelExpenses.Controllers
             return Redirect("/CentroCosto/Lista");
         }
 
+        
+        private int SaveDB(Comprobante comprobante)
+        {
+            var Id = _rembolso.Guardar(comprobante);
+
+            return Id;
+        }
+
+        private bool Exists(IFormFile file)
+        {
+            var InputFileName = Path.GetFileName(file.FileName).Replace(",", "-");
+            InputFileName = InputFileName.Replace(" ", "-");
+            var Extension = Path.GetExtension(file.FileName).Replace(".", "");            
+            var NombreArchivo = Path.GetFileName(file.FileName);
+
+            var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
+            return ((System.IO.File.Exists(filePath)) && _rembolso.Exists(NombreArchivo, Extension));
+        }
+
+        private List<Comprobante> SaveFile(IFormFile file)
+        {
+            var comprobante = new List<Comprobante>();
+            var InputFileName = Path.GetFileName(file.FileName).Replace(",", "-");
+            InputFileName = InputFileName.Replace(" ", "-");
+            var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
+
+            var Extension = Path.GetExtension(file.FileName);
+
+         
+
+            if (Extension == ".xml")
+            {
+                comprobante = CargaXML(file);                
+            }
+
+            comprobante.FirstOrDefault().Archivo = new Archivo();
+            comprobante.FirstOrDefault().Archivo.Extension = Extension;
+            comprobante.FirstOrDefault().Archivo.NombreArchivo = InputFileName;
+            comprobante.FirstOrDefault().Archivo.Ruta = "\\UploadFile\\" + InputFileName;
+            comprobante.FirstOrDefault().Archivo.Extension = Extension;
+            comprobante.FirstOrDefault().Archivo.Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
+            comprobante.FirstOrDefault().Archivo.FechaAlta = DateTime.Now;
+            if (Extension == ".xml")
+            {
+                comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
+            }
+
+            SaveDB(comprobante.FirstOrDefault());
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            return comprobante;
+        }
+
         [HttpPost]
-        public  ActionResult  FileUpload(IEnumerable<IFormFile> filex)
+        public  ActionResult  FileUpload(RembolsoViewModel rembolso)
         {
             try
             { 
@@ -113,42 +189,14 @@ namespace TravelExpenses.Controllers
                 {
                     if (formFile.Length > 0)
                     {
-
-                        var result = new StringBuilder();
-                        using (var reader = new StreamReader(formFile.OpenReadStream()))
+                        if (!Exists(formFile))
                         {
-                            while (reader.Peek() >= 0)
-                                result.AppendLine(reader.ReadLine());
+                            comprobante = SaveFile(formFile);
                         }
-
-                         
-
-
-                        XNamespace nsCFDi = "http://www.sat.gob.mx/cfd/3"; // para que pueda identificar el prefijo CFDI
-                            XDocument archivoXML = XDocument.Parse (result.ToString()); // selecciona y abre la factura electrónica xml
-
-                            
-                         
-                            comprobante = (from e in archivoXML.Elements(nsCFDi + "Comprobante")
-                                               let r = e.Element(nsCFDi + "Emisor")
-                                               select new Comprobante
-                                               {
-                                                   Folio = (string)e.Attribute("Folio"),
-                                                   Fecha = (string)e.Attribute("Folio"),
-                                                   Moneda = (string)e.Attribute("Moneda"),
-                                                   SubTotal = (float)e.Attribute("SubTotal"),
-                                                   Total = (float)e.Attribute("Total"),
-                                                   Impuestos = (float)e.Attribute("Total") - (float)e.Attribute("SubTotal"),
-                                                   RFC = (string)r.Attribute("Rfc"),
-                                                   NombreProveedor = (string)r.Attribute("Nombre"),
-                                                   RegimenFiscal = (string)r.Attribute("RegimenFiscal"),
-
-                                               }).ToList();
-
-                       
-
-
-
+                        else
+                        {
+                            return Json("ERROR-El archivo ya se encuentra registrado");
+                        }
                     }
                 } 
 
@@ -159,7 +207,86 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
- 
+
+        private List<Comprobante>  CargaXML(IFormFile formFile)
+        {
+            var result = new StringBuilder();
+            var comprobante = new List<Comprobante>();
+            using (var reader = new StreamReader(formFile.OpenReadStream()))
+            {
+                while (reader.Peek() >= 0)
+                    result.AppendLine(reader.ReadLine());
+            }
+
+            XNamespace nsCFDi = "http://www.sat.gob.mx/cfd/3";
+            XNamespace tfd = "http://www.sat.gob.mx/TimbreFiscalDigital";
+            XDocument archivoXML = XDocument.Parse(result.ToString());
+
+
+            comprobante = (from e in archivoXML.Elements(nsCFDi + "Comprobante")
+                               let r = e.Element(nsCFDi + "Emisor")
+                               let i = e.Element(nsCFDi + "Impuestos")
+                               let c = e.Element(nsCFDi + "Complemento").Element(tfd + "TimbreFiscalDigital")
+                               select new Comprobante
+                               {
+                                   UUID = (string)c.Attribute("UUID"),
+                                   Folio = (string)e.Attribute("Folio"),
+                                   Fecha = (string)e.Attribute("Fecha"),
+                                   Moneda = (string)e.Attribute("Moneda"),
+                                   SubTotal = (float)e.Attribute("SubTotal"),
+                                   Total = (float)e.Attribute("Total"),
+                                   Impuestos = (float)i.Attribute("TotalImpuestosTrasladados"),
+                                   RFC = (string)r.Attribute("Rfc"),
+                                   NombreProveedor = (string)r.Attribute("Nombre"),
+                                   RegimenFiscal = (string)r.Attribute("RegimenFiscal"),
+
+                               }                           
+                           ).ToList();
+
+            
+            List<Concepto> listaConceptos = new List<Concepto>();
+            comprobante[0].Conceptos = listaConceptos;
+            var conceptos = from c in archivoXML.Descendants()
+                            where c.Name.LocalName == "Conceptos"
+                            select c.Elements();
+
+            foreach (IEnumerable<XElement> item in conceptos)
+            {
+                foreach (var conceptoXML in item)
+                {
+                    Concepto concepto = new Concepto();
+                    concepto.UUID = comprobante.FirstOrDefault().UUID;
+                    concepto.Cantidad = float.Parse(conceptoXML.Attribute("Cantidad").Value);
+                    concepto.ClaveProdServ = conceptoXML.Attribute("ClaveProdServ").Value;
+                    if ( conceptoXML.Attribute("Base") != null)
+                    {
+                        concepto.Base = float.Parse(conceptoXML.Attribute("Base").Value);
+                    }
+                    concepto.Cantidad = float.Parse(conceptoXML.Attribute("ClaveProdServ").Value);
+                    concepto.ClaveUnidad = conceptoXML.Attribute("ClaveUnidad").Value;
+                    concepto.Descripcion = conceptoXML.Attribute("Descripcion").Value;
+                    concepto.Importe = float.Parse(conceptoXML.Attribute("Importe").Value);
+                    if (conceptoXML.Attribute("Impuesto") != null)
+                    {
+                        concepto.Impuesto = float.Parse(conceptoXML.Attribute("Impuesto").Value);
+                    }
+                    concepto.NoIdentificacion = conceptoXML.Attribute("NoIdentificacion").Value;
+                    if ( conceptoXML.Attribute("TasaOCuota") != null)
+                    {
+                        concepto.TasaOCuota = float.Parse(conceptoXML.Attribute("TasaOCuota").Value);
+                    }
+                    if ( conceptoXML.Attribute("TipoFactor") != null)
+                    {
+                        concepto.TipoFactor = conceptoXML.Attribute("TipoFactor").Value;
+                    }
+                    concepto.Unidad = conceptoXML.Attribute("Unidad").Value;
+                    concepto.ValorUnitario = float.Parse(conceptoXML.Attribute("ValorUnitario").Value);
+                    listaConceptos.Add(concepto);
+                }
+            }
+
+            return comprobante;
+        }
 
     }
 }

@@ -11,7 +11,7 @@
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Moneda" asp-action="Edit" class="btn btn-primary">Agregar Nueva Moneda</a>
+       
         <div class="card-body">
             <div class="table-responsive">
                 <table id="data-table-basic" class="table table-striped">
@@ -58,12 +58,12 @@
                                     <td>@item.Estatus</td>
                                     <td>2</td>
                                     <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-route-folio="@item.Folio">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit">
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Borrar">
                                             <i class="fas fa-eraser"></i>
                                         </a>
                                     </td>

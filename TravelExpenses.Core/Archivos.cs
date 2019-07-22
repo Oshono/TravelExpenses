@@ -14,8 +14,9 @@ namespace TravelExpenses.Core
         public string Extension { get; set; }
         [Required]
         public string Ruta { get; set; }
+        [Required]
+        public string UUID { get; set; }
         public DateTime FechaAlta { get; set; }
-        public string Usuario { get; set; }
-        public string Estatus { get; set; }
+        public string Usuario { get; set; } 
     }
 }

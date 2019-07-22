@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
 
 <h1>Rembolso</h1>
-
+<input type="hidden" asp-for="@Model.Comprobante.Folio" />
 <div class="dropzone-area">
     <div class="container">
         <div class="row">
@@ -18,7 +18,7 @@
                                 <i class="alert-info"></i>
                                 <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
                                 <p>
-                                    <span class="note needsclick">(Los archivos se guardan <strong>temporalmente</strong> hasta que de clic en <strong>Guardar</strong>)</span>
+                                    <span class="note needsclick">(Los archivos se guardan <strong>automaticamente</strong>)</span>
                                 </p>
                             </div>
 
@@ -43,6 +43,9 @@
                                 Folio
                             </th>
                             <th>
+                                UUID
+                            </th>
+                            <th>
                                 Fecha
                             </th>
                             <th>
@@ -63,6 +66,12 @@
                             <th>
                                 Total
                             </th>
+                            <th>
+                                Detalles
+                            </th>
+                            <th>
+                                Eliminar
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="tblComprobantes">
@@ -71,6 +80,7 @@
 
                         <tr>
                             <td>@comprobante.Folio</td>
+                            <td>@comprobante.UUID</td>
                             <td>@comprobante.Fecha</td>
                             <td>@comprobante.RFC</td>
                             <td>@comprobante.NombreProveedor</td>
@@ -78,6 +88,12 @@
                             <td>@comprobante.SubTotal</td>
                             <td>@comprobante.Impuestos</td>
                             <td>@comprobante.Total</td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                               
+                            </td>
                         </tr>
                         }
                     </tbody>
@@ -99,22 +115,33 @@
         paramName: "file",
         maxFilesize: 2,
         maxFiles: 5,
-        acceptedFiles: "text/xml",
-        uploadMultiple: true,
-        dictMaxFilesExceeded: "El máximo permitido son 2 Mb",
+        acceptedFiles: "text/xml, application/pdf,image/* ",
+        uploadMultiple: false,
+        dictMaxFilesExceeded: "El máximo permitido son 2 Mb",        
         init: function () {
             this.on("success", function (data)
             {
-                alert("Added file.");
                 var args = Array.prototype.slice.call(arguments);
+                if (args[1].includes("ERROR"))
+                {
+                    alert(args[1]);
+                    this.removeFile(data);
+                }
+                else
+                {
+                    alert("Archivo agregado");
 
-                console.log(args);
-                var row = "";
-                $.each(args[1], function (index, item) {
+                    console.log(args);
                     
-                    row += "<tr><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total +"</td></tr>";
-                });
-                $("#tblComprobantes").html(row);  
+
+                    var row = "";
+                    $.each(args[1], function (index, item) {
+
+                        console.log(item);
+                        row += "<tr><td>" + item.uuid + "</td><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "><i class='mdi mdi-magnify-plus'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
+                    });
+                    $("#tblComprobantes").html(row);  
+                }
             });
         }
     };

@@ -9,45 +9,45 @@ using System.Data.SqlClient;
 
 namespace TravelExpenses.Data
 {
-    public class RembolsoDA: IRembolso
+    public class ComprobanteDA : IComprobante
     {
-        private readonly IConfiguration _configuration;
-        private readonly IComprobante _comprobante;
-
         private readonly TravelExpensesContext db;
-        public RembolsoDA(TravelExpensesContext db, IConfiguration configuration, IComprobante comprobante)
+
+        private readonly IConfiguration _configuration;
+        public ComprobanteDA(TravelExpensesContext db, IConfiguration configuration)
         {
             _configuration = configuration;
-            _comprobante = comprobante;
-
             this.db = db;
         }
-        public IDbConnection connection
+        
+        public IDbConnection Connection
         {
             get
             {
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        public IEnumerable<Archivo> ObtenerArchivos()
+        
+        public IEnumerable<Comprobante> ObtenerComprobantes()
         {
-            return db.Archivos;
+            return db.Comprobante;
         }
-        public int Guardar(Comprobante miComprobante)
+        public int Guardar(Comprobante comprobante)
         {
             try
             {
                 int result = 0;
-                if (miComprobante != null)
+                if (comprobante != null)
                 {
-                    if (Exists(miComprobante.Archivo.NombreArchivo, miComprobante.Archivo.Extension))
+                    if (Exists(comprobante.UUID))
                     {
-                       
+                        db.Comprobante.Update(comprobante);
                     }
                     else
                     {
-                        _comprobante.Guardar(miComprobante);
-
+                        db.Comprobante.Add(comprobante);
+                        db.Concepto.AddRange(comprobante.Conceptos);
+                        db.Archivos.Add(comprobante.Archivo);
                     }
 
                     result = Commit();
@@ -61,14 +61,16 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-        public bool Exists(string NombreArchivo, string Extension)
+
+        private bool Exists(string UUID)
         {
-            return db.Archivos.Any(e => e.NombreArchivo == NombreArchivo && e.Extension == Extension);
+            return db.Comprobante.Any(e => e.UUID == UUID);
         }
         public int Commit()
         {
             return db.SaveChanges();
         }
+
 
     }
 }

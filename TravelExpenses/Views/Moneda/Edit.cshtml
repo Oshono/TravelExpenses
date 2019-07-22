@@ -7,7 +7,7 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <form method="post">
+            <form method="post">                
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label class="control-label">Clave Moneda</label>
@@ -16,17 +16,17 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descripción Moneda</label>
-                    <input asp-for=@Model.moneda.Descripcion class="form-control" placeholder="Descripción de la Moneda"/>
+                    <input asp-for=@Model.moneda.Descripcion class="form-control" placeholder="Descripción de la Moneda" />
                     <span asp-validation-for=@Model.moneda.Descripcion class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descripción Corto</label>
-                    <input asp-for=@Model.moneda.NombreCorto  class="form-control" placeholder="Nombre Corto"/>
+                    <input asp-for=@Model.moneda.NombreCorto class="form-control" placeholder="Nombre Corto" />
                     <span asp-validation-for=@Model.moneda.NombreCorto class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Simbolo</label>
-                    <input asp-for=@Model.moneda.Simbolo class="form-control" placeholder="Simbolo de la moneda"/>
+                    <input asp-for=@Model.moneda.Simbolo class="form-control" placeholder="Simbolo de la moneda" />
                     <span asp-validation-for=@Model.moneda.Simbolo class="text-danger"></span>
                 </div>
                 <div class="form-group">

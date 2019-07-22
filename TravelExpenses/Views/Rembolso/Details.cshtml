@@ -1,0 +1,27 @@
+﻿@model TravelExpenses.ViewModels.RembolsoViewModel
+
+<h1>Detalles del Comprobante</h1>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">RFC</label>
+                    <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
+                    <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Nombre Proveedor</label>
+                    <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="Nombre o Razón Social" />
+                    <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
+                </div>               
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

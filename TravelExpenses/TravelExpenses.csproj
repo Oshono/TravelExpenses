@@ -29,5 +29,6 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\netcoreapp2.2\" />
+    <Folder Include="UploadFiles\" />
   </ItemGroup>
 </Project>

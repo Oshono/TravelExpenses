@@ -3,10 +3,10 @@ using TravelExpenses.Core;
 
 namespace TravelExpenses.Data
 {
-    public interface IRembolso
+    public interface IComprobante
     {
+        IEnumerable<Comprobante> ObtenerComprobantes();
         int Guardar(Comprobante comprobante);
-        IEnumerable<Archivo> ObtenerArchivos();
-        bool Exists(string NombreArchivo, string Extension);
+        int Commit();
     }
 }
