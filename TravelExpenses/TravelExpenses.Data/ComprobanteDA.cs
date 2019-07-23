@@ -32,6 +32,14 @@ namespace TravelExpenses.Data
         {
             return db.Comprobante;
         }
+        public Comprobante ObtenerComprobantesXID(string UUID)
+        {
+            var comprobante =  db.Comprobante.Where(x=>x.UUID == UUID).FirstOrDefault();
+            comprobante.Archivo = db.Archivos.Where(x=>x.UUID == UUID).FirstOrDefault();
+            comprobante.Conceptos = db.Concepto.Where(x => x.UUID == UUID).ToList();
+
+            return comprobante;
+        }
         public int Guardar(Comprobante comprobante)
         {
             try

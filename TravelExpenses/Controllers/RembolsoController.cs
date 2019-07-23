@@ -22,14 +22,16 @@ namespace TravelExpenses.Controllers
     {
         private readonly IRembolso _rembolso;
         private readonly ISolicitudes _solicitud;
+        private readonly IComprobante _comprobante;
         private readonly IHostingEnvironment _env;
         public List<Comprobante> lstComprobantes;
         
-        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env)
+        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env, IComprobante comprobante)
         {
             _rembolso = rembolso;
             _solicitud = solicitud;
             _env = env;
+            _comprobante = comprobante;
         }
 
         // GET: Centro Costos
@@ -84,16 +86,9 @@ namespace TravelExpenses.Controllers
         public ActionResult Details(string UUID)
         {
             var rembolso = new RembolsoViewModel();
-            rembolso.Comprobantes = new List<Comprobante>();
-            //var centroModel = new CentroCostoViewModel();
-            //centroModel.CentroCosto = new CentroCosto();
-            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
-            //{
-            //    var centro = _centro.ObtenerCentroCostos()
-            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
-            //                .FirstOrDefault();
-            //    centroModel.CentroCosto = centro;
-            //}
+            rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
+
+            
             return View(rembolso);
         }
 
@@ -231,7 +226,7 @@ namespace TravelExpenses.Controllers
                                {
                                    UUID = (string)c.Attribute("UUID"),
                                    Folio = (string)e.Attribute("Folio"),
-                                   Fecha = (string)e.Attribute("Fecha"),
+                                   Fecha = (DateTime)e.Attribute("Fecha"),
                                    Moneda = (string)e.Attribute("Moneda"),
                                    SubTotal = (float)e.Attribute("SubTotal"),
                                    Total = (float)e.Attribute("Total"),

@@ -7,20 +7,123 @@
         <div class="card-body">
             <form method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 <div class="form-group">
-                    <label class="control-label">RFC</label>
-                    <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
-                    <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">UUID</label>
+                            <input asp-for=@Model.Comprobante.UUID class="form-control" placeholder="UUID" />
+                            <span asp-validation-for=@Model.Comprobante.UUID class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Folio</label>
+                            <input asp-for=@Model.Comprobante.Folio class="form-control" placeholder="Folio" />
+                            <span asp-validation-for=@Model.Comprobante.Folio class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Fecha</label>
+                            <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="RFC de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">RFC</label>
+                            <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <label class="control-label">Nombre Proveedor</label>
+                            <input asp-for=@Model.Comprobante.NombreProveedor class="form-control" placeholder="Nombre o Razón Social" />
+                            <span asp-validation-for=@Model.Comprobante.NombreProveedor class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">SubTotal</label>
+                            <input asp-for=@Model.Comprobante.SubTotal class="form-control" placeholder="SubTotal de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.SubTotal class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Impuestos</label>
+                            <input asp-for=@Model.Comprobante.Impuestos class="form-control" placeholder="Impuestos" />
+                            <span asp-validation-for=@Model.Comprobante.Impuestos class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Total</label>
+                            <input asp-for=@Model.Comprobante.Total class="form-control" placeholder="Total" />
+                            <span asp-validation-for=@Model.Comprobante.Total class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Nombre Proveedor</label>
-                    <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="Nombre o Razón Social" />
-                    <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
-                </div>               
-                <div class="form-group">
-                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                </div>
+
+
             </form>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                IdConcepto
+                            </th>                           
+                            <th>
+                                Importe
+                            </th>
+                            <th>
+                                Valor Unitario
+                            </th>
+                            <th>
+                                Descripción
+                            </th>
+                            <th>
+                                Unidad
+                            </th>
+                            <th>
+                                ClaveUnidad
+                            </th>
+                            <th>
+                                Cantidad
+                            </th>
+                            <th>
+                                No Identificación
+                            </th>
+                            <th>
+                                Detalles
+                            </th>
+                            <th>
+                                Eliminar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblComprobantes">
+                        @foreach (var concepto in Model.Comprobante.Conceptos)
+                        {
+
+                            <tr>
+                                <td>@concepto.IdConcepto</td> 
+                                <td>@concepto.Importe</td>
+                                <td>@concepto.ValorUnitario</td>
+                                <td>@concepto.Descripcion</td>
+                                <td>@concepto.Unidad</td>
+                                <td>@concepto.ClaveUnidad</td>
+                                <td>@concepto.Cantidad</td>
+                                <td>@concepto.NoIdentificacion</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 
