@@ -33,11 +33,11 @@
                         </div>
                     </div>
                     <div class="col-2">
-                        <label asp-for="@Model.Solicitud.Estatus" class="control-label">Estatus</label>
+                        @*<label asp-for="@Model.Solicitud.Estatus" class="control-label">Estatus</label>*@
                     </div>
                     <div class="col-2">
-                        <input asp-for="@Model.Solicitud.Estatus" class="form-control" value="SolicitudCapturada" readonly />
-                        <span asp-validation-for="@Model.Solicitud.Estatus" class="text-danger"></span>
+                        @*<input asp-for="@Model.Solicitud.Estatus" class="form-control" value="SolicitudCapturada" readonly />
+                        <span asp-validation-for="@Model.Solicitud.Estatus" class="text-danger"></span>*@
 
                     </div>
                     <div class="col-2"><label asp-for="@Model.Solicitud.Folio" class="control-label"></label></div>
@@ -50,11 +50,12 @@
                 @* Another section *@
                 <div class="row">
 
-                    <div class="col-2"><label asp-for="@Model.Solicitud.Id" class="control-label">Solicitante</label></div>
                     <div class="col-2">
-
-                        <input asp-for="@Model.Solicitud.Id" required class="form-control" readonly value="angel.razo@gmail.com" />
-                        <span asp-validation-for="@Model.Solicitud.Id" class="text-danger"></span>
+                        @*<label asp-for="@Model.Solicitud.Id" class="control-label">Solicitante</label>*@
+                    </div>
+                    <div class="col-2"> 
+                        @*<input asp-for="@Model.Solicitud.Id" required class="form-control" readonly value="angel.razo@gmail.com" />
+                        <span asp-validation-for="@Model.Solicitud.Id" class="text-danger"></span>*@
                     </div>
                     <div class="col-2">
                         <label asp-for="@Model.Solicitud.ImporteSolicitado" class="control-label">Importe Solicitado</label>
@@ -67,11 +68,13 @@
                     <div class="col-2">
                         Moneda:
                     </div>
-                    <div class="col-2">
-                        <select asp-for="ClaveMoneda" class="form-control input-sm"
+                    <div class="col-2"> 
+                        <select asp-for="Moneda.ClaveMoneda" class="form-control input-sm"
                                 asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))"></select>
                         @Html.ValidationMessageFor(x => x.Moneda, "", new { @class = "text-danger" })
                         <span asp-validation-for="@Model.Moneda.ClaveMoneda" class="text-danger"></span>
+
+                       
                     </div>
                 </div>
                 <br />
@@ -121,11 +124,11 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#Destinos"> Listar Destino</a>
+                            <a class="nav-link active" data-toggle="tab" href="#Destinos">Destinos</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#Listar">Agregar Destinos</a>
-                        </li>
+                        </li>*@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
                         </li>
@@ -139,64 +142,68 @@
                             @*<partial name="Add" />*@
 
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-
-                                <label asp-for="ClavePais" class="control-label">País</label>
-                                <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);" title="--Seleccione un país"
-                                        asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
-                                    <option value="">--Seleccione un País</option>
-                                </select>
-                                @*<input asp-for="ClavePais" class="form-control" />*@
-                                <span asp-validation-for="ClavePais" class="text-danger">*</span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="IdEstado" class="control-label">Estado</label>
-                                <select asp-for="Estado.IdEstado" class="form-control input-sm" onchange="CargaCiudades(this.value);"
-                                        asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado">
-                                    <option value="">--Seleccione un Estado</option>
-                                </select>
-
-                                <span asp-validation-for="IdEstado" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
-                                <select asp-for="Ciudad.IdCiudad" class="form-control input-sm"
-                                        asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
-                                    <option value="">--Seleccione una Ciudad</option>
-                                </select>
-                                <span asp-validation-for="@Model.Destino.IdCiudad" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
-                                <input asp-for="@Model.Destino.FechaSalida" class="form-control" />
-                                <span asp-validation-for="@Model.Destino.FechaSalida" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.FechaLlegada" class="control-label">Fecha de llegada</label>
-                                <input asp-for="Destino.FechaLlegada" class="form-control" />
-                                <span asp-validation-for="@Model.Destino.FechaLlegada" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.Motivo" class="control-label">Motivo</label>
-                                <textarea asp-for="@Model.Destino.Motivo" rows="5" cols="50" class="form-control"
-                                          placeholder="Escribe el motivo del viaje..."></textarea>
-                                <span asp-validation-for="@Model.Destino.Motivo" class="text-danger"></span>
-                            </div>
-
+                           
                         </div>
                         <div id="Destinos" class="container tab-pane active">
                             <br>
                             <h3>Destinos</h3>
-                            @*<a asp-action="Add" value="Agregar" class="btn" id="Button">Agregar</a>*@
+                            <a class="btn" id="Button" href="#">Agregar</a>
+                            <hr />
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label asp-for="ClavePais" class="control-label">País</label>
+                                        <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);" title="--Seleccione un país"
+                                                asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
+                                            <option value="">--Seleccione un País</option>
+                                        </select>
+                                        @*<input asp-for="ClavePais" class="form-control" />*@
+                                        <span asp-validation-for="ClavePais" class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="IdEstado" class="control-label">Estado</label>
+                                        <select asp-for="Estado.IdEstado" class="form-control input-sm" onchange="CargaCiudades(this.value);"
+                                                asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado">
+                                            <option value="">--Seleccione un Estado</option>
+                                        </select>
+
+                                        <span asp-validation-for="IdEstado" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
+                                        <select asp-for="Ciudad.IdCiudad" class="form-control input-sm"
+                                                asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
+                                            <option value="">--Seleccione una Ciudad</option>
+                                        </select>
+                                        <span asp-validation-for="@Model.Destino.IdCiudad" class="text-danger"></span>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
+                                        <input asp-for="@Model.Destino.FechaSalida" class="form-control" />
+                                        <span asp-validation-for="@Model.Destino.FechaSalida" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Destino.FechaLlegada" class="control-label">Fecha de llegada</label>
+                                        <input asp-for="Destino.FechaLlegada" class="form-control" />
+                                        <span asp-validation-for="@Model.Destino.FechaLlegada" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Destino.Motivo" class="control-label">Motivo</label>
+                                        <textarea asp-for="@Model.Destino.Motivo" rows="5" cols="50" class="form-control"
+                                                  placeholder="Escribe el motivo del viaje..."></textarea>
+                                        <span asp-validation-for="@Model.Destino.Motivo" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <div class="container">
-
-
                                 <div class="row">
                                     <div class="table-responsive">
-                                        <table  id="data-table-basic" class="table table-hover text-center">
+                                        <table class="table table-hover text-center">
                                             <thead>
 
                                                 <tr>
@@ -205,7 +212,7 @@
                                                     <th>Fecha de Salida</th>
                                                     <th>Fecha de Llegada</th>
                                                     <th>Motivo</th>
-                                                    <th>Folio</th>
+                                                    @*<th>Folio</th>*@
                                                     <th>Acción</th>
                                                 </tr>
                                             </thead>
@@ -213,16 +220,123 @@
 
                                                 @foreach (var destino in Model.Destinos)
                                                 {
+                                                    <tr>
+                                                        <td>@destino.Nombre</td>
+                                                        <td>@destino.Descripcion</td>
+                                                        <td>@destino.FechaSalida</td>
+                                                        <td>@destino.FechaLlegada</td>
+                                                        <td>@destino.Motivo</td>
+                                                        @*<td>@destino.Folio</td>*@
+                                                        <td>
+                                                            <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@destino.Folio" id="accion">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br />
+
+
+                        </div>
+                        <div id="Gastos" class="container tab-pane fade">
+                            <br>
+                            <h3>Gastos</h3>
+                            <a class="btn" id="Button" >Agregar</a> 
+                            <hr />
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label asp-for="RFC" class="control-label">Empresa</label>
+                                        <select asp-for="Empresa.RFC" class="form-control input-sm" title="--Seleccione una empresa"
+                                                asp-items="@(new SelectList(Model.Empresas, "RFC", "Nombre"))">
+                                            <option value="">--Seleccione una empresa</option>
+                                        </select> 
+                                        <span asp-validation-for="RFC" class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="IdGasto" class="control-label">Concepto</label>
+                                        <select asp-for="_Gasto.IdGasto" class="form-control input-sm"
+                                                asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
+                                            <option value="">--Seleccione un concepto</option>
+                                        </select>
+
+                                        <span asp-validation-for="IdGasto" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Gasto.ImporteSolicitado" class="control-label">Importe</label>
+                                        <input asp-for="Gasto.ImporteSolicitado" class="form-control" />
+                                        <span asp-validation-for="@Model.Gasto.ImporteSolicitado" class="text-danger"></span>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-4">
+                                        
+
+
+                                        <label asp-for="ClaveMoneda" class="control-label">Moneda </label>
+                                        <select asp-for="Gasto.ClaveMoneda" class="form-control input-sm"
+                                                asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))"></select>
+                                        @Html.ValidationMessageFor(x => x.Moneda, "", new { @class = "text-danger" })
+                                        <span asp-validation-for="@Model.Gasto.ClaveMoneda" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <label asp-for="@Model.Gasto.TipoCambios" class="control-label">Tipo de Cambio</label>
+                                        <input asp-for="Gasto.TipoCambios" class="form-control" />
+                                        <span asp-validation-for="@Model.Gasto.TipoCambios" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-4">
+                                         
+                                    </div>
+
+                                </div>
+                                <br />
+                            </div>
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover text-center">
+                                            <thead>
+
                                                 <tr>
-                                                    <td>@destino.Nombre</td>
-                                                    <td>@destino.Descripcion</td>
-                                                    <td>@destino.FechaSalida</td>
-                                                    <td>@destino.FechaLlegada</td>
-                                                    <td>@destino.Motivo</td>
-                                                    <td>@destino.Folio</td>
+                                                    <th>#</th>
+                                                    <th>Empresa </th>
+                                                    <th>Concepto </th>
+                                                    <th>Monto Máximo Permitido</th>
+                                                    <th>Importe Solicitado </th>
+                                                    <th>Moneda</th>
+                                                    <th>Tipo de Cambio </th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var gasto in Model.Gastos)
+                                                {
+                                                <tr>
+                                                    <td>@gasto.IdGastos</td>
+                                                    <td>@gasto.Empresa</td>
+                                                    <td>@gasto.Nombre</td>
+                                                    <td>@gasto.MontoMaximo</td>
+                                                    <td>@gasto.ImporteSolicitado</td>
+                                                    <td>@gasto.Descripcion</td>
+                                                    <td>@gasto.TipoCambios</td>
                                                     <td>
-                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@destino.Folio" id="accion">
+                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@gasto.IdGastos" id="accion">
                                                             <i class="fas fa-edit"></i>
+                                                        </a>
+
+                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@gasto.IdGastos" id="accion">
+                                                            <i class="fas fa-eraser"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -234,11 +348,7 @@
 
                                 </div>
                             </div>
-
-
-                        </div>
-                        <div id="Gastos"  class="container tab-pane fade">
-                            <h4>Sección de gastos</h4>
+                            <br />
                         </div>
 
                     </div>

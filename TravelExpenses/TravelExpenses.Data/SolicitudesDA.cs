@@ -56,6 +56,25 @@ namespace TravelExpenses.Data
             }
         }
 
+        public int EliminarSolicitud(int Folio)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Folio", Folio);
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Solicitudes_Eli", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public int ModificarEstatus(int Folio)
         {
             try
@@ -114,7 +133,6 @@ namespace TravelExpenses.Data
             
             try
             {
-
                 var parameters = new DynamicParameters();
             
                 using (IDbConnection conn = connection)
@@ -131,10 +149,8 @@ namespace TravelExpenses.Data
 
         public IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus)
         {
-
             try
             {
-
                 var parameters = new DynamicParameters();
                 parameters.Add("@Estatus", estatus);
                 using (IDbConnection conn = connection)
@@ -148,7 +164,26 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-         
+
+        public IEnumerable<Gasto> ObtenerGastos(int Folio)
+        {
+            var list = new List<Destinos>();
+            try
+            {
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio", Folio);
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Gasto>("Gastos_Sel", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdGasto);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus)
         {
 
@@ -170,22 +205,7 @@ namespace TravelExpenses.Data
             }
         }
 
-
-        //public IEnumerable<Solicitud> ObtenerSolicitudes()
-        //{ 
-        //    try
-        //    {
-        //        using (IDbConnection conn = connection)
-        //        {
-        //            var reader = connection.Query<Solicitud>("Solicitudes_Sel", null, commandType: CommandType.StoredProcedure);
-        //            return reader.OrderBy(x => x.Descripcion);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+         
         public int InsertarDestino(Destinos destinos)
         {
             try
@@ -245,49 +265,33 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-        //public Solicitud Add(Solicitud newRestaurant)
-        //{
-        //    db.Add(newRestaurant);
-        //    return newRestaurant;
-        //}
+        public int InsertarGastos(Gasto gasto)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                
+                parameters.Add("@MontoMaximo", gasto.MontoMaximo);
+                parameters.Add("@ImporteSolicitado", gasto.ImporteSolicitado);
+                parameters.Add("@TipoCambios", gasto.TipoCambios);
+                parameters.Add("@Folio", gasto.Folio);
+                parameters.Add("@RFC", gasto.RFC);
+                parameters.Add("@IdGasto", gasto.IdGasto);
+                parameters.Add("@ClaveMoneda", gasto.ClaveMoneda);
+                
+                
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Gastos_Ins", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //public int Commit()
-        //{
-        //    return db.SaveChanges();
-        //}
-
-        //public int Guardar(Solicitud solicitud)
-        //{
-        //    try
-        //    {
-        //        int result = 0;
-        //        if (solicitud != null)
-        //        {
-        //            if (Exists(solicitud.Folio))
-        //            {
-        //                db.Update(solicitud);
-        //            }
-        //            else
-        //            {
-        //                db.Add(solicitud);
-        //            }
-
-        //            result = Commit();
-
-        //        }
-        //        return result;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}
-        //private bool Exists(string Folio)
-        //{
-        //    return db.Solicitudes.Any(e => e.Folio == Folio);
-        //}
+                throw ex;
+            }
+        }
 
     }
 }

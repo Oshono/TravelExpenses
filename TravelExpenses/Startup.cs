@@ -51,7 +51,8 @@ namespace TravelExpenses
             services.AddScoped<IRembolso, RembolsoDA>();
             services.AddScoped<IComprobante, ComprobanteDA>();
 
-            services.Configure<CookiePolicyOptions>(options => {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.                
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
@@ -60,30 +61,30 @@ namespace TravelExpenses
                 options.UseSqlServer(
                     Configuration.GetConnectionString("TravelExDb")));
 
-            services.AddIdentity<IdentityUser,IdentityRole>(options =>
-            {
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+             {
                 // Password settings.
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                 options.Password.RequireLowercase = false;
+                 options.Password.RequireNonAlphanumeric = false;
+                 options.Password.RequireUppercase = false;
+                 options.Password.RequiredLength = 6;
+                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 100;
-                options.Lockout.AllowedForNewUsers = true;
+                 options.Lockout.MaxFailedAccessAttempts = 100;
+                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-            } )
+                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                 options.User.RequireUniqueEmail = false;
+             })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -111,8 +112,11 @@ namespace TravelExpenses
                                 || context.User.IsInRole("User")));
             });
 
-           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);      
-            
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            services.AddSession();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -135,7 +139,8 @@ namespace TravelExpenses
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseSession();
+             
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
-
+using System.Web;
 namespace TravelExpenses.Controllers
 {
     public class SolicitudesController : Controller
@@ -16,14 +16,19 @@ namespace TravelExpenses.Controllers
         private readonly IDestinos _DestinosData;
         private readonly IUbicacion _UbicacionData;
         private readonly IMoneda _MonedaData;
+        private readonly IEmpresa _EmpresaData;
+        private readonly IGasto _GastoData;
         Random rd = new Random();
-        public SolicitudesController(ISolicitudes SolicitudesData, IDestinos DestinosData, IUbicacion UbicacionData, IMoneda MonedaData)
+        public SolicitudesController(ISolicitudes SolicitudesData, IDestinos DestinosData, 
+                                        IUbicacion UbicacionData, IMoneda MonedaData, IEmpresa EmpresaData,
+                                            IGasto GastoData)
         {
             this._SolicitudesData = SolicitudesData;
             this._DestinosData = DestinosData;
             this._UbicacionData = UbicacionData;
             this._MonedaData = MonedaData;
-
+            this._EmpresaData = EmpresaData;
+            this._GastoData = GastoData;
 
         }
         // GET: Solicitudes
@@ -46,30 +51,38 @@ namespace TravelExpenses.Controllers
         // GET: Solicitudes/Create
         public ActionResult Create()
         {
+
             List<Solicitud> Solicitud = new List<Solicitud>();
             Solicitud = _SolicitudesData.ObtenerIdSolicitud().ToList();
-            ViewBag.Sol = Convert.ToInt32(Solicitud[0].IdFolio) + 1;
+            //ViewBag.Sol = Convert.ToInt32(Solicitud[0].IdFolio) + 1;
 
+            ViewBag.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
             var SolicitudModel = new SolicitudesViewModel();
 
             var Pais = _UbicacionData.ObtenerPaises();
             var Estado = _UbicacionData.ObtenerEstados("MEX");
-            var Ciudad = _UbicacionData.ObtenerCiudades("MEX",1);
+            var Ciudad = _UbicacionData.ObtenerCiudades("MEX", 1);
             var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
-            var Destino = _DestinosData.ObtenerDestinos(Convert.ToInt32(Solicitud[0].IdFolio) + 1);
-            var Moneda = _MonedaData.ObtenerMonedas();
-
+            var Destino = _DestinosData.ObtenerDestinos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
+            var Gasto = _SolicitudesData.ObtenerGastos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
+            var Moneda = _MonedaData.ObtenerMonedas()
+                          .OrderBy(x => x.Descripcion).ToList();
+            var Empresa = _EmpresaData.ObtenerEmpresas();
+            var _Gasto = _GastoData.ObtenerGastos();
 
             var IdFolio = _SolicitudesData.ObtenerIdSolicitud();
             SolicitudModel.Solicitudes = IdFolio;
-            
-            
+
+
             SolicitudModel.Solicitudes = TipoSolicitud;
             SolicitudModel.Paises = Pais;
             SolicitudModel.Estados = Estado;
             SolicitudModel.Ciudades = Ciudad;
             SolicitudModel.Destinos = Destino;
             SolicitudModel.Monedas = Moneda;
+            SolicitudModel.Empresas = Empresa;
+            SolicitudModel._Gastos = _Gasto;
+            SolicitudModel.Gastos = Gasto;
             return View(SolicitudModel);
            
         }
@@ -94,68 +107,69 @@ namespace TravelExpenses.Controllers
             return Json(estados);
         }
 
-        public ActionResult Add()
-        {
-            List<Solicitud> Solicitud = new List<Solicitud>();
-            Solicitud = _SolicitudesData.ObtenerIdSolicitud().ToList();
-            ViewBag.Sol = Convert.ToInt32(Solicitud[0].IdFolio) + 1;
+        //public ActionResult Add()
+        //{
+        //    List<Solicitud> Solicitud = new List<Solicitud>();
+        //    Solicitud = _SolicitudesData.ObtenerIdSolicitud().ToList();
+        //    ViewBag.Sol = Convert.ToInt32(Solicitud[0].IdFolio) + 1;
 
-            var SolicitudModel = new SolicitudesViewModel();
-            SolicitudModel.Solicitudes = _SolicitudesData.ObtenerTipoSolicitud();
-            SolicitudModel.Paises = _UbicacionData.ObtenerPaises();
-            SolicitudModel.Estados = _UbicacionData.ObtenerEstados("");
-            SolicitudModel.Ciudades = new List<Ciudades>();
-            SolicitudModel.Destinos = _DestinosData.ObtenerDestinos(4);
-            SolicitudModel.Monedas = _MonedaData.ObtenerMonedas();
-            return View(SolicitudModel);
-        }
+        //    var SolicitudModel = new SolicitudesViewModel();
+        //    SolicitudModel.Solicitudes = _SolicitudesData.ObtenerTipoSolicitud();
+        //    SolicitudModel.Paises = _UbicacionData.ObtenerPaises();
+        //    SolicitudModel.Estados = _UbicacionData.ObtenerEstados("");
+        //    SolicitudModel.Ciudades = new List<Ciudades>();
+        //    SolicitudModel.Destinos = _DestinosData.ObtenerDestinos(4);
+        //    SolicitudModel.Monedas = _MonedaData.ObtenerMonedas();
+        //    return View(SolicitudModel);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add(SolicitudesViewModel Solicitud)
-        {
-            List<Solicitud> Sol = new List<Solicitud>();
-            Sol = _SolicitudesData.ObtenerIdSolicitud().ToList();
-            ViewBag.Sol = Convert.ToInt32(Sol[0].IdFolio) + 1;
-            Solicitud objsolicitudes = new Solicitud();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Add(SolicitudesViewModel Solicitud)
+        //{
+        ////    List<Solicitud> Sol = new List<Solicitud>();
+        ////    Sol = _SolicitudesData.ObtenerIdSolicitud().ToList();
+        ////    ViewBag.Sol = Convert.ToInt32(Sol[0].IdFolio) + 1;
+        ////    Solicitud objsolicitudes = new Solicitud();
 
-            var objDestinos = new Destinos();
-            try
-            { 
-                objsolicitudes.Folio = Convert.ToInt32(Sol[0].IdFolio) + 1;
-                objsolicitudes.IdTipoSolicitud = Solicitud.Solicitud.IdTipoSolicitud;
-                objsolicitudes.Departamento = Solicitud.Solicitud.Departamento;
-                objsolicitudes.Empresa = Solicitud.Solicitud.Empresa;
-                objsolicitudes.ImporteSolicitado = Solicitud.Solicitud.ImporteSolicitado;
-                objsolicitudes.ImporteComprobado = Solicitud.Solicitud.ImporteComprobado;
-                objsolicitudes.Estatus = Solicitud.Solicitud.Estatus;
-                objsolicitudes.IdEstado = Solicitud.Solicitud.IdEstado;
-                objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
-                objsolicitudes.RFC = "456777";
-                objsolicitudes.ClaveMoneda = Solicitud.Moneda.ClaveMoneda;
-                //_SolicitudesData.InsertarSolicitud(objsolicitudes);
-                ViewBag.Script = "Datos almacenados";
+        ////    var objDestinos = new Destinos();
+        ////    try
+        ////    { 
+        ////        //objsolicitudes.Folio = Convert.ToInt32(Sol[0].IdFolio) + 1;
+        ////        //objsolicitudes.IdTipoSolicitud = Solicitud.Solicitud.IdTipoSolicitud;
+        ////        //objsolicitudes.Departamento = Solicitud.Solicitud.Departamento;
+        ////        //objsolicitudes.Empresa = Solicitud.Solicitud.Empresa;
+        ////        //objsolicitudes.ImporteSolicitado = Solicitud.Solicitud.ImporteSolicitado;
+        ////        //objsolicitudes.ImporteComprobado = Solicitud.Solicitud.ImporteComprobado;
+        ////        //objsolicitudes.Estatus = Solicitud.Solicitud.Estatus;
+        ////        //objsolicitudes.IdEstado = Solicitud.Solicitud.IdEstado;
+        ////        //objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
+        ////        //objsolicitudes.RFC = "456777";
+        ////        //objsolicitudes.ClaveMoneda = Solicitud.Moneda.ClaveMoneda;
+        ////        ////_SolicitudesData.InsertarSolicitud(objsolicitudes);
+        ////        //ViewBag.Script = "Datos almacenados";
 
-                objDestinos.ClavePais = Solicitud.Pais.ClavePais;
-                objDestinos.IdEstado = Solicitud.Estado.IdEstado;
-                objDestinos.IdCiudad = Solicitud.Ciudad.IdCiudad;
-                objDestinos.FechaSalida = Solicitud.Destino.FechaSalida;
-                objDestinos.FechaLlegada = Solicitud.Destino.FechaLlegada;
-                objDestinos.Folio = 13;
-                objDestinos.Motivo = Solicitud.Destino.Motivo;
+        ////        //objDestinos.ClavePais = Solicitud.Pais.ClavePais;
+        ////        //objDestinos.IdEstado = Solicitud.Estado.IdEstado;
+        ////        //objDestinos.IdCiudad = Solicitud.Ciudad.IdCiudad;
+        ////        //objDestinos.FechaSalida = Solicitud.Destino.FechaSalida;
+        ////        //objDestinos.FechaLlegada = Solicitud.Destino.FechaLlegada;
+        ////        //objDestinos.Folio = 13;
+        ////        //objDestinos.Motivo = Solicitud.Destino.Motivo;
 
-                //_DestinosData.InsertarDestino(objDestinos);
+        ////        //_DestinosData.InsertarDestino(objDestinos);
 
-            }
-            catch (Exception ex)
-            {
+        ////    }
+        ////    catch (Exception ex)
+        ////    {
 
-                ViewBag.Mensaje = "Error" + ex;
-            }
-            return RedirectToAction("Create", "Solicitudes", new { ClavePais = Solicitud.Pais.ClavePais,Folio= Solicitud.Destino.Folio});
-        }
+        ////        ViewBag.Mensaje = "Error" + ex;
+        ////    }
+        //    return RedirectToAction("Create", "Solicitudes", new { ClavePais = Solicitud.Pais.ClavePais,Folio= Solicitud.Destino.Folio});
+        //}
 
         // POST: Solicitudes/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(SolicitudesViewModel _solicitudes)
@@ -163,45 +177,44 @@ namespace TravelExpenses.Controllers
 
             List<Solicitud> Sol = new List<Solicitud>();
             Sol = _SolicitudesData.ObtenerIdSolicitud().ToList();
-            ViewBag.Sol = Convert.ToInt32(Sol[0].IdFolio) + 1;
+            //ViewBag.Sol = Convert.ToInt32(Sol[0].IdFolio) + 1;
 
+            HttpContext.Session.SetInt32("Folio", Convert.ToInt32(Sol[0].IdFolio) + 1);
 
+            ViewBag.Folio = HttpContext.Session.GetInt32("Folio");
             _DestinosData.ObtenerDestino(1);
             var result = _DestinosData.ObtenerDestinos(4);
-            Solicitud objsolicitudes = new Solicitud();
+            var objsolicitudes = new Solicitud();
             var objDestinos = new Destinos();
-
+            var objGastos = new Gasto();
             try
             {
+                if (_solicitudes.Pais.ClavePais == null || _solicitudes.Gasto.Empresa==null)
+                {
 
-                var SolicitudModel = new SolicitudesViewModel();
-                var Pais = _UbicacionData.ObtenerPaises();
-                var Estado = _UbicacionData.ObtenerEstados("MEX");
-                var Ciudad = _UbicacionData.ObtenerCiudades("MEX", 1);
-                var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
-              
-
-
-                SolicitudModel.Solicitudes = TipoSolicitud;
-                SolicitudModel.Paises = Pais;
-                SolicitudModel.Estados = Estado;
-                SolicitudModel.Ciudades = Ciudad;
-                SolicitudModel.Monedas = _MonedaData.ObtenerMonedas();
-
-                if (_solicitudes.Pais.ClavePais == null) {
-
-                    ViewBag.Script = "Debes registrar al menos un destino";
+                    objsolicitudes.Folio = Convert.ToInt32(Sol[0].IdFolio) + 1;
+                    objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
+                    objsolicitudes.Departamento = "TI";
+                    objsolicitudes.Empresa = "";
+                    objsolicitudes.ImporteSolicitado = _solicitudes.Solicitud.ImporteSolicitado;
+                    objsolicitudes.ImporteComprobado = _solicitudes.Solicitud.ImporteComprobado;
+                    objsolicitudes.Estatus ="SolicitudIncompleta";
+                    objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
+                    objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
+                    objsolicitudes.RFC = "456777";
+                    objsolicitudes.ClaveMoneda = _solicitudes.Moneda.ClaveMoneda;
+                    _SolicitudesData.InsertarSolicitud(objsolicitudes);
                 }
                 else
                 {
 
                     objsolicitudes.Folio = Convert.ToInt32(Sol[0].IdFolio) + 1;
-                    objsolicitudes.IdTipoSolicitud = _solicitudes.Solicitud.IdTipoSolicitud;
+                    objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
                     objsolicitudes.Departamento = "TI";
                     objsolicitudes.Empresa = "";
                     objsolicitudes.ImporteSolicitado = _solicitudes.Solicitud.ImporteSolicitado;
                     objsolicitudes.ImporteComprobado = _solicitudes.Solicitud.ImporteComprobado;
-                    objsolicitudes.Estatus = _solicitudes.Solicitud.Estatus;
+                    objsolicitudes.Estatus = "SolicitudCapturada";
                     objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
                     objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
                     objsolicitudes.RFC = "456777";
@@ -217,14 +230,40 @@ namespace TravelExpenses.Controllers
                     objDestinos.Motivo = _solicitudes.Destino.Motivo;
                     _DestinosData.InsertarDestino(objDestinos);
 
+                    objGastos.Folio = 12;//Convert.ToInt32(Sol[0].IdFolio) + 1;
+                    objGastos.MontoMaximo = "1000";
+                    objGastos.ImporteSolicitado = _solicitudes.Gasto.ImporteSolicitado;
+                    objGastos.TipoCambios = _solicitudes.Gasto.TipoCambios;
+                    objGastos.RFC = _solicitudes.Empresa.RFC;
+                    objGastos.IdGasto = _solicitudes._Gasto.IdGasto;
+                    objGastos.ClaveMoneda = _solicitudes.Gasto.ClaveMoneda;
+                    _SolicitudesData.InsertarGastos(objGastos);
+
                     ViewBag.Script = "Datos almacenados";
                 }
 
-                var Destino = _DestinosData.ObtenerDestinos(objDestinos.Folio);
 
+
+                var Destino = _DestinosData.ObtenerDestinos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
+                var Gasto = _SolicitudesData.ObtenerGastos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
+                //ViewBag.IdFolio = TempData["Folio"];
+                var SolicitudModel = new SolicitudesViewModel();
+                var Pais = _UbicacionData.ObtenerPaises();
+                var Estado = _UbicacionData.ObtenerEstados("MEX");
+                var Ciudad = _UbicacionData.ObtenerCiudades("MEX", 1);
+                var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
+
+
+
+                SolicitudModel.Solicitudes = TipoSolicitud;
+                SolicitudModel.Paises = Pais;
+                SolicitudModel.Estados = Estado;
+                SolicitudModel.Ciudades = Ciudad;
+                SolicitudModel.Monedas = _MonedaData.ObtenerMonedas();
                 SolicitudModel.Destinos = Destino;
-                
-                return View(SolicitudModel);
+                SolicitudModel.Gastos = Gasto;
+                return Redirect("./Create");
+                //return RedirectToAction("Create", "Solicitudes", new {  Folio = Convert.ToInt32(TempData["Folio"])});
 
             }
             catch (Exception ex)

@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table id="data-table-basic" class="table table-striped">
+                <table class="table table-striped" id="dtBasicExample">
                     <thead>
                         <tr>
                             <th>Folio</th>
@@ -53,39 +53,66 @@
                             <th>Cantidad Solicitada</th>
                             <th>Cantidad Comprobada</th>
                             <th>Estatus</th>
-                            <th>Acción</th> 
+                            <th>Acción</th>
                             <th>Enviar a<br />Autorización</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="developers">
                         @foreach (var item in Model.Solicitudes)
                         {
-                            <tr>
-                                <td>@item.Folio</td>
-                                <td>@item.Descripcion</td>
-                                <td>@item.UserName</td>
-                                <td>$@item.ImporteSolicitado @item.ClaveMoneda </td>
-                                <td>$@item.ImporteComprobado @item.ClaveMoneda </td>
-                                <td>@item.Estatus</td>
-                                <td  >
-                                    <a  class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@item.Folio" id="accion">
-                                        <i class="fas fa-edit"></i>
-                                    </a> 
-                                    <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Crseate" asp-route-Folio="@item.Folio" id="accion1" >
-                                        <i class="fas fa-eraser"></i>
+                        <tr>
+                            <td>@item.Folio</td>
+                            <td>@item.Descripcion</td>
+                            <td>@item.UserName</td>
+                            <td>$@item.ImporteSolicitado @item.ClaveMoneda </td>
+                            <td>$@item.ImporteComprobado @item.ClaveMoneda </td>
+
+                            <td>@item.Estatus</td>
+
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@item.Folio" id="accion">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-lg" asp-controller="Home" asp-action="EliminarSolicitud" asp-route-Folio="@item.Folio" id="accion1">
+                                    <i class="fas fa-eraser"></i>
+                                </a>
+                            </td>
+                            @if (@item.Estatus == "SolicitudIncomp")
+                            {
+                                <td>
+                                    <a class="btn btn-lg" >
+                                        <i class="fas fa-ban "></i>
                                     </a>
                                 </td>
+                            }
+                            else
+                            {
                                 <td>
                                     <a class="btn btn-lg" asp-controller="Home" asp-action="ModificarEstatus" asp-route-Folio="@item.Folio">
                                         <i class="fas fa-paper-plane"></i>
                                     </a>
                                 </td>
+                            }
                             </tr>
                         }
                     </tbody>
                 </table>
+                <div class="col-md-12 text-center">
+                    <ul class="pagination pagination-lg pager" id="developer_page"></ul>
+                </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    // Basic example
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable({
+            "pagingType": "simple", // "simple" option for 'Previous' and 'Next' buttons only
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
