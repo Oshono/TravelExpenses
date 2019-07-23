@@ -15,14 +15,14 @@ namespace TravelExpenses.Core
         public string RFC { get; set; }
         public string NombreProveedor { get; set; }
         [Required]
-        public string Fecha { get; set; }
-        public float SubTotal { get; set; }
-        public float Impuestos { get; set; }
-        public float Retenciones { get; set; }
-        public float Total { get; set; }
+        public DateTime Fecha { get; set; }
+        public double SubTotal { get; set; }
+        public double Impuestos { get; set; }
+        public double Retenciones { get; set; }
+        public double Total { get; set; }
         public string RegimenFiscal { get; set; }
         public string Moneda { get; set; }
-        
+        public int FolioSolicitud { get; set; }
         public List<Concepto> Conceptos { get; set; }
         public Archivo Archivo { get; set; }
     }
