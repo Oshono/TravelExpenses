@@ -101,7 +101,7 @@ namespace TravelExpenses.Controllers
             }
             if (rembolso.Comprobante != null)
             {
-                _rembolso.Guardar(rembolso.Comprobante);
+                _rembolso.GuardarComprobante(rembolso.Comprobante);
             }
 
             return View(rembolso);

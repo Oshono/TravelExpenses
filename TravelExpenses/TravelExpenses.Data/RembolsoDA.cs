@@ -61,14 +61,37 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public int GuardarComprobante(Comprobante miComprobante)
+        {
+            try
+            {
+                int result = 0;
+                if (miComprobante != null)
+                {
+                    _comprobante.Guardar(miComprobante);
+                    result = Commit();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public bool Exists(string NombreArchivo, string Extension)
         {
             return db.Archivos.Any(e => e.NombreArchivo == NombreArchivo && e.Extension == Extension);
         }
+        public bool Exists(string UUID)
+        {
+            return db.Comprobante.Any(e => e.UUID == UUID);
+        }
         public int Commit()
         {
             return db.SaveChanges();
-        }
+        }       
 
     }
 }

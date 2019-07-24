@@ -104,11 +104,13 @@
                         </tr>
                     </thead>
                     <tbody id="tblComprobantes">
+                        if (@Model.Comprobante.Conceptos != null  && @Model.Comprobante.Conceptos.Count > 0)
+                        {
                         @foreach (var concepto in Model.Comprobante.Conceptos)
                         {
 
                             <tr>
-                                <td>@concepto.IdConcepto</td> 
+                                <td>@concepto.IdConcepto</td>
                                 <td>@concepto.Importe</td>
                                 <td>@concepto.ValorUnitario</td>
                                 <td>@concepto.Descripcion</td>
@@ -119,6 +121,7 @@
                                 <td></td>
                                 <td></td>
                             </tr>
+                        }
                         }
                     </tbody>
                 </table>
