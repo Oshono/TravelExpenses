@@ -60,28 +60,30 @@ namespace TravelExpenses
                 options.UseSqlServer(
                     Configuration.GetConnectionString("TravelExDb")));
 
-            services.AddIdentity<IdentityUser,IdentityRole>(options =>
-            {
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+             {
                 // Password settings.
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                 options.Password.RequireLowercase = false;
+                 options.Password.RequireNonAlphanumeric = false;
+                 options.Password.RequireUppercase = false;
+                 options.Password.RequiredLength = 6;
+                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 100;
-                options.Lockout.AllowedForNewUsers = true;
+                 options.Lockout.MaxFailedAccessAttempts = 100;
+                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-            } )
+                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                 options.User.RequireUniqueEmail = false;
+                 options.SignIn.RequireConfirmedEmail = true;
+             })
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             
 
@@ -94,6 +96,7 @@ namespace TravelExpenses
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
+                
             });
             services.AddAuthorization(options =>
             {
