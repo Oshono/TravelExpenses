@@ -92,6 +92,20 @@ namespace TravelExpenses.Controllers
             return View(rembolso);
         }
 
+        [HttpPost]
+        public ActionResult Details(RembolsoViewModel rembolso)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(rembolso);
+            }
+            if (rembolso.Comprobante != null)
+            {
+                _rembolso.Guardar(rembolso.Comprobante);
+            }
+
+            return View(rembolso);
+        }
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -141,11 +155,20 @@ namespace TravelExpenses.Controllers
 
             var Extension = Path.GetExtension(file.FileName);
 
-         
+
 
             if (Extension == ".xml")
             {
-                comprobante = CargaXML(file);                
+                comprobante = CargaXML(file);
+            }
+            else
+            {
+                comprobante.Add (new Comprobante());
+                comprobante.FirstOrDefault().UUID = Guid.NewGuid().ToString();
+                comprobante.FirstOrDefault().Fecha = DateTime.Now;
+                comprobante.FirstOrDefault().Folio = "Sin Folio";
+                comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
+                comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
             }
 
             comprobante.FirstOrDefault().Archivo = new Archivo();
@@ -155,10 +178,8 @@ namespace TravelExpenses.Controllers
             comprobante.FirstOrDefault().Archivo.Extension = Extension;
             comprobante.FirstOrDefault().Archivo.Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
             comprobante.FirstOrDefault().Archivo.FechaAlta = DateTime.Now;
-            if (Extension == ".xml")
-            {
-                comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
-            }
+            comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
+            
 
             SaveDB(comprobante.FirstOrDefault());
 

@@ -54,7 +54,10 @@ namespace TravelExpenses.Data
                     else
                     {
                         db.Comprobante.Add(comprobante);
-                        db.Concepto.AddRange(comprobante.Conceptos);
+                        if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0)
+                        { 
+                            db.Concepto.AddRange(comprobante.Conceptos);
+                        }
                         db.Archivos.Add(comprobante.Archivo);
                     }
 
