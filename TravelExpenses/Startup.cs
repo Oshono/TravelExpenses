@@ -51,7 +51,8 @@ namespace TravelExpenses
             services.AddScoped<IRembolso, RembolsoDA>();
             services.AddScoped<IComprobante, ComprobanteDA>();
 
-            services.Configure<CookiePolicyOptions>(options => {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.                
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
@@ -85,7 +86,7 @@ namespace TravelExpenses
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -96,7 +97,6 @@ namespace TravelExpenses
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
-                
             });
             services.AddAuthorization(options =>
             {
@@ -114,8 +114,11 @@ namespace TravelExpenses
                                 || context.User.IsInRole("User")));
             });
 
-           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);      
-            
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            services.AddSession();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,7 +141,8 @@ namespace TravelExpenses
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseSession();
+             
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

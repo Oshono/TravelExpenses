@@ -51,10 +51,14 @@ namespace TravelExpenses.Controllers
             return Redirect("./");
         }
 
+        public ActionResult EliminarSolicitud(int Folio)
+        {
+            _SolicitudesData.EliminarSolicitud(Folio);
+            return Redirect("./");
+        }
+
         public IActionResult ListarSolicitudes()
         {
- 
-
             var Solicitud = _SolicitudesData.ObtenerSolicitudes();
             var SolicitudesModel = new SolicitudesViewModel();
             SolicitudesModel.Solicitudes = Solicitud; 

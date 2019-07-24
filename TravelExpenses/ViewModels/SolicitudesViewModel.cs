@@ -30,5 +30,16 @@ namespace TravelExpenses.ViewModels
         public IEnumerable<Moneda> Monedas { get; set; }
         public Moneda Moneda { get; set; }
         public string ClaveMoneda { get; set; }
+
+        public IEnumerable<Gasto> Gastos { get; set; }
+        public Gasto Gasto { get; set; }
+        public int IdGasto { get; set; }
+
+        public IEnumerable<Empresas> Empresas { get; set; }
+        public Empresas Empresa{ get; set; }
+        public string RFC { get; set; }
+
+        public IEnumerable<Gastos> _Gastos { get; set; }
+        public Gastos _Gasto { get; set; }
     }
 }

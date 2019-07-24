@@ -6,6 +6,7 @@ namespace TravelExpenses.Data
     public interface IComprobante
     {
         IEnumerable<Comprobante> ObtenerComprobantes();
+        Comprobante ObtenerComprobantesXID(string UUID);
         int Guardar(Comprobante comprobante);
         int Commit();
     }

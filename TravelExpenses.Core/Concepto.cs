@@ -12,20 +12,20 @@ namespace TravelExpenses.Core
         [Required]
         public string UUID { get; set; }
         [Required]
-        public float Importe { get; set; }
+        public double Importe { get; set; }
         [Required]
-        public float ValorUnitario { get; set; }
+        public double ValorUnitario { get; set; }
         [Required]
         public string Descripcion { get; set; }
         [Required]
         public string Unidad { get; set; }
         public string ClaveUnidad { get; set; }
-        public float Cantidad { get; set; }
+        public double Cantidad { get; set; }
         public string NoIdentificacion { get; set; }
         public string ClaveProdServ { get; set; }
-        public float TasaOCuota { get; set; }
+        public double TasaOCuota { get; set; }
         public string TipoFactor { get; set; }
-        public float Impuesto { get; set; }
-        public float Base { get; set; }
+        public double Impuesto { get; set; }
+        public double Base { get; set; }
     }
 }

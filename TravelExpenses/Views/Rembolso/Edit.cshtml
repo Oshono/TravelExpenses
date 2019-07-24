@@ -10,7 +10,7 @@
                 <div class="dropdone-nk mg-t-30">
                     <div class="cmp-tb-hd">
                         <h2>Arrastre y suelte los documentos</h2>
-                        <p>Solo puede subir archivos XML</p>
+                        <p>Solo puede subir archivos XML, PDF o imagénes.</p>
                     </div>
                     <div id="dropzone1" class="multi-uploader-cs">
                         <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
@@ -130,17 +130,15 @@
                 else
                 {
                     alert("Archivo agregado");
-
-                    console.log(args);
-                    
-
+                                      
                     var row = "";
                     $.each(args[1], function (index, item) {
 
                         console.log(item);
-                        row += "<tr><td>" + item.uuid + "</td><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "><i class='mdi mdi-magnify-plus'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
+                        row += "<tr><td>" + item.uuid + "</td><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
                     });
                     $("#tblComprobantes").html(row);  
+                    this.removeFile(data);
                 }
             });
         }

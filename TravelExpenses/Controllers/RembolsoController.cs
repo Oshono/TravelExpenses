@@ -22,14 +22,16 @@ namespace TravelExpenses.Controllers
     {
         private readonly IRembolso _rembolso;
         private readonly ISolicitudes _solicitud;
+        private readonly IComprobante _comprobante;
         private readonly IHostingEnvironment _env;
         public List<Comprobante> lstComprobantes;
         
-        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env)
+        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env, IComprobante comprobante)
         {
             _rembolso = rembolso;
             _solicitud = solicitud;
             _env = env;
+            _comprobante = comprobante;
         }
 
         // GET: Centro Costos
@@ -84,19 +86,26 @@ namespace TravelExpenses.Controllers
         public ActionResult Details(string UUID)
         {
             var rembolso = new RembolsoViewModel();
-            rembolso.Comprobantes = new List<Comprobante>();
-            //var centroModel = new CentroCostoViewModel();
-            //centroModel.CentroCosto = new CentroCosto();
-            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
-            //{
-            //    var centro = _centro.ObtenerCentroCostos()
-            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
-            //                .FirstOrDefault();
-            //    centroModel.CentroCosto = centro;
-            //}
+            rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
+
+            
             return View(rembolso);
         }
 
+        [HttpPost]
+        public ActionResult Details(RembolsoViewModel rembolso)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(rembolso);
+            }
+            if (rembolso.Comprobante != null)
+            {
+                _rembolso.GuardarComprobante(rembolso.Comprobante);
+            }
+
+            return View(rembolso);
+        }
         // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -146,11 +155,20 @@ namespace TravelExpenses.Controllers
 
             var Extension = Path.GetExtension(file.FileName);
 
-         
+
 
             if (Extension == ".xml")
             {
-                comprobante = CargaXML(file);                
+                comprobante = CargaXML(file);
+            }
+            else
+            {
+                comprobante.Add (new Comprobante());
+                comprobante.FirstOrDefault().UUID = Guid.NewGuid().ToString();
+                comprobante.FirstOrDefault().Fecha = DateTime.Now;
+                comprobante.FirstOrDefault().Folio = "Sin Folio";
+                comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
+                comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
             }
 
             comprobante.FirstOrDefault().Archivo = new Archivo();
@@ -160,10 +178,8 @@ namespace TravelExpenses.Controllers
             comprobante.FirstOrDefault().Archivo.Extension = Extension;
             comprobante.FirstOrDefault().Archivo.Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
             comprobante.FirstOrDefault().Archivo.FechaAlta = DateTime.Now;
-            if (Extension == ".xml")
-            {
-                comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
-            }
+            comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
+            
 
             SaveDB(comprobante.FirstOrDefault());
 
@@ -231,7 +247,7 @@ namespace TravelExpenses.Controllers
                                {
                                    UUID = (string)c.Attribute("UUID"),
                                    Folio = (string)e.Attribute("Folio"),
-                                   Fecha = (string)e.Attribute("Fecha"),
+                                   Fecha = (DateTime)e.Attribute("Fecha"),
                                    Moneda = (string)e.Attribute("Moneda"),
                                    SubTotal = (float)e.Attribute("SubTotal"),
                                    Total = (float)e.Attribute("Total"),
