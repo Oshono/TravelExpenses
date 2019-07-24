@@ -80,7 +80,7 @@ namespace TravelExpenses
                 options.User.AllowedUserNameCharacters =
                  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                  options.User.RequireUniqueEmail = false;
-                 options.SignIn.RequireConfirmedEmail = true;
+                 //options.SignIn.RequireConfirmedEmail = true;
              })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
