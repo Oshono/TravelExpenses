@@ -31,6 +31,7 @@ namespace TravelExpenses.Controllers
             var users = _context.Users.ToList();
             var userRoles = _context.UserRoles.ToList();
 
+
             var convertedUsers = users.Select(x => new UsersViewModel
             {
                 Email = x.Email,
@@ -45,7 +46,8 @@ namespace TravelExpenses.Controllers
             return View(new DisplayViewModel
             {
                 Roles = roles.Select(x => x.NormalizedName),
-                Users = convertedUsers
+                Users = convertedUsers,
+
             });
         }
 
@@ -67,6 +69,7 @@ namespace TravelExpenses.Controllers
         public async Task<IActionResult> CreateRole(RoleViewModel vm)
         {
             await _roleManager.CreateAsync(new IdentityRole { Name = vm.Name });
+            
 
             return RedirectToAction("Index");
         }
@@ -78,8 +81,11 @@ namespace TravelExpenses.Controllers
 
             if (vm.Delete)
                 await _userManager.RemoveFromRoleAsync(user, vm.Role);
-            else
+            if (vm.DeleteUser)
+                await _userManager.DeleteAsync(user);
+            if(vm.Role!=null)
                 await _userManager.AddToRoleAsync(user, vm.Role);
+            
 
             return RedirectToAction("Index");
         }
@@ -89,6 +95,7 @@ namespace TravelExpenses.Controllers
     {
         public IEnumerable<string> Roles { get; set; }
         public IEnumerable<UsersViewModel> Users { get; set; }
+
     }
 
     public class UsersViewModel
@@ -112,8 +119,10 @@ namespace TravelExpenses.Controllers
         public IEnumerable<UsersViewModel> Users { get; set; }
         public IEnumerable<string> Roles { get; set; }
 
+
         public string UserEmail { get; set; }
         public string Role { get; set; }
         public bool Delete { get; set; }
+        public bool DeleteUser { get; set; }
     }
 }
