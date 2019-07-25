@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelExpenses.Core
 {
@@ -9,16 +10,20 @@ namespace TravelExpenses.Core
     {
         public Politica()
         {
-            ClavePolitica = string.Empty;
+            IdPolitica = 0;
         }
         [Required, Key]
-        public string ClavePolitica { get; set; }
-        [Required]
-        public string Descripcion { get; set; }
+        public int IdPolitica { get; set; }
+        [Required, StringLength(200)]
+        public string Nombre { get; set; }
         public int IdGasto { get; set; }
-        public float Limite { get; set; }
-        public string UserName { get; set; }
+        [Range(0.0, float.MaxValue)]
+        public decimal ImportePermitido { get; set; }
+        
+        [StringLength(250)]
         public string MensajeError { get; set; }
         public bool Activo { get; set; }
+        [NotMapped]
+        public string UserName { get; set; }
     }
 }
