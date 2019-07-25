@@ -10,5 +10,6 @@ namespace TravelExpenses.ViewModels
     {
         public IEnumerable<Politica> Politicas { get; set; }
         public Politica Politica { get; set; }
+        public IEnumerable<Gastos> Gastos { get; set; }
     }
 }

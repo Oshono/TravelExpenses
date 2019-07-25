@@ -50,6 +50,7 @@ namespace TravelExpenses
             services.AddScoped<ICentroCostoEmpresa, CentroCostoEmpresaDA>();
             services.AddScoped<IRembolso, RembolsoDA>();
             services.AddScoped<IComprobante, ComprobanteDA>();
+            services.AddScoped<IPolitica, PoliticaDA>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

@@ -4,11 +4,11 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Politicas</h1>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-        <a asp-controller="Politica" asp-action="Edit" class="btn btn-primary">Agregar Nuevo Centro de Costo</a>
+        <a asp-controller="Politica" asp-action="Edit" class="btn btn-primary">Agregar Nueva Politica</a>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="data-table-basic" class="table table-striped">
@@ -21,7 +21,10 @@
                                 Descripción
                             </th>
                             <th>
-                                Limite
+                                Importe Permitido
+                            </th>
+                            <th>
+                                Gasto
                             </th>
                             <th>
                                 Editar
@@ -33,11 +36,12 @@
                         {
 
                         <tr>
-                            <td>@politica.ClavePolitica</td>
-                            <td>@politica.Descripcion</td>
-                            <td>@politica.Limite</td>
+                            <td>@politica.IdPolitica</td>
+                            <td>@politica.Nombre</td>
+                            <td>@politica.ImportePermitido</td>
+                            <td>@politica.IdGasto</td>
                             <td>
-                                <a class="btn btn-lg" asp-controller="Politic" asp-action="Edit" asp-route-clavepolitica="@politica.ClavePolitica">
+                                <a class="btn btn-lg" asp-controller="Politica" asp-action="Edit" asp-route-idpolitica="@politica.IdPolitica">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
