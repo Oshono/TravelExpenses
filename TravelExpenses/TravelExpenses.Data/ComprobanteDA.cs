@@ -12,11 +12,12 @@ namespace TravelExpenses.Data
     public class ComprobanteDA : IComprobante
     {
         private readonly TravelExpensesContext db;
-
+        private readonly ICatProdServSATDA _prodserv;
         private readonly IConfiguration _configuration;
-        public ComprobanteDA(TravelExpensesContext db, IConfiguration configuration)
+        public ComprobanteDA(TravelExpensesContext db, IConfiguration configuration, ICatProdServSATDA prodserv)
         {
             _configuration = configuration;
+            _prodserv = prodserv;
             this.db = db;
         }
         
@@ -34,9 +35,23 @@ namespace TravelExpenses.Data
         }
         public Comprobante ObtenerComprobantesXID(string UUID)
         {
+            var catProdServ = _prodserv.ObtenerCatalogo();
+
             var comprobante =  db.Comprobante.Where(x=>x.UUID == UUID).FirstOrDefault();
             comprobante.Archivo = db.Archivos.Where(x=>x.UUID == UUID).FirstOrDefault();
             comprobante.Conceptos = db.Concepto.Where(x => x.UUID == UUID).ToList();
+
+            //   concepto.DescripcionProdServ = catProdServ.Where(x => x.ClaveProdServ == conceptoXML.Attribute("ClaveProdServ").Value).Select(c => c.Descripcion).FirstOrDefault().ToString();
+            foreach (var concepto in comprobante.Conceptos)
+            {
+                var catprodserv = catProdServ.FirstOrDefault(x => x.ClaveProdServ == concepto.ClaveProdServ);
+
+                if (catprodserv != null)
+                {
+                    concepto.DescripcionProdServ = catprodserv.Descripcion;
+                }                
+            }
+
 
             return comprobante;
         }

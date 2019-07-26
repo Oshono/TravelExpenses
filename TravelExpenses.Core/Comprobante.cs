@@ -16,9 +16,13 @@ namespace TravelExpenses.Core
         public string NombreProveedor { get; set; }
         [Required]
         public DateTime Fecha { get; set; }
+        
         public double SubTotal { get; set; }
+        
         public double Impuestos { get; set; }
+        
         public double Retenciones { get; set; }
+        
         public double Total { get; set; }
         public string RegimenFiscal { get; set; }
         public string Moneda { get; set; }

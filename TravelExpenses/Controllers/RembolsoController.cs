@@ -23,15 +23,26 @@ namespace TravelExpenses.Controllers
         private readonly IRembolso _rembolso;
         private readonly ISolicitudes _solicitud;
         private readonly IComprobante _comprobante;
+        private readonly IGasto _gastos;
+        private readonly IPolitica _politica;
         private readonly IHostingEnvironment _env;
+        
         public List<Comprobante> lstComprobantes;
         
-        public rembolsoController(IRembolso rembolso, ISolicitudes solicitud, IHostingEnvironment env, IComprobante comprobante)
+        public rembolsoController(  IRembolso rembolso, 
+                                    ISolicitudes solicitud, 
+                                    IHostingEnvironment env, 
+                                    IComprobante comprobante,
+                                    IGasto gastos,
+                                    IPolitica politica
+                                    )
         {
             _rembolso = rembolso;
             _solicitud = solicitud;
             _env = env;
             _comprobante = comprobante;
+            _gastos = gastos;
+            _politica = politica;
         }
 
         // GET: Centro Costos
@@ -87,20 +98,41 @@ namespace TravelExpenses.Controllers
         {
             var rembolso = new RembolsoViewModel();
             rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
-
-            
+            var gastos = _gastos.ObtenerGastos();
+            rembolso.Gastos = gastos;
             return View(rembolso);
         }
 
         [HttpPost]
         public ActionResult Details(RembolsoViewModel rembolso)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(rembolso);
-            }
+        { 
             if (rembolso.Comprobante != null)
             {
+                var politicas = _politica.ObtenerPoliticas();
+
+                if (rembolso.Comprobante.Conceptos.Count() > 0)
+                {
+                    var gastos = rembolso.Comprobante.Conceptos.Select(o => o.IdGasto).Distinct().ToList();
+                    foreach (int gasto in gastos)
+                    {
+                        var Importe = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto).Sum(x => x.Impuesto + x.Importe);
+                        var pol = politicas.Where(x => x.IdGasto == gasto).FirstOrDefault();
+                        if (pol != null && decimal.Parse(Importe.ToString()) > pol.ImportePermitido)
+                        {
+                                var conceptos = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto);
+
+                                foreach (var obj in conceptos)
+                                {
+                                    obj.MensajeError = pol.MensajeError;    
+                                }
+                            var listagastos = _gastos.ObtenerGastos();
+                            rembolso.Gastos = listagastos;
+                            return View(rembolso);
+                        }
+                        
+                    }
+                    
+                }
                 _rembolso.GuardarComprobante(rembolso.Comprobante);
             }
 
@@ -261,6 +293,7 @@ namespace TravelExpenses.Controllers
 
             
             List<Concepto> listaConceptos = new List<Concepto>();
+            
             comprobante[0].Conceptos = listaConceptos;
             var conceptos = from c in archivoXML.Descendants()
                             where c.Name.LocalName == "Conceptos"
@@ -273,7 +306,7 @@ namespace TravelExpenses.Controllers
                     Concepto concepto = new Concepto();
                     concepto.UUID = comprobante.FirstOrDefault().UUID;
                     concepto.Cantidad = float.Parse(conceptoXML.Attribute("Cantidad").Value);
-                    concepto.ClaveProdServ = conceptoXML.Attribute("ClaveProdServ").Value;
+                    concepto.ClaveProdServ = conceptoXML.Attribute("ClaveProdServ").Value;                    
                     if ( conceptoXML.Attribute("Base") != null)
                     {
                         concepto.Base = float.Parse(conceptoXML.Attribute("Base").Value);
