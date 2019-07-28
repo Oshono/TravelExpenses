@@ -37,14 +37,21 @@
         <div class="card-body">
             <div class="container">
                 <div class="row" id="seccionBtn">
-                    @*<div class="col-2"><a id="EnviarSolicitud" class="btn" asp-page="/Solicitudes/Solicitudes"><i class="mdi  mdi-pencil"></i>Agregar</a></div>*@
+                    
                     <div class="col-2"><a id="EnviarSolicitud" class="btn" asp-controller="Solicitudes" asp-action="create"><i class="mdi  mdi-pencil"></i>Agregar</a></div>
-                     
+                    <div class="col-4">
+                        <select asp-for="Estatus.IdEstatus" class="form-control input-sm" id="estatus" onchange="ObtenerSolcitudes()"
+                                asp-items="@(new SelectList(Model.Estatuses, "IdEstatus", "Status"))">
+                            <option value="">--Seleccionar estatus</option>
+                            <option value="">Todo</option>
+                        </select>
+                    </div>
                     <div class="col"></div>
                 </div>
+                <br />
             </div>
             <div class="table-responsive">
-                <table class="table table-striped" id="dtBasicExample">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Folio</th>
@@ -53,11 +60,12 @@
                             <th>Cantidad Solicitada</th>
                             <th>Cantidad Comprobada</th>
                             <th>Estatus</th>
-                            <th>Acción</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
                             <th>Enviar a<br />Autorización</th>
                         </tr>
                     </thead>
-                    <tbody id="developers">
+                    <tbody id="tblSolicitud">
                         @foreach (var item in Model.Solicitudes)
                         {
                         <tr>
@@ -73,11 +81,13 @@
                                 <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@item.Folio" id="accion">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                            </td>
+                            <td>
                                 <a class="btn btn-lg" asp-controller="Home" asp-action="EliminarSolicitud" asp-route-Folio="@item.Folio" id="accion1">
                                     <i class="fas fa-eraser"></i>
                                 </a>
                             </td>
-                            @if (@item.Estatus == "SolicitudIncomp")
+                            @if (@item.Estatus == "Incompleta")
                             {
                                 <td>
                                     <a class="btn btn-lg" >
@@ -108,6 +118,51 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
+
+    function ObtenerSolcitudes() {
+        var estatus = $("#estatus").children("option:selected").text();
+        var row = "";
+        var url = "/Home/SolicitudesEstatus/";
+        $.ajax({
+            url: url,
+            data: { estatus: estatus },
+            type:"POST",
+            cache: false,
+            success: function (response) {
+                var data = [];
+                data = response;
+                
+                var row = "";
+                if (data.length == 0) {
+                    row += "<tr><td colspan='9'>" +"-- No existen registros --"+ "</td></tr>";
+                }
+                else {
+                    $.each(response, function (index, item) {
+                        if (item.estatus == "Incompleta") {
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + "$" +  item.importeSolicitado+" "+item.claveMoneda+
+                                "</td><td>" + "$" +  item.importeComprobado + " " +item.claveMoneda+ "</td><td>" + item.estatus +
+                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" +
+                                "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                        }
+                        else {
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" +"$"+ item.importeSolicitado + " " +item.claveMoneda+
+                                "</td><td>" + "$" + item.importeComprobado + " " +item.claveMoneda+ "</td><td>" + item.estatus +
+                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
+                                "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                        }
+                    });
+                }
+                $("#tblSolicitud").html(row);
+                
+              
+            },
+            error: function (error) {
+                alert("unknown error: ", error);
+            }
+        });
+    }
     // Basic example
     $(document).ready(function () {
         $('#dtBasicExample').DataTable({

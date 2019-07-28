@@ -37,11 +37,29 @@ namespace TravelExpenses.Controllers
 
         public IActionResult SolicitudesEstatus(string estatus)
         {
-            var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
-            var SolicitudesModel = new SolicitudesViewModel();
-            SolicitudesModel.Solicitudes = Solicitud;
+            try
+            {
+                var SolicitudesModel = new SolicitudesViewModel();
+                if (estatus == "Todo" || estatus == "--Seleccionar estatus")
+                {
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudes();
+                    SolicitudesModel.Solicitudes = Solicitud;
+                    return Json(Solicitud);
+                }
+                else
+                {
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
+                    SolicitudesModel.Solicitudes = Solicitud;
+                    return Json(Solicitud);
+                }
+            }
+            catch (Exception ex)
+            {
 
-            return View(SolicitudesModel);
+                throw ex;
+            }
+
+
         }
 
         public ActionResult ModificarEstatus(int Folio)
@@ -59,8 +77,14 @@ namespace TravelExpenses.Controllers
 
         public IActionResult ListarSolicitudes()
         {
-            var Solicitud = _SolicitudesData.ObtenerSolicitudes();
             var SolicitudesModel = new SolicitudesViewModel();
+            var Solicitud = _SolicitudesData.ObtenerSolicitudes();
+            var Estatus = _SolicitudesData.EstatusSolicitudes();
+
+
+            
+            SolicitudesModel.Estatuses = Estatus;
+
             SolicitudesModel.Solicitudes = Solicitud; 
 
             return View(SolicitudesModel);

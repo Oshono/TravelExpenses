@@ -39,7 +39,7 @@ namespace TravelExpenses.Data
                 parameters.Add("@ImporteSolicitado", solicitud.ImporteSolicitado);
                 parameters.Add("@ImporteComprobado", solicitud.ImporteComprobado);
                 parameters.Add("@Estatus", solicitud.Estatus); 
-                parameters.Add("@IdEstado", solicitud.IdEstado);
+                //parameters.Add("@IdEstado", solicitud.IdEstado);
                 parameters.Add("@Id", solicitud.Id);
                 parameters.Add("@RFC", solicitud.RFC);
                 parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
@@ -161,6 +161,23 @@ namespace TravelExpenses.Data
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Estatus> EstatusSolicitudes()
+        {
+            try
+            {
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Estatus>("Estatus_Sel", null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Status);
+                }
+            }
+            catch (Exception ex)
+            {
+
                 throw ex;
             }
         }
