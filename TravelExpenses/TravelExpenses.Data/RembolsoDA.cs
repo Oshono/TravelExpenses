@@ -40,7 +40,7 @@ namespace TravelExpenses.Data
                 int result = 0;
                 if (miComprobante != null)
                 {
-                    if (Exists(miComprobante.Archivo.NombreArchivo, miComprobante.Archivo.Extension))
+                    if (Exists(miComprobante.Archivos.FirstOrDefault().NombreArchivo, miComprobante.Archivos.FirstOrDefault().Extension))
                     {
                        
                     }

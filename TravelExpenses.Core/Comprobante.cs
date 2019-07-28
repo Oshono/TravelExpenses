@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelExpenses.Core
 {
@@ -27,7 +28,9 @@ namespace TravelExpenses.Core
         public string RegimenFiscal { get; set; }
         public string Moneda { get; set; }
         public int FolioSolicitud { get; set; }
-        public List<Concepto> Conceptos { get; set; }
-        public Archivo Archivo { get; set; }
+        public List<Concepto> Conceptos { get; set; }        
+        public List<Archivo> Archivos { get; set; }
+        [NotMapped]
+        public bool ComprobanteXML { get; set; }
     }
 }

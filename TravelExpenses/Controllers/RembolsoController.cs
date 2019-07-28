@@ -80,17 +80,15 @@ namespace TravelExpenses.Controllers
         // GET: gastos/Edit/5
         public ActionResult Edit(string Folio)
         {
+            int FolioSolicitud = 0;
             var rembolso = new RembolsoViewModel();
-            rembolso.Comprobantes = new List<Comprobante>();
-            //var centroModel = new CentroCostoViewModel();
-            //centroModel.CentroCosto = new CentroCosto();
-            //if (!string.IsNullOrEmpty(ClaveCentroCosto))
-            //{
-            //    var centro = _centro.ObtenerCentroCostos()
-            //                .Where(x => x.ClaveCentroCosto == ClaveCentroCosto)
-            //                .FirstOrDefault();
-            //    centroModel.CentroCosto = centro;
-            //}
+            if (int.TryParse(Folio, out FolioSolicitud))
+            {                 
+                rembolso.Comprobantes = new List<Comprobante>();
+
+                var solicitud = _solicitud.ObtenerSolicitudes().Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
+                rembolso.solicitud = solicitud;
+            }
             return View( rembolso);
         }
 
@@ -98,6 +96,7 @@ namespace TravelExpenses.Controllers
         {
             var rembolso = new RembolsoViewModel();
             rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
+            rembolso.Comprobante.ComprobanteXML = rembolso.Comprobante.Archivos.FirstOrDefault().Extension.Contains("xml");
             var gastos = _gastos.ObtenerGastos();
             rembolso.Gastos = gastos;
             return View(rembolso);
@@ -109,6 +108,16 @@ namespace TravelExpenses.Controllers
             if (rembolso.Comprobante != null)
             {
                 var politicas = _politica.ObtenerPoliticas();
+
+                if (rembolso.Concepto != null && rembolso.Concepto.Descripcion != string.Empty)
+                {
+                    if (rembolso.Comprobante.Conceptos == null)
+                    { 
+                        rembolso.Comprobante.Conceptos = new List<Concepto>();                        
+                    }
+                    rembolso.Comprobante.Conceptos.Add(rembolso.Concepto);
+                    rembolso.Concepto = new Concepto();
+                }
 
                 if (rembolso.Comprobante.Conceptos.Count() > 0)
                 {
@@ -127,16 +136,17 @@ namespace TravelExpenses.Controllers
                                 }
                             var listagastos = _gastos.ObtenerGastos();
                             rembolso.Gastos = listagastos;
-                            return View(rembolso);
+                            _rembolso.GuardarComprobante(rembolso.Comprobante);
+                            return RedirectToAction("Details", "Rembolso", new { UUID = rembolso.Comprobante.UUID });
                         }
                         
                     }
                     
                 }
-                _rembolso.GuardarComprobante(rembolso.Comprobante);
+                
             }
 
-            return View(rembolso);
+            return RedirectToAction("Details", "Rembolso", new { UUID = rembolso.Comprobante.UUID });
         }
         // POST: Empresa/Edit/5
         [HttpPost]
@@ -178,7 +188,7 @@ namespace TravelExpenses.Controllers
             return ((System.IO.File.Exists(filePath)) && _rembolso.Exists(NombreArchivo, Extension));
         }
 
-        private List<Comprobante> SaveFile(IFormFile file)
+        private List<Comprobante> SaveFile(IFormFile file, int FolioSolicitud)
         {
             var comprobante = new List<Comprobante>();
             var InputFileName = Path.GetFileName(file.FileName).Replace(",", "-");
@@ -187,11 +197,13 @@ namespace TravelExpenses.Controllers
 
             var Extension = Path.GetExtension(file.FileName);
 
-
-
             if (Extension == ".xml")
             {
                 comprobante = CargaXML(file);
+                foreach (Comprobante comp in comprobante)
+                {
+                    comp.FolioSolicitud = FolioSolicitud;
+                }
             }
             else
             {
@@ -201,16 +213,18 @@ namespace TravelExpenses.Controllers
                 comprobante.FirstOrDefault().Folio = "Sin Folio";
                 comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
                 comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
+                comprobante.FirstOrDefault().FolioSolicitud = FolioSolicitud;
             }
 
-            comprobante.FirstOrDefault().Archivo = new Archivo();
-            comprobante.FirstOrDefault().Archivo.Extension = Extension;
-            comprobante.FirstOrDefault().Archivo.NombreArchivo = InputFileName;
-            comprobante.FirstOrDefault().Archivo.Ruta = "\\UploadFile\\" + InputFileName;
-            comprobante.FirstOrDefault().Archivo.Extension = Extension;
-            comprobante.FirstOrDefault().Archivo.Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
-            comprobante.FirstOrDefault().Archivo.FechaAlta = DateTime.Now;
-            comprobante.FirstOrDefault().Archivo.UUID = comprobante.FirstOrDefault().UUID;
+            comprobante.FirstOrDefault().Archivos = new List<Archivo>();
+            comprobante.FirstOrDefault().Archivos.Add(new Archivo()) ;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Extension = Extension;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().NombreArchivo = InputFileName;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Ruta = "\\UploadFile\\" + InputFileName;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Extension = Extension;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().FechaAlta = DateTime.Now;
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().UUID = comprobante.FirstOrDefault().UUID;
             
 
             SaveDB(comprobante.FirstOrDefault());
@@ -219,6 +233,8 @@ namespace TravelExpenses.Controllers
             {
                 file.CopyTo(fileStream);
             }
+
+            comprobante = _comprobante.ObtenerComprobantes(FolioSolicitud);
 
             return comprobante;
         }
@@ -231,7 +247,7 @@ namespace TravelExpenses.Controllers
                 IFormFileCollection files = Request.Form.Files;
                 //// full path to file in temp location
                 var filePath = Path.GetTempFileName();
-                var comprobante = new List<Comprobante>();
+                var comprobantes = new List<Comprobante>();
 
                 foreach (var formFile in files)
                 {
@@ -239,7 +255,8 @@ namespace TravelExpenses.Controllers
                     {
                         if (!Exists(formFile))
                         {
-                            comprobante = SaveFile(formFile);
+                            comprobantes = SaveFile(formFile, rembolso.solicitud.Folio);
+                            rembolso.Comprobantes = comprobantes;
                         }
                         else
                         {
@@ -248,7 +265,7 @@ namespace TravelExpenses.Controllers
                     }
                 } 
 
-                return Json(comprobante);
+                return Json(comprobantes);
             }
             catch (Exception ex)
             {

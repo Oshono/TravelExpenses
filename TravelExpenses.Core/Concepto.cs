@@ -8,6 +8,17 @@ namespace TravelExpenses.Core
 {
     public class Concepto
     {
+        public Concepto()
+        {
+            IdGasto = 0;
+            Cantidad = 0;
+            Importe = 0;
+            Descripcion = string.Empty;
+            TasaOCuota = 0;
+            Impuesto = 0;
+            Base = 0;
+            IdGasto = 0;
+        }
         [Key]
         public int IdConcepto { get; set; }
         [Required]
