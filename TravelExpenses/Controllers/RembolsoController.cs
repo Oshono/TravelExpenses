@@ -275,7 +275,7 @@ namespace TravelExpenses.Controllers
         [HttpPost]
         public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
         {
-            _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Guardado");
+            _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Comprobada");
             return Redirect("/rembolso/Lista");
         }
 
