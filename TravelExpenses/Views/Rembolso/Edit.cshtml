@@ -10,7 +10,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="control-label">Folio Solicitud: @Model.solicitud.Folio</label>
                     <label class="control-label">Departamento: @Model.solicitud.Departamento</label>
-                    <label class="control-label">Importe Solicitado: @Model.solicitud.ImporteSolicitado</label>
+                    <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.solicitud.ImporteSolicitado)
                 </div>                
             </div>
         </div>
@@ -99,10 +99,14 @@
                             <td>@comprobante.Impuestos</td>
                             <td>@comprobante.Total</td>
                             <td>
-                               
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-edit"></i>
+                                </a>
                             </td>
                             <td>
-                               
+                                <a class="btn btn-lg">
+                                    <i class="fas fa-eraser"></i>
+                                </a>
                             </td>
                         </tr>
                         }
@@ -145,7 +149,15 @@
                     $.each(args[1], function (index, item) {
 
                         console.log(item);
-                        row += "<tr><td>" + item.uuid + "</td><td>" + item.folio + "</td><td>" + item.fecha + "</td><td>" + item.rfc + "</td><td>" + item.nombreProveedor + "</td><td>" + item.moneda + "</td><td>" + item.subTotal + "</td><td>" + item.impuestos + "</td><td>" + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
+                        row += "<tr><td>" + item.uuid + "</td><td>"
+                            + item.folio + "</td><td>"
+                            + item.fecha + "</td><td>"
+                            + item.rfc + "</td><td>"
+                            + item.nombreProveedor + "</td><td>"
+                            + item.moneda + "</td><td>"
+                            + item.subTotal + "</td><td>"
+                            + item.impuestos + "</td><td>"
+                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
                     });
                     $("#tblComprobantes").html(row);  
                     this.removeFile(data);

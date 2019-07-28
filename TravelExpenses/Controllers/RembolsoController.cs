@@ -85,7 +85,7 @@ namespace TravelExpenses.Controllers
             if (int.TryParse(Folio, out FolioSolicitud))
             {                 
                 rembolso.Comprobantes = new List<Comprobante>();
-
+                rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
                 var solicitud = _solicitud.ObtenerSolicitudes().Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
                 rembolso.solicitud = solicitud;
             }
@@ -182,7 +182,7 @@ namespace TravelExpenses.Controllers
             var InputFileName = Path.GetFileName(file.FileName).Replace(",", "-");
             InputFileName = InputFileName.Replace(" ", "-");
             var Extension = Path.GetExtension(file.FileName).Replace(".", "");            
-            var NombreArchivo = Path.GetFileName(file.FileName);
+            var NombreArchivo = Path.GetFileNameWithoutExtension(file.FileName);
 
             var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
             return ((System.IO.File.Exists(filePath)) && _rembolso.Exists(NombreArchivo, Extension));
@@ -191,8 +191,8 @@ namespace TravelExpenses.Controllers
         private List<Comprobante> SaveFile(IFormFile file, int FolioSolicitud)
         {
             var comprobante = new List<Comprobante>();
-            var InputFileName = Path.GetFileName(file.FileName).Replace(",", "-");
-            InputFileName = InputFileName.Replace(" ", "-");
+            var InputFileName = Path.GetFileNameWithoutExtension(file.FileName).Replace(",", "-");
+            InputFileName = InputFileName.Replace(" ", "-") + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
 
             var Extension = Path.GetExtension(file.FileName);
@@ -272,6 +272,14 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
+        [HttpPost]
+        public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
+        {
+            _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Guardado");
+            return Redirect("/rembolso/Lista");
+        }
+
+
 
         private List<Comprobante>  CargaXML(IFormFile formFile)
         {

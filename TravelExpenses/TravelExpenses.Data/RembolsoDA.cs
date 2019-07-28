@@ -82,7 +82,7 @@ namespace TravelExpenses.Data
 
         public bool Exists(string NombreArchivo, string Extension)
         {
-            return db.Archivos.Any(e => e.NombreArchivo == NombreArchivo && e.Extension == Extension);
+            return db.Archivos.Any(e => e.NombreArchivo == NombreArchivo + "." + Extension );
         }
         public bool Exists(string UUID)
         {
