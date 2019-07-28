@@ -12,11 +12,12 @@ namespace TravelExpenses.Data
     public class ComprobanteDA : IComprobante
     {
         private readonly TravelExpensesContext db;
-
+        private readonly ICatProdServSATDA _prodserv;
         private readonly IConfiguration _configuration;
-        public ComprobanteDA(TravelExpensesContext db, IConfiguration configuration)
+        public ComprobanteDA(TravelExpensesContext db, IConfiguration configuration, ICatProdServSATDA prodserv)
         {
             _configuration = configuration;
+            _prodserv = prodserv;
             this.db = db;
         }
         
@@ -32,12 +33,37 @@ namespace TravelExpenses.Data
         {
             return db.Comprobante;
         }
+        public List<Comprobante> ObtenerComprobantes(int FolioSolicitud)
+        {
+            var comprobantes = db.Comprobante.Where(x => x.FolioSolicitud == FolioSolicitud).ToList();
+            foreach (Comprobante comprobante in comprobantes)
+            {
+                comprobante.Archivos = db.Archivos.Where(x => x.UUID == comprobante.UUID).ToList();
+                comprobante.Conceptos = db.Concepto.Where(x => x.UUID == comprobante.UUID).ToList();
+            }
+            return comprobantes;
+        }
+
         public Comprobante ObtenerComprobantesXID(string UUID)
         {
+            var catProdServ = _prodserv.ObtenerCatalogo();
+
             var comprobante =  db.Comprobante.Where(x=>x.UUID == UUID).FirstOrDefault();
-            comprobante.Archivo = db.Archivos.Where(x=>x.UUID == UUID).FirstOrDefault();
+            comprobante.Archivos = db.Archivos.Where(x=>x.UUID == UUID).ToList();
             comprobante.Conceptos = db.Concepto.Where(x => x.UUID == UUID).ToList();
 
+            if (comprobante.Conceptos.Count() > 0)
+            {
+                foreach (var concepto in comprobante.Conceptos)
+                {
+                    var catprodserv = catProdServ.FirstOrDefault(x => x.ClaveProdServ == concepto.ClaveProdServ);
+
+                    if (catprodserv != null)
+                    {
+                        concepto.DescripcionProdServ = catprodserv.Descripcion;
+                    }
+                }
+            }
             return comprobante;
         }
         public int Guardar(Comprobante comprobante)
@@ -58,7 +84,7 @@ namespace TravelExpenses.Data
                         { 
                             db.Concepto.AddRange(comprobante.Conceptos);
                         }
-                        db.Archivos.Add(comprobante.Archivo);
+                        db.Archivos.AddRange(comprobante.Archivos);
                     }
 
                     result = Commit();

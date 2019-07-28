@@ -3,10 +3,10 @@
 @{
 }
 
-<div>
+<div >
     <form asp-controller="Roles" asp-action="UpdateUserRole" method="post">
-        <h2>Add User to Role</h2>
-        <ul>
+        <h2>Agregar Roles a usuario</h2>
+        @*<ul>
             @foreach (var user in Model.Users)
             {
                 <li>
@@ -24,8 +24,25 @@
                     </ul>
                 </li>
             }
-        </ul>
-        <h4>Roles to add</h4>
+        </ul>*@
+
+        <select asp-for="UserEmail" class="form-control" onchange="SelectItem()">
+            <option>Selecciona un usuario</option>
+
+            @{
+                foreach (var item in Model.Users)
+                {
+                    <option>
+                        @item.Email
+                    </option>
+                }
+            }
+
+        </select>
+
+        <input type="submit" class="btn btn-primary" value="Eliminar Usuario" onclick="document.getElementById('DeleteUser').value = 'true'" />
+
+        <h4>Roles a agregar</h4>
         <ul>
             @foreach (var role in Model.Roles)
             {
@@ -35,8 +52,19 @@
                 </li>
             }
         </ul>
-        <input type="submit" class="btn btn-primary"  value="Agregar Role" />
+        <input type="submit" class="btn btn-primary" value="Agregar Role" />
         <input type="hidden" class="btn btn-primary" asp-for="Delete" value="false" id="Eliminar" />
-        <input type="submit" class="btn btn-primary"  value="Eliminar Role" onclick="document.getElementById('delete').value = 'true'" />
+        <input type="hidden" class="btn btn-primary" asp-for="DeleteUser" value="false" id="DeleteUser" />
+        <input type="submit" class="btn btn-primary" value="Eliminar Role" onclick="document.getElementById('delete').value = 'true'" />
+
     </form>
 </div>
+
+<script>
+
+    function SelectItem() {
+       
+    }
+
+
+</script>

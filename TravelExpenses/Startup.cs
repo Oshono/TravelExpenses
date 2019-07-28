@@ -50,6 +50,8 @@ namespace TravelExpenses
             services.AddScoped<ICentroCostoEmpresa, CentroCostoEmpresaDA>();
             services.AddScoped<IRembolso, RembolsoDA>();
             services.AddScoped<IComprobante, ComprobanteDA>();
+            services.AddScoped<IPolitica, PoliticaDA>();
+            services.AddScoped<ICatProdServSATDA, CatProdServSATDA>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -72,7 +74,7 @@ namespace TravelExpenses
                  options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
                  options.Lockout.MaxFailedAccessAttempts = 100;
                  options.Lockout.AllowedForNewUsers = true;
 
@@ -80,9 +82,11 @@ namespace TravelExpenses
                 options.User.AllowedUserNameCharacters =
                  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                  options.User.RequireUniqueEmail = false;
+                 //options.SignIn.RequireConfirmedEmail = true;
              })
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
 
 

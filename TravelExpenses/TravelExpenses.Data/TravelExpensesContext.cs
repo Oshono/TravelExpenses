@@ -24,6 +24,9 @@ namespace TravelExpenses.Data
         public DbSet<CentroCostoEmpresa> CentroCosto_Empresa { get; set; }
         public DbSet<Ciudades> Ciudades { get; set; }
         public DbSet<Paises> Paises { get; set; }
+        public DbSet<Moneda> CatMonedas { get; set; }
+        public DbSet<Politica> Politica { get; set; }
+        public DbSet<CatProdServSAT> CatProdServSAT { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,7 +35,5 @@ namespace TravelExpenses.Data
                 table.RFC
             });
         }
-
-        public DbSet<Moneda> CatMonedas { get; set; }
     }
 }

@@ -2,36 +2,38 @@
 
 @{ }
 <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-        <div class="content-wrapper d-flex align-items-center auth px-0">
-            <div class="ms">
-                <h2>Create User</h2>
-                <div>
-                    <form asp-controller="Roles" asp-action="CreateUser" method="post">
-                        <label>User Email</label>
-                        <input name="email" value="" />
-                        <br />
-                        <input class="btn btn-primary" type="submit" value="Crear Usuario" />
-                    </form>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <h2>Role List</h2>
-                    <ul>
-                        @foreach (var role in Model.Roles)
-                        {
-                            <li>
-                                @role
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <partial name="_CreateRole" model="new TravelExpenses.Controllers.RoleViewModel()">
-            </div>
-            <div>
-                <partial name="_AddUserToRole" model="new TravelExpenses.Controllers.UpdateUserRoleViewModel() { Users = Model.Users, Roles = Model.Roles }">
-            </div>
+    @*<div class="container-fluid page-body-wrapper full-page-wrapper">*@
+    <div>
+
+
+        <br />
+
+        <div class="row w-100 mx-0">
+            <partial name="_AddUserToRole" model="new TravelExpenses.Controllers.UpdateUserRoleViewModel() { Users = Model.Users, Roles = Model.Roles }">
+        </div>
+
+        <br />
+        <div class="class=" col-lg-6">
+            <h2>Lista de Roles</h2>
+            <br />
+            <ul>
+                @foreach (var role in Model.Roles)
+                {
+                    <li>
+                        @role
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="class=" col-lg-6">
+            <partial name="_CreateRole" model="new TravelExpenses.Controllers.RoleViewModel()">
+        </div>
+        <div class="row w-100 mx-0">
+            <br />
+            <br />
         </div>
     </div>
+    @*</div>*@
 </div>
+
+

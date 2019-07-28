@@ -15,7 +15,7 @@ namespace TravelExpenses.Data
         IEnumerable<Solicitud> ObtenerIdSolicitud();
         IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus);
         int ModificarEstatus(int Folio);
- 
+        int ActualizarEstatus(int Folio, string Estatus);
         IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus);
         int EliminarSolicitud(int Folio);
         int InsertarGastos(Gasto gasto);

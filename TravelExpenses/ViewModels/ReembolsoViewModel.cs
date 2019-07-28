@@ -12,5 +12,8 @@ namespace TravelExpenses.ViewModels
         public Archivo miArchivo { get; set; }
         public IEnumerable<Comprobante> Comprobantes { get; set; }
         public Comprobante Comprobante { get; set; }
+        public Concepto Concepto { get; set; }
+        public IEnumerable<Gastos> Gastos { get; set; }
+        public Solicitud solicitud { get; set; }
     }
 }

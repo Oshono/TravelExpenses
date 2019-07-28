@@ -95,6 +95,27 @@ namespace TravelExpenses.Data
             }
         }
 
+        public int ActualizarEstatus(int Folio, string Estatus)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio", Folio);
+                parameters.Add("@Estatus", Estatus);
+
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("ActualizarEstatus", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
 
         public IEnumerable<Solicitud> ObtenerTipos()
         { 

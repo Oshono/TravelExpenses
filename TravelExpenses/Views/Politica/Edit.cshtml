@@ -1,28 +1,56 @@
-﻿@model TravelExpenses.ViewModels.CentroCostoViewModel
+﻿@model TravelExpenses.ViewModels.PoliticaViewModel
+
+@if (!string.IsNullOrEmpty(Model.Politica.Nombre))
+{ <h1>@Model.Politica.Nombre</h1>
+} 
+else { <h1>Nueva Politica</h1> }
 
 
-
-<h1>@Model.CentroCosto.Nombre</h1>
-
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <form method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for=@Model.CentroCosto.ClaveCentroCosto class="form-control" type="hidden" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Descripción moneda</label>
-                    <input asp-for=@Model.CentroCosto.Nombre class="form-control" />
-                    <span asp-validation-for=@Model.CentroCosto.Nombre class="text-danger"></span>
-                </div>                
-                <div class="form-group">
-                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                </div>
-            </form>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="@Model.Politica.IdPolitica " />                    
+                    <div class="form-group">
+                        <label class="control-label">Descripcion</label>
+                        <input asp-for=@Model.Politica.Nombre class="form-control" placeholder="Descripción" />
+                        <span asp-validation-for=@Model.Politica.Nombre class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Gasto</label>
+                        <select asp-for="Politica.IdGasto" class="form-control input-sm" title="--Seleccione un gasto"
+                                asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))">
+                            <option value="">--Seleccione un Gasto</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="Gastos"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Importe Permitido</label>
+                        <input asp-for=@Model.Politica.ImportePermitido class="form-control" placeholder="Importe máximo permitido" />
+                        <span asp-validation-for=@Model.Politica.ImportePermitido class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Rol relacionado</label>
+                        <input asp-for=@Model.Politica.UserName class="form-control" placeholder="Rol relacionado" />
+                        <span asp-validation-for=@Model.Politica.UserName class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Mensaje Error</label>
+                        <input asp-for=@Model.Politica.MensajeError class="form-control" placeholder="Mensaje de Error a mostrar" />
+                        <span asp-validation-for=@Model.Politica.MensajeError class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Activo</label>
+                        <input asp-for=@Model.Politica.Activo class="custom-checkbox" />
+                        <span asp-validation-for=@Model.Politica.Activo class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 
