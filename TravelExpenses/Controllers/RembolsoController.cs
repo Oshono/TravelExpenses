@@ -76,6 +76,19 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
+        
+        public ActionResult Delete(string UUID)
+        {
+            try
+            {
+                _comprobante.Delete(UUID);
+                return RedirectToAction("Lista", "Rembolso");
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         // GET: gastos/Edit/5
         public ActionResult Edit(string Folio)

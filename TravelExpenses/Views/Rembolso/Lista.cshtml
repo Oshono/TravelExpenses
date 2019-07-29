@@ -21,9 +21,6 @@
                                 Folio
                             </th>
                             <th>
-                                Tipo Solicitud
-                            </th>
-                            <th>
                                 Empresa
                             </th>
                             <th>
@@ -46,20 +43,19 @@
                         <tbody>
                             @foreach (var item in Model.Solicitudes)
                             {
-                                <tr>
-                                    <td>@item.Folio</td>
-                                    <td>@item.IdTipoSolicitud</td>
-                                    <td>@item.Empresa</td>
-                                    <td>@item.UserName</td>
-                                    <td>@item.FechaSolicitud</td>
-                                    <td>@item.Estatus</td>
-                                    <td>2</td>
-                                    <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-route-folio="@item.Folio">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>@item.Folio</td>
+                                <td>@item.Empresa</td>
+                                <td>@item.UserName</td>
+                                <td>@item.FechaSolicitud</td>
+                                <td>@string.Format("{0:c}", item.ImporteSolicitado)</td>
+                                <td>@item.Estatus</td>                                
+                                <td>
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-route-folio="@item.Folio">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                 </table>

@@ -98,7 +98,21 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+        public   void Delete(string UUID)
+        {
+                if (Exists(UUID))
+                {
+                    var Archivos = db.Archivos.Where(x => x.UUID == UUID).ToList();
+                    db.Archivos.RemoveRange(Archivos);
 
+                    var Conceptos = db.Concepto.Where(x => x.UUID == UUID).ToList();
+                    db.Concepto.RemoveRange(Conceptos);
+
+                    var comprobante = ObtenerComprobantesXID(UUID);
+                    db.Comprobante.Remove(comprobante);
+                    Commit();
+                }
+        }
         private bool Exists(string UUID)
         {
             return db.Comprobante.Any(e => e.UUID == UUID);

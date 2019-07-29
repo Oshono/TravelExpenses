@@ -61,7 +61,7 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-
+       
         public int GuardarComprobante(Comprobante miComprobante)
         {
             try
