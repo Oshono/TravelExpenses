@@ -5,6 +5,7 @@ using TravelExpenses.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace TravelExpenses.Controllers
 {
@@ -31,7 +32,6 @@ namespace TravelExpenses.Controllers
             var users = _context.Users.ToList();
             var userRoles = _context.UserRoles.ToList();
 
-
             var convertedUsers = users.Select(x => new UsersViewModel
             {
                 Email = x.Email,
@@ -46,11 +46,34 @@ namespace TravelExpenses.Controllers
             return View(new DisplayViewModel
             {
                 Roles = roles.Select(x => x.NormalizedName),
-                Users = convertedUsers,
-
+                Users = convertedUsers
             });
         }
 
+ 
+        public IActionResult ConsultarPermisos(string Email)
+        {
+            var roles = _context.Roles.ToList();
+            var users = _context.Users.ToList();
+            var userRoles = _context.UserRoles.ToList();
+
+            var convertedUsers = users.Select(x => new UsersViewModel
+            {
+                Email = x.Email,
+                Roles = roles
+                    .Where(y => userRoles.Any(z => z.UserId == x.Id && z.RoleId == y.Id))
+                    .Select(y => new UsersRole
+                    {
+                        Name = y.NormalizedName
+                    })
+            });
+
+            return View("ConsultarPermisos",new DisplayViewModel
+            {
+                Roles = roles.Select(x => x.NormalizedName),
+                Users = convertedUsers.Where(x => x.Email == Email)
+            });
+        }
         [HttpPost]
         public async Task<IActionResult> CreateUser(string email)
         {
@@ -80,14 +103,33 @@ namespace TravelExpenses.Controllers
             var user = await _userManager.FindByEmailAsync(vm.UserEmail);
 
             if (vm.Delete)
+            {
                 await _userManager.RemoveFromRoleAsync(user, vm.Role);
+                return RedirectToAction("Index");
+            }
+                
             if (vm.DeleteUser)
-                await _userManager.DeleteAsync(user);
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                await _userManager.SetLockoutEndDateAsync(user, DateTime.Now);
+                return RedirectToAction("Index");
+            }
+                
             if(vm.Role!=null)
+            {
                 await _userManager.AddToRoleAsync(user, vm.Role);
-            
+                return RedirectToAction("Index");
+            }
 
-            return RedirectToAction("Index");
+            if (vm.Consultar)
+            {
+                //this.ConsultarPermisos(vm.UserEmail);
+                return RedirectToAction("ConsultarPermisos","Roles", new { Email = vm.UserEmail })
+;            }
+            else
+                return RedirectToAction("Index");
+
+           
         }
     }
 
@@ -124,5 +166,6 @@ namespace TravelExpenses.Controllers
         public string Role { get; set; }
         public bool Delete { get; set; }
         public bool DeleteUser { get; set; }
+        public bool Consultar { get; set; }
     }
 }
