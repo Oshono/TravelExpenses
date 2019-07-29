@@ -20,5 +20,6 @@ namespace TravelExpenses.Data
         int EliminarSolicitud(int Folio);
         int InsertarGastos(Gasto gasto);
         IEnumerable<Gasto> ObtenerGastos(int folio);
+        IEnumerable<Estatus> EstatusSolicitudes();
     }
 }
