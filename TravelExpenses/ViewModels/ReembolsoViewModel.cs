@@ -8,6 +8,7 @@ namespace TravelExpenses.ViewModels
 {
     public class RembolsoViewModel
     {
+        public string Error { get; set; }
         public IEnumerable<Archivo> Archivos { get; set; }
         public Archivo miArchivo { get; set; }
         public IEnumerable<Comprobante> Comprobantes { get; set; }

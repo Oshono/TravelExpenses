@@ -121,6 +121,8 @@ namespace TravelExpenses.Controllers
             if (rembolso.Comprobante != null)
             {
                 var politicas = _politica.ObtenerPoliticas();
+                var listagastos = _gastos.ObtenerGastos();
+                rembolso.Gastos = listagastos;
 
                 if (rembolso.Concepto != null && rembolso.Concepto.Descripcion != string.Empty)
                 {
@@ -139,7 +141,13 @@ namespace TravelExpenses.Controllers
                     {
                         var Importe = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto).Sum(x => x.Impuesto + x.Importe);
                         var pol = politicas.Where(x => x.IdGasto == gasto).FirstOrDefault();
-                        if (pol != null && decimal.Parse(Importe.ToString()) > pol.ImportePermitido)
+                        if (pol == null)
+                        {
+                            rembolso.Error = "Selecciono gastos que no cuentan con politica";
+                            return View(rembolso);
+                        }
+
+                        if (decimal.Parse(Importe.ToString()) > pol.ImportePermitido)
                         {
                                 var conceptos = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto);
 
@@ -147,14 +155,12 @@ namespace TravelExpenses.Controllers
                                 {
                                     obj.MensajeError = pol.MensajeError;    
                                 }
-                            var listagastos = _gastos.ObtenerGastos();
-                            rembolso.Gastos = listagastos;
-                            _rembolso.GuardarComprobante(rembolso.Comprobante);
-                            return RedirectToAction("Details", "Rembolso", new { UUID = rembolso.Comprobante.UUID });
-                        }
-                        
+                        }                        
                     }
+
                     
+                    _rembolso.GuardarComprobante(rembolso.Comprobante);
+
                 }
                 
             }
