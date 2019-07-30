@@ -1,92 +1,67 @@
-﻿@model TravelExpenses.Views.Aprobador.AprobarSolicitudModel
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+
 @{
     ViewData["Title"] = "Centro de Costos";
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 <h2>Aprobar Solicitud</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Folio
-            </th>
-            <th>
-                Tipo Solicitud
-            </th>
-            <th>
-                Empresa
-            </th>
-            <th>
-                Solicitante
-            </th>
-            <th>
-                Fecha Solicitud
-            </th>
-            <th>
-                ImporteSolicitud
-            </th>
-            <th>
-                Estatus
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    <tbody>
-        <tr>
-            <td>
-                0001
-            </td>
-            <td>
-                Rembolso
-            </td>
-            <td>
-                Ozono
-            </td>
-            <td>
-                Javier
-            </td>
-            <td>
-                19/07/2019
-            </td>
-            <td>
-                $50000
-            </td>
-            <td>
-                Aprobado
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="IdDestinos">Aceptar</a> |
-                <a asp-action="Details" asp-route-id="IdDestinos">Rechazar</a> |
-            </td>
-        </tr>
-        <tr>
-            <td>
-                0002
-            </td>
-            <td>
-                Rembolso
-            </td>
-            <td>
-                Ozono
-            </td>
-            <td>
-                Juan Perez
-            </td>
-            <td>
-                19/07/2019
-            </td>
-            <td>
-                $5000
-            </td>
-            <td style=" background-color:red;">
-                Rechazado
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="IdDestinos">Aceptar</a> |
-                <a asp-action="Details" asp-route-id="IdDestinos">Rechazar</a> |
-            </td>
-        </tr>
-    </tbody>
-    </table>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Folio
+                            </th>
+                            <th>
+                                Tipo Solicitud
+                            </th>
+                            <th>
+                                Empresa
+                            </th>
+                            <th>
+                                Solicitante
+                            </th>
+                            <th>
+                                Fecha Solicitud
+                            </th>
+                            <th>
+                                Importe Solicitado
+                            </th>
+                            <th>
+                                Estatus
+                            </th>
+                            <th>
+                                Editar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Solicitudes)
+                        {
+                            <tr>
+                                <td>@item.Folio</td>
+                                <td>@item.IdTipoSolicitud</td>
+                                <td>@item.Empresa</td>
+                                <td>@item.UserName</td>
+                                <td>@item.FechaSolicitud</td>
+                                <td>@item.Estatus</td>
+                                <td>2</td>
+                                <td>
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-route-folio="@item.Folio">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
