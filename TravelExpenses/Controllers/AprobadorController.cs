@@ -31,5 +31,15 @@ namespace TravelExpenses.Controllers
 
             return View(solicitud);
         }
+
+        public ActionResult Aprobar(string Folio)
+        {
+            SolicitudesViewModel solicitud = new SolicitudesViewModel();
+            solicitud.Solicitudes = SolicitudesData.ObtenerSolicitudes();
+
+            return View("AprobarSolicitud",solicitud);
+        }
+
+
     }
 }
