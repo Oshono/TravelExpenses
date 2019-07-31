@@ -1,0 +1,69 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+@{
+    ViewData["Title"] = "create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<h1>Gastos</h1>
+<form id="FormGastos">
+    <input asp-for="Gasto.IdGastos" class="form-control"  hidden />
+    <input asp-for="Gasto.Folio" class="form-control" id="IdGasto" hidden />
+
+    <label asp-for="IdGasto" class="control-label">Concepto</label>
+    <select asp-for="_Gasto.IdGasto" class="form-control input-sm concepto"
+            asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
+        <option value="">-- Seleccione un concepto</option>
+    </select>
+
+    <label asp-for="@Model.Gasto.ImporteSolicitado" class="control-label">Importe</label>
+    <input asp-for="Gasto.ImporteSolicitado" class="form-control" id="ImporteGasto" />
+    <span asp-validation-for="@Model.Gasto.ImporteSolicitado" class="text-danger"></span>
+
+    <label asp-for="ClaveMoneda" class="control-label">Moneda </label>
+    <select asp-for="Gasto.ClaveMoneda" class="form-control input-sm MonedaGasto"
+            asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
+        <option value="">-- Seleccione una moneda</option>
+    </select>
+    <label asp-for="@Model.Gasto.TipoCambios" class="control-label">Tipo de Cambio</label>
+    <input asp-for="Gasto.TipoCambios" class="form-control" id="TipoCambio" />
+    <span asp-validation-for="@Model.Gasto.TipoCambios" class="text-danger"></span>
+    <br />
+    <input type="button" class="btn btn-primary" value="Guardar" onclick="EditarGasto()" />
+</form>
+
+<script>
+    function EditarGasto() {
+        
+        var url = "/Solicitudes/EditarGastos/"
+        var form = $("#FormGastos").serialize();
+        var IdGasto = $("#IdGasto").val();
+
+        var ImporteGasto = $("#ImporteGasto").val();
+        var concepto = $(".concepto").val();
+
+        var MonedaGasto = $(".MonedaGasto").val();
+        var TipoCambio = $("#TipoCambio").val();
+        console.log(ImporteGasto, concepto, MonedaGasto, TipoCambio);
+        if (ImporteGasto == "" || concepto == "" || MonedaGasto == "" || TipoCambio == "") {
+            alert("Favor de llenar todos los campos");
+        }
+        else {
+            $.ajax({
+                url: url,
+                data: form,
+                cache: true,
+                type: "post",
+                success: function (response) {
+                    alert("Gasto actualizado");
+                    window.location.href = "./Edit?Folio="+IdGasto;
+                    
+                },
+                error: function (error) {
+                    alert(error);
+                    
+                }
+
+            });
+        }
+    }
+
+</script>

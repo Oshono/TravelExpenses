@@ -132,6 +132,7 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
         public Solicitud ObtenerTipo()
         { 
             try
@@ -214,7 +215,7 @@ namespace TravelExpenses.Data
                 using (IDbConnection conn = connection)
                 {
                     var reader = connection.Query<Gasto>("Gastos_Sel", parameters, commandType: CommandType.StoredProcedure);
-                    return reader.OrderBy(x => x.IdGasto);
+                    return reader.OrderBy(x => x.IdGastos);
                 }
             }
             catch (Exception ex)
@@ -331,5 +332,190 @@ namespace TravelExpenses.Data
             }
         }
 
+        public Solicitud SolicitudesXFolio(int Folio)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                using(IDbConnection conn = connection)
+                {
+                    parameters.Add("@Folio", Folio);
+                    var reader = connection.Query<Solicitud>("Solicitudes_SelFolio", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Destinos> DestinosXFolio(int Folio)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                using (IDbConnection conn = connection)
+                {
+                    parameters.Add("@Folio", Folio);
+                    var reader = connection.Query<Destinos>("Destinos_Sel", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdDestinos);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        
+        public int Destinos_Upd(Destinos _destinos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdDestinos", _destinos.IdDestinos);
+                parameters.Add("@ClavePais", _destinos.ClavePais);
+                parameters.Add("@IdEstado", _destinos.IdEstado);
+                parameters.Add("@IdCiudad", _destinos.IdCiudad);
+                parameters.Add("@Motivo  ", _destinos.Motivo);
+                parameters.Add("@FechaSalida", _destinos.FechaSalida);
+                parameters.Add("@FechaLlegada", _destinos.FechaLlegada);
+                using(IDbConnection conn = connection)
+                {
+                    var result = conn.Execute("Destinos_upd", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex; 
+            }
+        }
+
+
+        public int Gastos_Upd(Gasto _Gastos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdGastos", _Gastos.IdGastos); 
+                parameters.Add("@ImporteSolicitado", _Gastos.ImporteSolicitado);
+                parameters.Add("@TipoCambios", _Gastos.TipoCambios); 
+                parameters.Add("@IdGasto", _Gastos.IdGasto);
+                parameters.Add("@ClaveMoneda", _Gastos.ClaveMoneda);
+                using (IDbConnection conn = connection)
+                {
+                    var result = conn.Execute("Gastos_upd", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Destinos ObtenerDestinosFolio(int IdDestinos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                using (IDbConnection conn = connection)
+                {
+                    parameters.Add("@IdDestinos", IdDestinos);
+                    var reader = connection.Query<Destinos>("Destinos_SelFolio", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public Gasto ObtenerGastosFolio(int IdGastos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                using (IDbConnection conn = connection)
+                {
+                    parameters.Add("@IdGastos  ", IdGastos);
+                    var reader = connection.Query<Gasto>("Gastos_SelFolio", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public int EliminarDestinos(int IdDestinos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdDestinos", IdDestinos);
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Destinos_Eli", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public int EliminarGastos(int IdGastos)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@IdGastos", IdGastos);
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Gastos_Eli", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public int SolicitudesUpd(Solicitud solicitud)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio", solicitud.Folio);
+                parameters.Add("@IdTipoSolicitud", solicitud.IdTipoSolicitud);
+                parameters.Add("@ImporteSolicitado", solicitud.ImporteSolicitado);
+                parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
+
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Solicitudes_Upd", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

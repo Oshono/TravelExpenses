@@ -1,0 +1,185 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Destinos</h1>
+<div class="text-left">
+    <form id="formDestinos">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-4">
+                    <label asp-for="ClavePais" class="control-label">País</label>
+                    <select asp-for="Pais.ClavePais" class="form-control input-sm Pais" onchange="CargaEstados(this.value);" title="--Seleccione un país"
+                            asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
+                        <option value="">--Seleccione un País</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label asp-for="IdEstado" class="control-label">Estado</label>
+                    <select asp-for="Estado.IdEstado" class="form-control input-sm"
+                            asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" onchange="CargaCiudades(this.value);" id="Estado">
+                        <option value="">--Seleccione un Estado</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
+                    <select asp-for="@Model.Ciudad.IdCiudad" class="form-control input-sm"
+                            asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
+                        <option value="">--Seleccione una Ciudad</option>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-4">
+                    <label asp-for="@Model.Destino.Motivo" class="control-label">Motivo</label>
+                    <input asp-for="Destino.Motivo" class="form-control" id="Motivo" />
+                </div>
+                <div class="col-4">
+                    <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
+                    <input asp-for="@Model.Destino.FechaSalida" class="form-control" id="FechaSalida" />
+                </div>
+                <div class="col-4">
+                    <label asp-for="@Model.Destino.FechaLlegada" class="control-label">Fecha de llegada</label>
+                    <input asp-for="Destino.FechaLlegada" class="form-control" id="FechaLlegada" />
+                </div>
+            </div>
+            <br />
+
+            <input type="button" onclick="EditarDestino(this.value)" class="btn btn-primary" value="Guardar" />
+
+        </div>
+    </form>
+</div>
+<script>
+
+        function EditarDestino(_destinos) {
+            var arr = [];
+            var urlGet = window.location;
+            var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+            var [, protocolo, servidor, path] = url_analizada;
+            var Folio = path.split("=", 2)
+            //console.log(separacion[1]); 
+            var url = "/Solicitudes/RegistrarDestino/"; 
+
+            var pais = $(".Pais").val(); 
+            var Estado = $("#Estado").val();
+            var Ciudad = $("#Ciudad").val();
+
+
+            var ClavePais = $(".Pais").children("option:selected").val();
+            var IdEstado = $("#Estado").children("option:selected").val();
+            var IdCiudad = $("#Ciudad").children("option:selected").val();
+
+            var Motivo = $("#Motivo").val();
+            var FechaSalida = $("#FechaSalida").val();
+            var FechaLlegada = $("#FechaLlegada").val();
+
+            arr.push({
+                ClavePais: ClavePais,
+                IdEstado: IdEstado,
+                IdCiudad: IdCiudad,
+                Motivo: Motivo,
+                FechaLlegada: FechaLlegada,
+                FechaSalida: FechaSalida,
+                Folio: Folio[1]
+            });
+              _destinos = arr; 
+            if (pais == "" || Estado == "" || Ciudad == "" || Estado == "0" || Ciudad == "0") {
+                alert("Seleccionar un destino válido");
+            }
+                else if(Motivo == "" || FechaLlegada == "" || FechaLlegada == "") {
+                alert("Llenar todos los campos");
+            } else {
+
+                $.ajax({
+                    url: url,
+                    data: { _destinos: _destinos },
+                    type: "post",
+                    cache: false,
+                    success: function (response) {
+                        alert("Datos Insertados.\n");
+                        window.location.href = "./Edit?Folio=" + Folio[1];
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+        function CargaEstados(ClavePais) {
+            var url = "/Solicitudes/CargaEstados/";
+            $('#Estado').css({ visibility: 'hidden' });
+            $('#Ciudad').css({ visibility: 'hidden' });
+
+            $('#newEstado').removeAttr('style');
+            $('#newCiudad').removeAttr('style');
+
+            $.ajax({
+                url: url,
+                data: {
+                    ClavePais: ClavePais
+                },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#Estado').css({ visibility: 'visible ' });
+
+                        var markup = "<option value='0'>Seleccione</option>";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].idEstado + ">" + data[x].descripcion + "</option>";
+                        }
+                        $("#Estado").html(markup).show();
+
+                        CargaCiudades(0);
+                    }
+                    else {
+                        $('#Estado').css({ visibility: 'hidden' });
+                        $('#Ciudad').css({ visibility: 'hidden' });
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+        function CargaCiudades(IdEstado) {
+            var url = "/Solicitudes/CargaCiudades/";
+            var ClavePais = $("#Pais_ClavePais").val();
+            $('#Ciudad').css({ visibility: 'hidden' });
+            $('#newCiudad').removeAttr('style');
+            $.ajax({
+                url: url,
+                data: {
+                    ClavePais: ClavePais,
+                    IdEstado: IdEstado
+                },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#Ciudad').css({ visibility: 'visible' });
+                        $("#Ciudad").empty();
+                        var markup = "<option value='0'>Seleccione</option>";
+                        for (var x = 0; x < data.length; x++) {
+                            //console.log(data[x]);
+                            markup += "<option value=" + data[x].idCiudad + ">" + data[x].descripcion + "</option>";
+                        }
+                        $("#Ciudad").html(markup).show();
+                    } else {
+                        $('#Ciudad').css({ visibility: 'hidden' });
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
+</script>

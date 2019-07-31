@@ -12,93 +12,88 @@
 @*</div>*@
 <h1>Modificar</h1>
 
-<form asp-action="Create" method="post">
+<form  id="FormSolicitudes">
     <div class="text-left">
         <div class="card">
             <div class="card-header">
                 Registro de solicitudes
+                
             </div>
             <div class="card-body ">
                 <div class="row">
-                    <div class="col-2">
-                        <label asp-for="@Model.Solicitud.IdTipoSolicitud" class="control-label">Concepto</label>
+                    <div class="col-4">
+                        <h3>
+                            Folio: <u>@Model.Solicitud.Folio</u>  
+                        </h3>
                     </div>
-                    <div class="col-2">
-                        <div class="form-group">
+                    <div class="col-4">
+                        @if (@Model.Solicitud.Estatus == "Incompleta")
+                        {
+                            <h3 style="color:red;">
+                                Estatus: <u>@Model.Solicitud.Estatus</u>
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3>
+                                Estatus: <u>@Model.Solicitud.Estatus</u>
+                            </h3>
+                        }
+                    </div>
+                    <div class="col"></div>
+                </div>
+                
+                <br />
+                <div class="row">
+                    @if (@Model.Solicitud.Estatus == "Incompleta" || @Model.Solicitud.Estatus == "Capturada")
+                    {
 
-                            @*<select asp-for="IdTipoSolicitud" class="form-control input-sm"
-                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))"></select>
-                            @Html.ValidationMessageFor(x => x.Solicitud, "", new { @class = "text-danger" })
-                            <span asp-validation-for="@Model.Solicitud.IdTipoSolicitud" class="text-danger"></span>*@
+                        <div class="col-4">
+                            Concepto
+                            <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo"
+                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))">
+                                <option value="">-- Seleccione una concepto</option>
+
+                            </select>
+                            <input asp-for="Solicitud.Folio" hidden id="folio" />
+
                         </div>
-                    </div>
-                    <div class="col-2">
-                        <label asp-for="@Model.Solicitud.Estatus" class="control-label">Estatus</label>
-                    </div>
-                    <div class="col-2">
-                        <input asp-for="@Model.Solicitud.Estatus" class="form-control" value="SolicitudCapturada" readonly />
-                        <span asp-validation-for="@Model.Solicitud.Estatus" class="text-danger"></span>
+                        <div class="col-4">
+                            Importe Solicitado
+                            <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" id="Importe"/>
 
-                    </div>
-                    <div class="col-2"><label asp-for="@Model.Solicitud.Folio" class="control-label"></label></div>
-                    <div class="col-2">
-                        <input asp-for="@Model.Solicitud.Folio" class="form-control" required readonly value="@ViewBag.Sol" />
-                        <span asp-validation-for="@Model.Solicitud.Folio" class="text-danger"></span>
-                    </div>
+                        </div>
+                        <div class="col-4">
+                            Moneda:
+                            <select asp-for="Moneda.ClaveMoneda" class="form-control input-sm Moneda"
+                                    asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
+                                <option value="">--Selecciona una moneda</option>
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-4">
+                            Concepto: 
+                            <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.Descripcion" class="form-control" disabled/> 
+
+                        </div>
+                        <div class="col-4">
+                            Importe Solicitado
+                            <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.ImporteSolicitado" class="form-control" disabled/> 
+                        </div>
+                        <div class="col-4">
+                            Moneda:
+                            <input asp-for="Moneda.Descripcion" value="@Model.Solicitud.MonedaNombre" class="form-control" disabled/> 
+                        </div>
+                    }
                 </div>
                 <br />
                 @* Another section *@
-                <div class="row">
 
-                    <div class="col-2"><label asp-for="@Model.Solicitud.Id" class="control-label">Solicitante</label></div>
-                    <div class="col-2">
-
-                        <input asp-for="@Model.Solicitud.Id" required class="form-control" readonly value="angel.razo@gmail.com" />
-                        <span asp-validation-for="@Model.Solicitud.Id" class="text-danger"></span>
-                    </div>
-                    <div class="col-2">
-                        <label asp-for="@Model.Solicitud.ImporteSolicitado" class="control-label">Importe Solicitado</label>
-                    </div>
-                    <div class="col-2">
-
-                        <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" />
-                        <span asp-validation-for="@Model.Solicitud.ImporteSolicitado" class="text-danger"></span>
-                    </div>
-                    <div class="col-2">
-                        Moneda:
-                    </div>
-                    <div class="col-2">
-                        @*<select asp-for="ClaveMoneda" class="form-control input-sm"
-                                asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))"></select>
-                        @Html.ValidationMessageFor(x => x.Moneda, "", new { @class = "text-danger" })
-                        <span asp-validation-for="@Model.Moneda.ClaveMoneda" class="text-danger"></span>*@
-                    </div>
-                </div>
                 <br />
                 @* Another section *@
-                <div class="row">
-                    <div class="col-2">
 
-                    </div>
-                    <div class="col-2">
-
-                    </div>
-                    <div class="col-2">
-                        @* <label asp-for="@Model.Solicitud.ImporteComprobado" class="control-label">Importe Comprobado</label>*@
-                    </div>
-                    <div class="col-2">
-                        @*<input asp-for="@Model.Solicitud.ImporteComprobado" required class="form-control" />*@
-                        @*<span asp-validation-for="@Model.Solicitud.ImporteComprobado" class="text-danger"></span>*@
-                    </div>
-
-                    <div class="col-2">
-
-                    </div>
-
-                    <div class="col-2">
-
-                    </div>
-                </div>
                 <br />
                 <div class="form-group">
                     <h3 style="color:red;"> @ViewBag.Mensaje</h3>
@@ -106,7 +101,7 @@
                         <div class="col-5">
                             <a href="~/" class="btn" id="Button">Cerrar</a>
 
-                            <input type="submit" value="Guardar" class="btn" id="Button" />
+                            <input type="Button" value="Guardar" onclick="ModificarSolicitud()" class="btn" id="Button" disabled="@ViewBag.Deshabilitar" />
                             @*<a href="#" class="btn" id="Button">Enviar a autorización</a>*@
                         </div>
                         <div class="col">
@@ -121,113 +116,85 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#Destinos"> Listar Destino</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Listar">Agregar Destinos</a>
+                            <a class="nav-link active" data-toggle="tab" href="#Destinos">Destinos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
                         </li>
+
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
 
-                        <div id="Listar" class="container tab-pane fade">
-                            <br>
-                            @*<partial name="Add" />*@
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-
-                                @*<label asp-for="ClavePais" class="control-label">País</label>
-                                <select asp-for="Pais.ClavePais" class="form-control input-sm" onchange="CargaEstados(this.value);" title="--Seleccione un país"
-                                        asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
-                                    <option value="">--Seleccione un País</option>
-                                </select>*@
-                                @*<input asp-for="ClavePais" class="form-control" />*@
-                                <span asp-validation-for="ClavePais" class="text-danger">*</span>
-                            </div>
-                            <div class="form-group">
-                                @*<label asp-for="IdEstado" class="control-label">Estado</label>
-                                <select asp-for="Estado.IdEstado" class="form-control input-sm" onchange="CargaCiudades(this.value);"
-                                        asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" id="Estado">
-                                    <option value="">--Seleccione un Estado</option>
-                                </select>*@
-
-                                <span asp-validation-for="IdEstado" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                @*<label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
-                                <select asp-for="Ciudad.IdCiudad" class="form-control input-sm"
-                                        asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
-                                    <option value="">--Seleccione una Ciudad</option>
-                                </select>
-                                <span asp-validation-for="@Model.Destino.IdCiudad" class="text-danger"></span>*@
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
-                                <input asp-for="@Model.Destino.FechaSalida" class="form-control" />
-                                <span asp-validation-for="@Model.Destino.FechaSalida" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.FechaLlegada" class="control-label">Fecha de llegada</label>
-                                <input asp-for="Destino.FechaLlegada" class="form-control" />
-                                <span asp-validation-for="@Model.Destino.FechaLlegada" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="@Model.Destino.Motivo" class="control-label">Motivo</label>
-                                <textarea asp-for="@Model.Destino.Motivo" rows="5" cols="50" class="form-control"
-                                          placeholder="Escribe el motivo del viaje..."></textarea>
-                                <span asp-validation-for="@Model.Destino.Motivo" class="text-danger"></span>
-                            </div>
-
-                        </div>
                         <div id="Destinos" class="container tab-pane active">
                             <br>
                             <h3>Destinos</h3>
-                            @*<a asp-action="Add" value="Agregar" class="btn" id="Button">Agregar</a>*@
-
+                            <input type="Button" value="Agregar" class="btn" id="Button" onclick="RegistrarDestino()" disabled="@ViewBag.Deshabilitar" />
                             <div class="container">
-
-
                                 <div class="row">
                                     <div class="table-responsive">
-                                        <table id="data-table-basic" class="table table-hover text-center">
+                                        <table class="table table-hover text-center">
                                             <thead>
 
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>País destino</th>
                                                     <th>Ciudad Destino</th>
                                                     <th>Fecha de Salida</th>
                                                     <th>Fecha de Llegada</th>
                                                     <th>Motivo</th>
-                                                    <th>Folio</th>
-                                                    <th>Acción</th>
+
+                                                    <th>Editar</th>
+                                                    <th>Eliminar</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
 
-                                                @*@foreach (var destino in Model.Destinos)
+                                                @foreach (var destino in @Model.Destinos)
                                                 {
                                                     <tr>
+                                                        <td>@destino.IdDestinos</td>
                                                         <td>@destino.Nombre</td>
                                                         <td>@destino.Descripcion</td>
                                                         <td>@destino.FechaSalida</td>
                                                         <td>@destino.FechaLlegada</td>
                                                         <td>@destino.Motivo</td>
-                                                        <td>@destino.Folio</td>
+                                                        @*<td>@destino.Folio</td>*@
                                                         <td>
-                                                            <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@destino.Folio" id="accion">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
+                                                            @if (@ViewBag.Deshabilitar == true)
+                                                            {
+                                                                <a class="btn btn-lg">
+                                                                    <i class="fas fa-ban "></i>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarDestino" asp-route-IdDestinos="@destino.IdDestinos" id="accion">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                            }
+                                                        </td>
+
+                                                        <td>
+                                                            @if (@ViewBag.Deshabilitar == true)
+                                                            {
+                                                                <a class="btn btn-lg">
+                                                                    <i class="fas fa-ban "></i>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="btn btn-lg" onclick="EliminarDestino(@destino.IdDestinos)" id="accion">
+                                                                    <i class="fas fa-eraser"></i>
+                                                                </a>
+                                                            }
                                                         </td>
                                                     </tr>
 
-                                                }*@
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -238,8 +205,84 @@
 
                         </div>
                         <div id="Gastos" class="container tab-pane fade">
-                            <h4>Sección de gastos</h4>
+                            <br>
+                            <h3>Gastos</h3>
+                            <input type="Button" value="Agregar" class="btn" id="Button" onclick="RegistrarGasto()" disabled="@ViewBag.Deshabilitar" />
+                            <div class="container">
+                                <div class="table table-responsive">
+                                    <table class="table table-hover text-center">
+                                        <thead>
+
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Empresa</th>
+                                                <th>Concepto</th>
+                                                <th>Monto Máximo</th>
+                                                <th>Importe Solicitado</th>
+                                                <th>Descripcion</th>
+                                                <th>Tipo Cambio</th>
+                                                <th>Editar</th>
+                                                <th>Eliminar</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var g in @Model.Gastos)
+                                            {
+                                            <tr>
+                                                <td>@g.IdGastos</td>
+                                                <td>@g.Empresa</td>
+                                                <td>@g.Nombre</td>
+
+                                                <td>@g.MontoMaximo</td>
+                                                @if (@g.MontoMaximo < @g.ImporteSolicitado)
+                                                {
+                                                    <td style="color:red;">@g.ImporteSolicitado</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="color:green;">@g.ImporteSolicitado</td>
+                                                }
+                                                <td>@g.Descripcion</td>
+                                                <td>@g.TipoCambios</td>
+                                                <td>
+                                                    @if (@ViewBag.Deshabilitar == true)
+                                                    {
+                                                        <a class="btn btn-lg">
+                                                            <i class="fas fa-ban "></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (@ViewBag.Deshabilitar == true)
+                                                    {
+                                                        <a class="btn btn-lg">
+                                                            <i class="fas fa-ban "></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion">
+                                                            <i class="fas fa-eraser"></i>
+                                                        </a>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -248,9 +291,96 @@
             </div>
         </div>
     </div>
-</form>
-
+</form> 
 <script type="text/javascript">
+
+    function RegistrarGasto() {
+        var Folio = $("#folio").val();  
+        window.location.href = "./RegistrarGasto?Folio=" + Folio;
+
+    }
+
+    function RegistrarDestino() {
+        var Folio = $("#folio").val();
+
+        window.location.href = "./RegistrarDestino?Folio=" + Folio;
+
+    }
+
+    function ModificarSolicitud() {
+        var Moneda = $(".Moneda").children("option:selected").val();
+        var Importe = $("#Importe").children("option:selected").val();
+        var Tipo = $(".Tipo").children("option:selected").val();
+        var form = $("#FormSolicitudes").serialize();
+        var Folio = $("#folio").val();
+        var url = "/Solicitudes/ModificarSolicitud/";
+        if (Moneda == "" || Importe=="" || Tipo=="") {
+            alert("Favor de llenar todos los campos");
+        }
+        else {
+
+
+            $.ajax({
+                url: url,
+                data: form,
+                type: "POST",
+                cache: false,
+                success: function (response) {
+                    alert("Solicitud actualizada");
+                    window.location.href = "../";
+                },
+                error: function (error) {
+                    alert("Error: " + error);
+                    console.log(error);
+                }
+
+            });
+        }
+    }
+
+    function EliminarDestino(IdDestinos) {
+        
+        var Folio = $("#folio").val(); 
+        var url = "/Solicitudes/EliminarDestino/";
+        $.ajax({
+            url: url,
+            data: { IdDestinos: IdDestinos },
+            type: "POST",
+            cache: false,
+            success: function (response) {
+                alert("Dato eliminado");
+                window.location.href = "./Edit?Folio="+Folio;
+            },
+            error: function (error) {
+                alert("Error: "+error); 
+                console.log(error);
+            }
+
+        });
+    }
+
+    function EliminarGasto(IdGastos) {
+
+        var Folio = $("#folio").val();
+        var url = "/Solicitudes/EliminarGasto/";
+        alert("Hola");
+        //$.ajax({
+        //    url: url,
+        //    data: { IdGastos: IdGastos},
+        //    type: "POST",
+        //    cache: false,
+        //    success: function (response) {
+        //        alert("Dato eliminado");
+        //        window.location.href = "./Edit?Folio=" + Folio;
+        //    },
+        //    error: function (error) {
+        //        alert("Error: " + error);
+        //        console.log(error);
+        //    }
+
+        //});
+    }
+
     function CargaEstados(ClavePais) {
         var url = "/Solicitudes/CargaEstados/";
         $('#Estado').css({ visibility: 'hidden' });

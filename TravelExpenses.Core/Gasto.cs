@@ -7,7 +7,7 @@ namespace TravelExpenses.Core
     public class Gasto
     {
         public int IdGastos { get; set; }
-        public string MontoMaximo { get; set; }
+        public double MontoMaximo { get; set; }
         public double ImporteSolicitado { get; set; }
         public string TipoCambios { get; set; }
         public int Folio { get; set; }

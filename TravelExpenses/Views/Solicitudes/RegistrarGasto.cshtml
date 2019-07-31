@@ -1,0 +1,83 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+@{
+    ViewData["Title"] = "create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<h1>Gastos</h1>
+<form id="FormGastos">
+    <input asp-for="Gasto.IdGastos" class="form-control" hidden />
+    <input asp-for="Gasto.Folio" class="form-control" id="IdGasto" hidden />
+
+    <label asp-for="IdGasto" class="control-label">Concepto</label>
+    <select asp-for="_Gasto.IdGasto" class="form-control input-sm concepto"
+            asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
+        <option value="">-- Seleccione un concepto</option>
+    </select>
+
+    <label asp-for="@Model.Gasto.ImporteSolicitado" class="control-label">Importe</label>
+    <input asp-for="Gasto.ImporteSolicitado" class="form-control" id="ImporteGasto" />
+    <span asp-validation-for="@Model.Gasto.ImporteSolicitado" class="text-danger"></span>
+
+    <label asp-for="ClaveMoneda" class="control-label">Moneda </label>
+    <select asp-for="Gasto.ClaveMoneda" class="form-control input-sm MonedaGasto"
+            asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
+        <option value="">-- Seleccione una moneda</option>
+    </select>
+    <label asp-for="@Model.Gasto.TipoCambios" class="control-label">Tipo de Cambio</label>
+    <input asp-for="Gasto.TipoCambios" class="form-control" id="TipoCambio" />
+    <span asp-validation-for="@Model.Gasto.TipoCambios" class="text-danger"></span>
+    <br />
+    <input type="button" class="btn btn-primary" value="Guardar" onclick="RegistrarGasto(this.value)" />
+</form>
+
+<script>
+    function RegistrarGasto(_gastos) {
+        var arr = [];
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2);
+
+        var url = "/Solicitudes/RegistrarGasto/"
+        var form = $("#FormGastos").serialize();
+        var IdGasto = $("#IdGasto").val();
+
+        var ImporteGasto = $("#ImporteGasto").val();
+        var concepto = $(".concepto").val();
+
+        var IdGasto = $(".concepto").children("option:selected").val();
+        var MonedaGasto = $(".MonedaGasto").val();
+        var ClaveMoneda = $(".MonedaGasto").children("option:selected").val();
+        var TipoCambio = $("#TipoCambio").val();
+
+        arr.push({
+            ClaveMoneda: ClaveMoneda,
+            IdGasto: IdGasto,
+            ImporteSolicitado: ImporteGasto,
+            TipoCambios: TipoCambio,
+            Folio: Folio[1]
+        });
+        _gastos = arr;
+        if (ImporteGasto == "" || concepto == "" || MonedaGasto == "" || TipoCambio == "") {
+            alert("Favor de llenar todos los campos");
+        }
+        else {
+            $.ajax({
+                url: url,
+                data: { _gastos: _gastos },
+                cache: true,
+                type: "post",
+                success: function (response) {
+                    alert("Gasto actualizado");
+                    window.location.href = "./Edit?Folio=" + Folio[1];
+                    console.log(response);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+
+            });
+        }
+    }
+
+</script>
