@@ -28,23 +28,21 @@
                         <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo"
                                 asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))">
                             <option value="">--Selecciona un concepto</option>
-                        </select>
-
-
+                        </select> 
                     </div>
 
                     <div class="col-4">
                         Importe Solicitado
-                        <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" id="Importe" />
+                        <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" id="Importe" readonly/>
                         <span asp-validation-for="@Model.Solicitud.ImporteSolicitado" class="text-danger"></span>
                     </div>
 
                     <div class="col-4">
-                        Moneda
+                        @*Moneda(QUITAR)
                         <select asp-for="Moneda.ClaveMoneda" class="form-control input-sm Moneda"
                                 asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
                             <option value="">--Selecciona una moneda</option>
-                        </select>
+                        </select>*@
 
                     </div>
 
@@ -192,7 +190,7 @@
                                         <label asp-for="IdGasto" class="control-label">Concepto</label>
                                         <select asp-for="_Gasto.IdGasto" class="form-control input-sm concepto"
                                                 asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
-                                            <option value="">-- Seleccione un concepto</option>
+                                            <option value="0">-- Seleccione un concepto</option>
                                         </select>
 
                                         <span asp-validation-for="IdGasto" class="text-danger"></span>
@@ -309,12 +307,13 @@
         var TipoCambios = $("#TipoCambio").val();
         
         var row = "";
+        var Importe; 
         console.log(IdGasto, ImporteSolicitado, ClaveMoneda);
-        if (IdGasto == "" || ImporteSolicitado == "" || ClaveMoneda == "" || TipoCambios=="") {
+        if (IdGasto == 0 || ImporteSolicitado == "" || ClaveMoneda == "" || TipoCambios=="") {
             alert("Favor de capturar datos correctamente");
         }
-        else {
-
+        else { 
+            
             arrG.push({
                 IdGasto: IdGasto,
                 Nombre: Nombre,
@@ -323,6 +322,12 @@
                 Descripcion: Descripcion,
                 TipoCambios: TipoCambios
             });
+            var res = 0; 
+            for (var i = 0; i <= arrG.length - 1; i++) {
+                res = res + parseInt(arrG[i]['ImporteSolicitado']);
+                Importe = $("#Importe").val(res);
+                console.log("Suma: "+res);
+            }
             arrG.forEach((index, item) => {
 
                 row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 111 +
@@ -331,6 +336,7 @@
             });
 
             $("#tablaGastos").html(row);
+            IdGasto = $(".concepto").get(0).selectedIndex = 0;
         }
 
     }
@@ -405,7 +411,7 @@
             _solicitudes
         };
        
-        if (Moneda == "" || Importe == "" || Tipo == "") {
+        if (Tipo == "") {
             alert("Favor de llenar los campos correctamente");
         }
         else if (arr.length == 0 || arrG.length == 0) {

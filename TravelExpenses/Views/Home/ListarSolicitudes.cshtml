@@ -51,7 +51,7 @@
                 <br />
             </div>
             <div class="table-responsive">
-                <table class="table table-striped" id="data-table-basic">
+                <table class="table table-striped" id="dtBasicExample">
                     <thead>
                         <tr>
                             <th>Folio</th>
@@ -72,8 +72,8 @@
                             <td>@item.Folio</td>
                             <td>@item.Descripcion</td>
                             <td>@item.UserName</td>
-                            <td>$@item.ImporteSolicitado @item.ClaveMoneda </td>
-                            <td>$@item.ImporteComprobado @item.ClaveMoneda </td>
+                            <td>@item.ImporteSolicitado </td>
+                            <td>@item.ImporteComprobado </td>
 
                             <td>@item.Estatus</td>
 
@@ -197,6 +197,7 @@
     $(document).ready(function () {
         $('#dtBasicExample').DataTable({
             "pagingType": "simple", // "simple" option for 'Previous' and 'Next' buttons only
+           
         });
         $('.dataTables_length').addClass('bs-select');
     });
