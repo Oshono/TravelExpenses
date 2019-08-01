@@ -337,6 +337,9 @@
 
             $("#tablaGastos").html(row);
             IdGasto = $(".concepto").get(0).selectedIndex = 0;
+            ImporteSolicitado = $("#ImporteGasto").val("");
+            ClaveMoneda = $(".MonedaGasto").get(0).selectedIndex = 0;
+            TipoCambios = $("#TipoCambio").val("");
         }
 
     }
@@ -381,6 +384,13 @@
                     "</td><td>" + "<a class='btn btn-lg' id='accion'  data-toggle='modal' data-target='#exampleModalLong'  onclick='EliminarItem("+item+");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>"+ "</td></tr>";
             });
             $("#tblDestinos").html(row);
+
+            IdEstado = $("#Estado").get(0).selectedIndex=0;
+            ClavePais = $(".Pais").get(0).selectedIndex = 0;
+            IdCiudad = $("#Ciudad").get(0).selectedIndex = 0; 
+            FechaSalida = $("#FechaSalida").val("");
+            FechaLlegada = $("#FechaLlegada").val("");
+            Motivo = $("#Motivo").val("");
         }
     }
     
