@@ -11,6 +11,7 @@ namespace TravelExpenses.Core
         public Politica()
         {
             IdPolitica = 0;
+            NumSolicitudes = 0;
         }
         [Required, Key]
         public int IdPolitica { get; set; }
@@ -23,6 +24,7 @@ namespace TravelExpenses.Core
         [StringLength(250)]
         public string MensajeError { get; set; }
         public bool Activo { get; set; }
+        public Int16 NumSolicitudes { get; set; }
         [NotMapped]
         public string UserName { get; set; }
     }
