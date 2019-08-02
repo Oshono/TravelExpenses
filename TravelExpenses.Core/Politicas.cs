@@ -24,8 +24,10 @@ namespace TravelExpenses.Core
         [StringLength(250)]
         public string MensajeError { get; set; }
         public bool Activo { get; set; }
-        public Int16 NumSolicitudes { get; set; }
+        public byte NumSolicitudes { get; set; }
         [NotMapped]
         public string UserName { get; set; }
+        [NotMapped]
+        public List<PoliticaDetalle> Detalle { get; set; }
     }
 }

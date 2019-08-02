@@ -13,9 +13,9 @@ namespace TravelExpenses.Core
             ImportePermitido = 0;
             Activo = true;
         }
-        [Required]
+        [Key,Required]
         public int IdPolitica { get; set; }
-        [Required]
+        [Key, Required]
         public int IdGasto { get; set; }
         
         [Range(0.0, float.MaxValue)]
