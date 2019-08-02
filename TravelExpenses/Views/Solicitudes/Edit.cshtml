@@ -60,15 +60,15 @@
                         </div>
                         <div class="col-4">
                             Importe Solicitado
-                            <input asp-for="@Model.Solicitud.ImporteSolicitado" required class="form-control" id="Importe"/>
+                            <input asp-for="@Model.Solicitud.ImporteSolicitado" disabled required class="form-control" id="Importe"/>
 
                         </div>
                         <div class="col-4">
-                            Moneda:
-                            <select asp-for="Moneda.ClaveMoneda" class="form-control input-sm Moneda"
+                            @*Moneda:*@
+                            @*<select asp-for="Moneda.ClaveMoneda" class="form-control input-sm Moneda"
                                     asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
                                 <option value="">--Selecciona una moneda</option>
-                            </select>
+                            </select>*@
                         </div>
                     }
                     else
@@ -83,8 +83,8 @@
                             <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.ImporteSolicitado" class="form-control" disabled/> 
                         </div>
                         <div class="col-4">
-                            Moneda:
-                            <input asp-for="Moneda.Descripcion" value="@Model.Solicitud.MonedaNombre" class="form-control" disabled/> 
+                            @*Moneda:
+                            <input asp-for="Moneda.Descripcion" value="@Model.Solicitud.MonedaNombre" class="form-control" disabled/>*@ 
                         </div>
                     }
                 </div>
@@ -234,6 +234,7 @@
                                                 <td>@g.IdGastos</td>
                                                 <td>@g.Empresa</td>
                                                 <td>@g.Nombre</td>
+
 
                                                 <td>@g.MontoMaximo</td>
                                                 @if (@g.MontoMaximo < @g.ImporteSolicitado)
