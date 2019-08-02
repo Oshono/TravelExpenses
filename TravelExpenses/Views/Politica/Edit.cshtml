@@ -11,7 +11,7 @@ else { <h1>Nueva Politica</h1> }
             <div class="card-body">
                 <form method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="@Model.Politica.IdPolitica " />                    
+                    <input type="hidden" asp-for="@Model.Politica.IdPolitica " />
                     <div class="form-group">
                         <label class="control-label">Descripcion</label>
                         <input asp-for=@Model.Politica.Nombre class="form-control" placeholder="Descripción" />
@@ -29,6 +29,11 @@ else { <h1>Nueva Politica</h1> }
                         <label class="control-label">Importe Permitido</label>
                         <input asp-for=@Model.Politica.ImportePermitido class="form-control" placeholder="Importe máximo permitido" />
                         <span asp-validation-for=@Model.Politica.ImportePermitido class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Num Solicitudes</label>
+                        <input asp-for=@Model.Politica.NumSolicitudes class="form-control" placeholder="Número de Solicitudes Pendientes Comprobar" />
+                        <span asp-validation-for=@Model.Politica.NumSolicitudes class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Rol relacionado</label>
