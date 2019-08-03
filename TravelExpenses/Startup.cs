@@ -52,6 +52,7 @@ namespace TravelExpenses
             services.AddScoped<IComprobante, ComprobanteDA>();
             services.AddScoped<IPolitica, PoliticaDA>();
             services.AddScoped<ICatProdServSATDA, CatProdServSATDA>();
+            services.AddScoped<IPoliticaDetalle, PoliticaDetalleDA>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

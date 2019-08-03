@@ -140,8 +140,8 @@ namespace TravelExpenses.Controllers
                     objsolicitudes.IdEstado = s.IdEstado;
                     objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
                     objsolicitudes.RFC = "456777";
-                    objsolicitudes.ClaveMoneda = s.ClaveMoneda;
-                    //_SolicitudesData.InsertarSolicitud(objsolicitudes);
+                    objsolicitudes.ClaveMoneda = "ABC";
+                    _SolicitudesData.InsertarSolicitud(objsolicitudes);
                 });
 
                 _Destino.ForEach(d =>
@@ -153,7 +153,7 @@ namespace TravelExpenses.Controllers
                     destino.FechaSalida = d.FechaSalida;
                     destino.FechaLlegada = d.FechaLlegada;
                     destino.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
-                    //_DestinosData.InsertarDestino(destino);
+                    _DestinosData.InsertarDestino(destino);
                 });
 
                 _Gasto.ForEach(g =>
@@ -165,7 +165,7 @@ namespace TravelExpenses.Controllers
                     gasto.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
                     gasto.RFC = "456777";
                     gasto.IdGasto = g.IdGasto;
-                    //_SolicitudesData.InsertarGastos(gasto);
+                    _SolicitudesData.InsertarGastos(gasto);
                 });
 
                 return Json(gasto.Folio);
@@ -238,13 +238,13 @@ namespace TravelExpenses.Controllers
                 objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
                 objsolicitudes.Departamento = "TI";
                 objsolicitudes.Empresa = "";
-                objsolicitudes.ImporteSolicitado = _solicitudes.Solicitud.ImporteSolicitado;
+                objsolicitudes.ImporteSolicitado = 0;
                 objsolicitudes.ImporteComprobado = _solicitudes.Solicitud.ImporteComprobado;
                 objsolicitudes.Estatus = "Incompleta";
                 objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
                 objsolicitudes.Id = "1e882d25-59f5-4156-bd74-f33ae58a6e5a";
                 objsolicitudes.RFC = "456777";
-                objsolicitudes.ClaveMoneda = _solicitudes.Moneda.ClaveMoneda;
+                objsolicitudes.ClaveMoneda = "MXN";
                 _SolicitudesData.InsertarSolicitud(objsolicitudes); 
                 return Json(objsolicitudes.Folio);
             }
@@ -383,6 +383,7 @@ namespace TravelExpenses.Controllers
 
         }
 
+        
         // POST: Solicitudes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -524,7 +525,7 @@ namespace TravelExpenses.Controllers
             {
 
                 objSolicitud.Folio = _Solicitud.Solicitud.Folio;
-                objSolicitud.ClaveMoneda = _Solicitud.Moneda.ClaveMoneda;
+                objSolicitud.ClaveMoneda = "MXN";
                 objSolicitud.IdTipoSolicitud = _Solicitud.IdTipoSolicitud;
                 objSolicitud.ImporteSolicitado = _Solicitud.Solicitud.ImporteSolicitado;
                 _SolicitudesData.SolicitudesUpd(objSolicitud);
