@@ -2,21 +2,61 @@
     Layout = "/Areas/Identity/Pages/_Layout.cshtml";
 }
 
-<h1>Administrador de Cuenta</h1>
 
-<div>
-    <h4>Configuración de Cuenta.</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Majestic Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="~/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Images/favicon.png" />
+</head>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-12 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <div class="brand-logo">
+                            <img src="~/Images/logo_Ozono.png" alt="logo">
+                        </div>
+                        <h1>Administrador de Cuenta</h1>
+                        <h4>Configuración de Cuenta.</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <partial name="_ManageNav" />
+                            </div>
+                            <div class="col-md-9">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
+        <!-- content-wrapper ends -->
     </div>
+    <!-- page-body-wrapper ends -->
 </div>
+
+
+
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
 }
+<script src="~/vendors/base/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="~/js/off-canvas.js"></script>
+<script src="~/js/hoverable-collapse.js"></script>
+<script src="~/js/template.js"></script>

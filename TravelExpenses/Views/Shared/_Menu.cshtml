@@ -1,86 +1,98 @@
-﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" asp-page="/">
-                <i class="mdi mdi-home menu-icon"></i>
-                <span class="menu-title">Inicio</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                <span class="menu-title">Catálogos</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a asp-controller="Destino" asp-action="Lista" class="nav-link">Destinos</a></li>
-                    <li class="nav-item"><a asp-controller="Empresa" asp-action="ListaEmpresas" class="nav-link">Empresas</a></li>
-                    <li class="nav-item"><a asp-controller="Gasto" asp-action="Lista" class="nav-link">Conceptos de Gastos</a></li>
-                    <li class="nav-item"><a asp-controller="CentroCosto" asp-action="Lista" class="nav-link">Centros de Costos</a></li>
-                    <li class="nav-item"><a asp-controller="CentroCostoEmpresa" asp-action="Lista" class="nav-link">Centros de Costos - Empresa</a></li>
-                    <li class="nav-item"><a asp-controller="Departamento" asp-action="Lista" class="nav-link">Áreas/Departamentos</a></li>
-                    <li class="nav-item"><a asp-controller="Moneda" asp-action="Lista" class="nav-link">Monedas</a></li>
-                    <li class="nav-item"><a asp-controller="Politica" asp-action="Lista" class="nav-link">Politicas</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-page="/">
+                    <i class="mdi mdi-home menu-icon"></i>
+                    <span class="menu-title">Inicio</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                    <span class="menu-title">Catálogos</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a asp-controller="Destino" asp-action="Lista" class="nav-link">Destinos</a></li>
+                        <li class="nav-item"><a asp-controller="Empresa" asp-action="ListaEmpresas" class="nav-link">Empresas</a></li>
+                        <li class="nav-item"><a asp-controller="Gasto" asp-action="Lista" class="nav-link">Conceptos de Gastos</a></li>
+                        <li class="nav-item"><a asp-controller="CentroCosto" asp-action="Lista" class="nav-link">Centros de Costos</a></li>
+                        <li class="nav-item"><a asp-controller="CentroCostoEmpresa" asp-action="Lista" class="nav-link">Centros de Costos - Empresa</a></li>
+                        <li class="nav-item"><a asp-controller="Departamento" asp-action="Lista" class="nav-link">Áreas/Departamentos</a></li>
+                        <li class="nav-item"><a asp-controller="Moneda" asp-action="Lista" class="nav-link">Monedas</a></li>
+                        <li class="nav-item"><a asp-controller="Politica" asp-action="Lista" class="nav-link">Politicas</a></li>
+                    </ul>
+                </div>
+            </li>
+            if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
 
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
 
-                <i class="mdi mdi-account menu-icon"></i>
-                <span class="menu-title">Usuarios</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic2">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">
+                        <i class="mdi mdi-account menu-icon"></i>
+                        <span class="menu-title">Usuarios</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic2">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
-                <i class="mdi mdi-backup-restore"></i>
-                <span class="menu-title">Comprobación</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic3">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a asp-controller="Rembolso" asp-action="Lista" class="nav-link">Comprobar/Rembolso</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+            }
 
-                <i class="mdi mdi-account menu-icon"></i>
-                <span class="menu-title">Aprobador</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic2">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" asp-controller="Aprobador" asp-action="AprobarSolicitud">Aprobar</a></li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">
 
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+                    <i class="mdi mdi-backup-restore"></i>
+                    <span class="menu-title">Comprobación</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-basic3">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a asp-controller="Rembolso" asp-action="Lista" class="nav-link">Comprobar/Rembolso</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
 
-                <i class="mdi mdi-account menu-icon"></i>
-                <span class="menu-title">Revisor</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic2">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" asp-controller="Revisor" asp-action="Lista">Aprobar</a></li>
+                    <i class="mdi mdi-account menu-icon"></i>
+                    <span class="menu-title">Aprobador</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-basic2">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" asp-controller="Aprobador" asp-action="AprobarSolicitud">Aprobar</a></li>
 
-                </ul>
-            </div>
-        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+
+                    <i class="mdi mdi-account menu-icon"></i>
+                    <span class="menu-title">Revisor</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-basic2">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" asp-controller="Revisor" asp-action="Lista">Aprobar</a></li>
+
+                    </ul>
+                </div>
+            </li>
+        }
     </ul>
 </nav>
