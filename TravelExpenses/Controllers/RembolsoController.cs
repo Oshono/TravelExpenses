@@ -25,6 +25,7 @@ namespace TravelExpenses.Controllers
         private readonly IComprobante _comprobante;
         private readonly IGasto _gastos;
         private readonly IPolitica _politica;
+        private readonly IPoliticaDetalle _politicadetalle;
         private readonly IHostingEnvironment _env;
         
         public List<Comprobante> lstComprobantes;
@@ -34,7 +35,8 @@ namespace TravelExpenses.Controllers
                                     IHostingEnvironment env, 
                                     IComprobante comprobante,
                                     IGasto gastos,
-                                    IPolitica politica
+                                    IPolitica politica,
+                                    IPoliticaDetalle politicadetalle
                                     )
         {
             _rembolso = rembolso;
@@ -43,6 +45,7 @@ namespace TravelExpenses.Controllers
             _comprobante = comprobante;
             _gastos = gastos;
             _politica = politica;
+            _politicadetalle = politicadetalle;
         }
 
         // GET: Centro Costos
@@ -120,7 +123,7 @@ namespace TravelExpenses.Controllers
         { 
             if (rembolso.Comprobante != null)
             {
-                var politicas = _politica.ObtenerPoliticas();
+                var politicasdetalle = _politicadetalle.ObtenerDetalles();
                 var listagastos = _gastos.ObtenerGastos();
                 rembolso.Gastos = listagastos;
 
@@ -140,20 +143,22 @@ namespace TravelExpenses.Controllers
                     foreach (int gasto in gastos)
                     {
                         var Importe = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto).Sum(x => x.Impuesto + x.Importe);
-                        var pol = politicas.Where(x => x.IdGasto == gasto).FirstOrDefault();
-                        if (pol == null)
+                        var poldetalle = politicasdetalle.Where(x => x.IdGasto == gasto).FirstOrDefault();
+                        
+                        if (poldetalle == null)
                         {
                             rembolso.Error = "Selecciono gastos que no cuentan con politica";
                             return View(rembolso);
                         }
-
-                        if (decimal.Parse(Importe.ToString()) > pol.ImportePermitido)
+                        
+                        if (decimal.Parse(Importe.ToString()) > poldetalle.ImportePermitido)
                         {
                                 var conceptos = rembolso.Comprobante.Conceptos.Where(x => x.IdGasto == gasto);
+                                var politica = _politica.ObtenerPoliticas().Where(x => x.IdPolitica == poldetalle.IdPolitica).FirstOrDefault();
 
                                 foreach (var obj in conceptos)
                                 {
-                                    obj.MensajeError = pol.MensajeError;    
+                                    obj.MensajeError = politica.MensajeError;    
                                 }
                         }                        
                     }
@@ -291,6 +296,53 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Download(string UUID)
+        {
+            var comprobante =_comprobante.ObtenerComprobantesXID(UUID);            
+
+            string filename = comprobante.Archivos.FirstOrDefault().NombreArchivo;
+            if (filename == null)
+                return Content("Archivo no encontrado");
+
+            var path = Path.Combine(
+                           _env.ContentRootPath,
+                           "UploadFiles", filename);
+            
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"},
+                {".xml", "text/xml"},
+            };
+        }
+
         [HttpPost]
         public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
         {

@@ -29,7 +29,11 @@ namespace TravelExpenses.Data
         }
         public List<PoliticaDetalle> ObtenerDetalles(int IdPolitica)
         {
-            return db.PoliticaDetalle.Where(x=>x.IdPolitica == IdPolitica).ToList();
+            return ObtenerDetalles().Where(x=>x.IdPolitica == IdPolitica).ToList();
+        }
+        public List<PoliticaDetalle> ObtenerDetalles()
+        {
+            return db.PoliticaDetalle.ToList();
         }
         public int Guardar(PoliticaDetalle detalle)
         {
