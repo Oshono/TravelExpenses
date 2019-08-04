@@ -5,9 +5,10 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+//using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TravelExpenses.Services;
 
 namespace TravelExpenses.Areas.Identity.Pages.Account
 {
@@ -55,8 +56,8 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Restablecer contraseña",
+                    $"Por favor restablezca su contraseña por <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Aqui</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

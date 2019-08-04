@@ -1,8 +1,9 @@
-﻿@page
-@model ConfirmEmailModel
+﻿@page "{userId}"
+@model UnconfirmedEmailModel
 @{
-    ViewData["Title"] = "Confirmacion de Correo";
+    ViewData["Title"] = "Confirmar su Correo.";
 }
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -30,29 +31,18 @@
                         <div class="brand-logo">
                             <img src="~/Images/logo_Ozono.png" alt="logo">
                         </div>
-
-                        <h1>@ViewData["Title"]</h1>
-                        <div>
+                        <h2>@ViewData["Title"]</h2>
+                        <h4>Entre a su correo.</h4>
+                        <hr />
+                        <form method="post">
                             <div asp-validation-summary="All" class="text-danger"></div>
-                            @{
-                                if (Model.ShowInvalid)
-                                {
-                                    <p>
-                                        Error al confirmar correo.
-                                    </p>
-                                    <p>
-                                        Si es tu usuario, Intenta actulizar tu correo.<br />
-                                        Si no es tu correo, intenta reenviar la confirmación.
-                                    </p>
-                                }
-                                else
-                                {
-                                    <p>
-                                        Gracias por confirmar su correo.
-                                    </p>
-                                }
-                            }
-                        </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Email"></label>
+                                <input asp-for="Input.Email" class="form-control" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -62,6 +52,9 @@
     <!-- page-body-wrapper ends -->
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 <script src="~/vendors/base/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- inject:js -->

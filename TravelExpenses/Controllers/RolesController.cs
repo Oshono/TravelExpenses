@@ -105,13 +105,15 @@ namespace TravelExpenses.Controllers
             if (vm.Delete)
             {
                 await _userManager.RemoveFromRoleAsync(user, vm.Role);
+                await _userManager.DeleteAsync(user);
                 return RedirectToAction("Index");
             }
                 
             if (vm.DeleteUser)
             {
-                await _userManager.SetLockoutEnabledAsync(user, true);
-                await _userManager.SetLockoutEndDateAsync(user, DateTime.Now);
+                await _userManager.DeleteAsync(user);
+                //await _userManager.SetLockoutEnabledAsync(user, true);
+                //await _userManager.SetLockoutEndDateAsync(user, DateTime.Now);
                 return RedirectToAction("Index");
             }
                 
