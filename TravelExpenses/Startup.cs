@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using TravelExpenses.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TravelExpenses.TravelExpenses.Data;
 
 namespace TravelExpenses
 {
@@ -53,6 +54,7 @@ namespace TravelExpenses
             services.AddScoped<IPolitica, PoliticaDA>();
             services.AddScoped<ICatProdServSATDA, CatProdServSATDA>();
             services.AddScoped<IPoliticaDetalle, PoliticaDetalleDA>();
+            services.AddScoped<IObservacionDA, ObservacionDA>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
