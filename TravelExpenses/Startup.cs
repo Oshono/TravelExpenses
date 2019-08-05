@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using TravelExpenses.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TravelExpenses.TravelExpenses.Data;
+using TravelExpenses.Core;
+using TravelExpenses.Services;
 
 namespace TravelExpenses
 {
@@ -28,6 +31,10 @@ namespace TravelExpenses
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Email
+            services.AddOptions();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -53,6 +60,7 @@ namespace TravelExpenses
             services.AddScoped<IPolitica, PoliticaDA>();
             services.AddScoped<ICatProdServSATDA, CatProdServSATDA>();
             services.AddScoped<IPoliticaDetalle, PoliticaDetalleDA>();
+            services.AddScoped<IObservacionDA, ObservacionDA>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -83,7 +91,9 @@ namespace TravelExpenses
                 options.User.AllowedUserNameCharacters =
                  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                  options.User.RequireUniqueEmail = false;
-                 //options.SignIn.RequireConfirmedEmail = true;
+                 //requered Email
+                 options.SignIn.RequireConfirmedEmail = true;
+                 options.User.RequireUniqueEmail = true;
              })
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -98,6 +108,7 @@ namespace TravelExpenses
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
                 options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
@@ -117,10 +128,18 @@ namespace TravelExpenses
                                 || context.User.IsInRole("User")));
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                    .AddRazorPagesOptions(options =>
+                    {
+                        options.AllowAreas = true;
+                        options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+                        options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+                    });
             services.AddMvc()
                 .AddSessionStateTempDataProvider();
             services.AddSession();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
 
         }
 

@@ -83,6 +83,9 @@
                                 Detalles
                             </th>
                             <th>
+                                Descargar
+                            </th>
+                            <th>
                                 Eliminar
                             </th>
                         </tr>
@@ -92,27 +95,32 @@
                         { 
                             foreach (var comprobante in Model.Comprobantes)
                             {
-                                <tr>
-                                <td>@comprobante.Folio</td>
-                                <td>@comprobante.UUID</td>
-                                <td>@comprobante.Fecha</td>
-                                <td>@comprobante.RFC</td>
-                                <td>@comprobante.NombreProveedor</td>
-                                <td>@comprobante.Moneda</td>
-                                <td>@comprobante.SubTotal</td>
-                                <td>@comprobante.Impuestos</td>
-                                <td>@comprobante.Total</td>
-                                <td>
-                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
-                                        <i class="fas fa-eraser"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@comprobante.Folio</td>
+                            <td>@comprobante.UUID</td>
+                            <td>@comprobante.Fecha</td>
+                            <td>@comprobante.RFC</td>
+                            <td>@comprobante.NombreProveedor</td>
+                            <td>@comprobante.Moneda</td>
+                            <td>@comprobante.SubTotal</td>
+                            <td>@comprobante.Impuestos</td>
+                            <td>@comprobante.Total</td>
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-file-download"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-eraser"></i>
+                                </a>
+                            </td>
+                        </tr>
                             }
                         }
                     </tbody>

@@ -1,5 +1,141 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model TravelExpenses.ViewModels.ObservacionViewModel;
+@*@mode TravelExpenses.ViewModels.ObservacionViewModel;*@
+
+<link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
+<h1>Detalles Comprobantes de aprobaciones</h1>
+<div class="dropzone-area">
+    <div class="container">
+        @if (Model.Solicitud != null)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="control-label">Folio Solicitud: @Model.Solicitud.Folio</label>
+                        <label class="control-label">Departamento: @Model.Solicitud.Departamento</label>
+                        <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.Solicitud.ImporteSolicitado)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label">Observación</label>
+                            <input type="hidden" asp-for=@Model.Observacion.Folio class="form-control" required />
+                            <input type="hidden" id="Operacion" name="Operacion" asp-for=@Model.Operacion class="form-control" required />
+                            <textarea asp-for=@Model.Observacion.Descripcion rows="2" class="form-control" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-1">
+                            <input type="submit" value="Aprobada" onclick="myFunction('1')" class="btn btn-primary" />
+                        </div>
+                        <div class="col-1">
+                            <input type="submit" value="Rechazar" onclick="myFunction('0')" class="btn btn-primary" />
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Folio
+                            </th>
+                            <th>
+                                UUID
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                RFC
+                            </th>
+                            <th>
+                                Proveedor
+                            </th>
+                            <th>
+                                Moneda
+                            </th>
+                            <th>
+                                Subtotal
+                            </th>
+                            <th>
+                                Impuestos
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Detalles
+                            </th>
+                            <th>
+                                Descargar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblComprobantes">
+                        @if (Model.Comprobantes != null)
+                        {
+                            foreach (var comprobante in Model.Comprobantes)
+                            {
+                                <tr>
+                                    <td>@comprobante.Folio</td>
+                                    <td>@comprobante.UUID</td>
+                                    <td>@comprobante.Fecha</td>
+                                    <td>@comprobante.RFC</td>
+                                    <td>@comprobante.NombreProveedor</td>
+                                    <td>@comprobante.Moneda</td>
+                                    <td>@comprobante.SubTotal</td>
+                                    <td>@comprobante.Impuestos</td>
+                                    <td>@comprobante.Total</td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Aprobador" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-file-download"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function myFunction(a) {
+        document.getElementById("Operacion").value = a;
+    }
+</script>
+
+<script src="~/vendors/dropzone/dropzone.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
