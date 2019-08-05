@@ -20,7 +20,8 @@ namespace TravelExpenses.Core
         public int IdGasto { get; set; }
         [Range(0.0, float.MaxValue)]
         public decimal ImportePermitido { get; set; }
-        
+        [StringLength(20)]
+        public string ClaveCentroCosto { get; set; }
         [StringLength(250)]
         public string MensajeError { get; set; }
         public bool Activo { get; set; }

@@ -84,8 +84,9 @@ namespace TravelExpenses.Controllers
         {
             try
             {
+                var FolioSolicitud =  _comprobante.ObtenerComprobantes().Where(x=>x.UUID == UUID).FirstOrDefault().FolioSolicitud;
                 _comprobante.Delete(UUID);
-                return RedirectToAction("Lista", "Rembolso");
+                return RedirectToAction("Edit", "Rembolso", new { Folio = FolioSolicitud.ToString() });
             }
             catch
             {

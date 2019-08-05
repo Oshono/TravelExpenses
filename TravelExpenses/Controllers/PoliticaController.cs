@@ -17,15 +17,18 @@ namespace TravelExpenses.Controllers
         private readonly IPolitica _politica;
         private readonly IGasto _gastos;
         private readonly IPoliticaDetalle _polDetalle;
+        private readonly ICentroCosto _centroCosto;
 
         public PoliticaController(  IPolitica politica, 
                                     IGasto gasto, 
-                                    IPoliticaDetalle poldetalle
+                                    IPoliticaDetalle poldetalle,
+                                    ICentroCosto centroCosto
                                    )
         {
             _politica = politica;
             _gastos = gasto;
             _polDetalle = poldetalle;
+            _centroCosto = centroCosto;
         }
 
         // GET: moneda Costos
@@ -66,23 +69,31 @@ namespace TravelExpenses.Controllers
         {
             var politicaModel = new PoliticaViewModel();
             politicaModel.Politica = new Politica();
-
+            
             politicaModel.Politica.Activo = true;
+            var Gastos = _gastos.ObtenerGastos();
+            var CentrosCosto = _centroCosto.ObtenerCentroCostos();
             if (IdPolitica > 0)
             {
                 var politica = _politica.ObtenerPoliticas()
                             .Where(x => x.IdPolitica == IdPolitica)
                             .FirstOrDefault();
                 politicaModel.Politica = politica;
+                
                 politica.Detalle = _polDetalle.ObtenerDetalles(IdPolitica);
+                foreach (PoliticaDetalle polDetalle in politica.Detalle)
+                {
+                    polDetalle.DescripcionGasto = Gastos.Where(x => x.IdGasto == polDetalle.IdGasto).FirstOrDefault().Nombre;
+                }
                 if (politica.Detalle==null || politica.Detalle.Count <1)
                 {
                     politica.Detalle = new List<PoliticaDetalle>();
                 }
 
             }
-            var Gastos = _gastos.ObtenerGastos();
+            
             politicaModel.Gastos = Gastos;
+            politicaModel.CentroCostos = CentrosCosto;
             return View(politicaModel);
         }
 
@@ -91,10 +102,7 @@ namespace TravelExpenses.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(PoliticaViewModel politicaModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(politicaModel);
-            }             
+                   
             try
             {
                 _politica.Guardar(politicaModel.Politica);

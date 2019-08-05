@@ -19,13 +19,7 @@
                             </th>
                             <th>
                                 Descripción
-                            </th>
-                            <th>
-                                Importe Permitido
-                            </th>
-                            <th>
-                                Gasto
-                            </th>
+                            </th>                         
                             <th>
                                 Editar
                             </th>
@@ -38,8 +32,6 @@
                         <tr>
                             <td>@politica.IdPolitica</td>
                             <td>@politica.Nombre</td>
-                            <td>@politica.ImportePermitido</td>
-                            <td>@politica.IdGasto</td>
                             <td>
                                 <a class="btn btn-lg" asp-controller="Politica" asp-action="Edit" asp-route-idpolitica="@politica.IdPolitica">
                                     <i class="fas fa-edit"></i>
