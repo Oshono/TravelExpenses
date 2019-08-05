@@ -37,7 +37,7 @@ namespace TravelExpenses.Core
         public string ClaveMoneda { get; set; }
         public int IdFolio { get; set; }
         public string MonedaNombre { get; set; }
-
+        public string Comentarios { get; set; }
 
     }
 }

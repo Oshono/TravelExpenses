@@ -63,6 +63,9 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Comentarios">Comentarios</a>
+                    </li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -242,29 +245,7 @@
                                             </thead>
                                             <tbody id="tablaGastos">
 
-                                                @*@foreach (var gasto in Model.Gastos)
-                                                    {
-                                                        <tr>
-                                                            <td>@gasto.IdGastos</td>
-                                                            <td>@gasto.Empresa</td>
-                                                            <td>@gasto.Nombre</td>
-                                                            <td>@gasto.MontoMaximo</td>
-                                                            <td>@gasto.ImporteSolicitado</td>
-                                                            <td>@gasto.Descripcion</td>
-                                                            <td>@gasto.TipoCambios</td>
-                                                            <td>
-                                                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@gasto.IdGastos" id="accion">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                             </td>
-                                                            <td>
-                                                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="Edit" asp-route-Folio="@gasto.IdGastos" id="accion">
-                                                                    <i class="fas fa-eraser"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-
-                                                    }*@
+                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -274,7 +255,33 @@
                         </form>
                         <br />
                     </div>
+                    <div id="Comentarios" class="container tab-pane fade">
+                        <form id="comentarios">
+                            <h3>Comentarios</h3>
+                            <input type="button" class="btn" id="Button" value="Guardar" onclick="RegistrarComentario();"/> <br />
+                            <textarea id="Comentarios_" cols="5" rows="7" class="form-control"  placeholder="Escribe comentario" style="border-color:gray;"></textarea>
+                            <hr />
+                            <div class="container">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover text-center" id="tabla">
+                                            <thead>
 
+                                                <tr>
+                                                    <th>Comentario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblComentarios">
+
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -298,6 +305,7 @@
     var arr = [];
     var arrG = [];
     var arrS = [];
+    var arrC = [];
     function RegistrarGasto() {
         var IdGasto = $(".concepto").children("option:selected").val();
         var Nombre = $(".concepto").children("option:selected").text();
@@ -364,6 +372,9 @@
         else if (FechaSalida == "" || FechaSalida == "" || Motivo == "") {
             alert("Llenar todos los campos");
         }
+        else if (FechaLlegada < FechaSalida) {
+            alert("La fecha de llegada no puede ser menor que la fecha de salida");
+        }
         else {
             var row = "";
             arr.push({
@@ -393,7 +404,19 @@
             Motivo = $("#Motivo").val("");
         }
     }
-    
+    function RegistrarComentario() {
+        var Comentarios_ = $("#Comentarios_").val();
+        arrC.push({
+            Comentario: Comentarios_
+        });
+        
+        var row = "";
+        arrC.forEach((index, item) => {
+
+            row += "<tr><td>" + arrC[item]["Comentario"] + "</td></tr>";
+        });
+        $("#tblComentarios").html(row);
+    }
 
     function RegistrarSolicitud() {
          
@@ -405,6 +428,7 @@
 
         var _Destino = arr;
         var _Gasto = arrG;
+        var _comentarios = arrC;
         var form = $("#formSolicitudes").serialize();
          
         arrS.push({
@@ -418,7 +442,8 @@
         var parameters = {
             _Destino,
             _Gasto,
-            _solicitudes
+            _solicitudes,
+            _comentarios
         };
        
         if (Tipo == "") {

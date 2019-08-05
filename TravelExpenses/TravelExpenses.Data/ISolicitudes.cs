@@ -31,5 +31,6 @@ namespace TravelExpenses.Data
         int EliminarDestinos(int IdDestinos);
         int EliminarGastos(int IdGastos);
         int SolicitudesUpd(Solicitud solicitud);
+        int InsertarComentarios(Comentarios Comentarios);
     }
 }

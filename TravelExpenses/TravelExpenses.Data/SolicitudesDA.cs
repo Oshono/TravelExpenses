@@ -56,6 +56,27 @@ namespace TravelExpenses.Data
             }
         }
 
+        public int InsertarComentarios(Comentarios comentarios)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio", comentarios.Folio);
+                parameters.Add("@Comentario", comentarios.Comentario);
+
+                using (IDbConnection conn = connection)
+                {
+                    var result = connection.Execute("Comentarios_Ins", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public int EliminarSolicitud(int Folio)
         {
             try
