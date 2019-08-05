@@ -141,6 +141,11 @@ namespace TravelExpenses
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
+
+            services.AddMvc().AddRazorPagesOptions(options => {
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/Account/Login");
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -169,8 +174,10 @@ namespace TravelExpenses
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=ListarSolicitudes}/{id?}");
+                    template: "{controller=Home}/{action=index}");
             });
+
         }
     }
 }
+
