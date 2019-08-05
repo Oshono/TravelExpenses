@@ -74,7 +74,7 @@ namespace TravelExpenses.Controllers
             _SolicitudesData.EliminarSolicitud(Folio);
             return Redirect("./");
         }
-
+        [Authorize]
         public IActionResult ListarSolicitudes()
         {
             var SolicitudesModel = new SolicitudesViewModel();
