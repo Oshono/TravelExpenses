@@ -406,15 +406,23 @@
     }
     function RegistrarComentario() {
         var Comentarios_ = $("#Comentarios_").val();
-        arrC.push({
-            Comentario: Comentarios_
-        });
-        
-        var row = "";
-        arrC.forEach((index, item) => {
 
-            row += "<tr><td>" + arrC[item]["Comentario"] + "</td></tr>";
-        });
+        if (Comentarios_ == "") {
+            alert("Favor de ingresar un comentario");
+        }
+        else {
+
+            arrC.push({
+                Comentario: Comentarios_
+            });
+
+
+            var row = "";
+            arrC.forEach((index, item) => {
+
+                row += "<tr><td>" + arrC[item]["Comentario"] + "</td></tr>";
+            });
+        }
         $("#tblComentarios").html(row);
     }
 

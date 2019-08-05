@@ -244,6 +244,25 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public IEnumerable<Comentarios> ObtenerComentario(int Folio)
+        { 
+            try
+            {
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Folio", Folio);
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Comentarios>("Comentarios_Sel", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdComentarios);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus)
         {
 

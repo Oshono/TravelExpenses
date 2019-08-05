@@ -121,6 +121,9 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Comentarios">Comentarios</a>
+                        </li>
 
                     </ul>
 
@@ -230,60 +233,88 @@
                                         <tbody>
                                             @foreach (var g in @Model.Gastos)
                                             {
-                                            <tr>
-                                                <td>@g.IdGastos</td>
-                                                <td>@g.Empresa</td>
-                                                <td>@g.Nombre</td>
+                                                <tr>
+                                                    <td>@g.IdGastos</td>
+                                                    <td>@g.Empresa</td>
+                                                    <td>@g.Nombre</td>
 
 
-                                                <td>@g.MontoMaximo</td>
-                                                @if (@g.MontoMaximo < @g.ImporteSolicitado)
-                                                {
-                                                    <td style="color:red;">@g.ImporteSolicitado</td>
-                                                }
-                                                else
-                                                {
-                                                    <td style="color:green;">@g.ImporteSolicitado</td>
-                                                }
-                                                <td>@g.Descripcion</td>
-                                                <td>@g.TipoCambios</td>
-                                                <td>
-                                                    @if (@ViewBag.Deshabilitar == true)
+                                                    <td>@g.MontoMaximo</td>
+                                                    @if (@g.MontoMaximo < @g.ImporteSolicitado)
                                                     {
-                                                        <a class="btn btn-lg">
-                                                            <i class="fas fa-ban "></i>
-                                                        </a>
+                                                        <td style="color:red;">@g.ImporteSolicitado</td>
                                                     }
                                                     else
                                                     {
-                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
+                                                        <td style="color:green;">@g.ImporteSolicitado</td>
                                                     }
-                                                </td>
-                                                <td>
-                                                    @if (@ViewBag.Deshabilitar == true)
-                                                    {
-                                                        <a class="btn btn-lg">
-                                                            <i class="fas fa-ban "></i>
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion">
-                                                            <i class="fas fa-eraser"></i>
-                                                        </a>
-                                                    }
+                                                    <td>@g.Descripcion</td>
+                                                    <td>@g.TipoCambios</td>
+                                                    <td>
+                                                        @if (@ViewBag.Deshabilitar == true)
+                                                        {
+                                                            <a class="btn btn-lg">
+                                                                <i class="fas fa-ban "></i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (@ViewBag.Deshabilitar == true)
+                                                        {
+                                                            <a class="btn btn-lg">
+                                                                <i class="fas fa-ban "></i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion">
+                                                                <i class="fas fa-eraser"></i>
+                                                            </a>
+                                                        }
 
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        <div id="Comentarios" class="container tab-pane fade">
+                            <br>
+                            <h3>Comentarios</h3>
+                            
+                            <div class="container">
+                                <div class="table table-responsive">
+                                    <table class="table table-hover text-center">
+                                        <thead>
 
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Comentario</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var g in @Model.comentarios)
+                                            {
+                                                <tr>
+                                                    <td>@g.IdComentarios</td>
+                                                    <td>@g.Comentario</td>
+                                                    
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

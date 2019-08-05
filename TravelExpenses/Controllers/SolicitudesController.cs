@@ -74,6 +74,7 @@ namespace TravelExpenses.Controllers
                           .OrderBy(x => x.Descripcion).ToList();
             var Empresa = _EmpresaData.ObtenerEmpresas();
             var _Gasto = _GastoData.ObtenerGastos();
+            
 
             var IdFolio = _SolicitudesData.ObtenerIdSolicitud();
             SolicitudModel.Solicitudes = IdFolio;
@@ -373,10 +374,11 @@ namespace TravelExpenses.Controllers
             SolicitudModel.Solicitudes = TipoSolicitud;
             var Gastos = _SolicitudesData.ObtenerGastos(Folio);
             var Destinos = _SolicitudesData.DestinosXFolio(Folio);
-
+            var comentarios = _SolicitudesData.ObtenerComentario(Folio);
             SolicitudModel.Gastos = Gastos;
             SolicitudModel.Solicitud = Solicitudes;
             SolicitudModel.Destinos = Destinos;
+            SolicitudModel.comentarios = comentarios;
             if(Solicitudes.Estatus=="Capturada"|| Solicitudes.Estatus == "Incompleta")
             {
                 ViewBag.Deshabilitar = false;
