@@ -15,11 +15,13 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
         {
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -29,6 +31,10 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        public bool ShowResend { get; set; }
+
+        public string UserId { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [TempData]
@@ -37,8 +43,8 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Display(Name = "Login Name")]
+            public string UserName { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -73,7 +79,7 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Usuario ingreso Ozono Travel.");
@@ -85,8 +91,17 @@ namespace TravelExpenses.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Cuenta de usuario bloqueada.");
                     return RedirectToPage("./Lockout");
+                }
+                if (result.IsNotAllowed)
+                {
+                    _logger.LogWarning("El correo electrónico del usuario no está confirmado.");
+                    ModelState.AddModelError(string.Empty, "Email no confirmado.");
+                    var user = await _userManager.FindByNameAsync(Input.UserName);
+                    UserId = user.Id;
+                    ShowResend = true;
+                    return Page();
                 }
                 else
                 {
