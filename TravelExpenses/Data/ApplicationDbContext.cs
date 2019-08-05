@@ -13,7 +13,7 @@ namespace TravelExpenses.Data
             : base(options)
         {
         }
-        public DbSet<TravelExpenses.Core.Destinos> Destinos { get; set; }
-        public DbSet<TravelExpenses.Core.Solicitud> Solicitud { get; set; }
+        public DbSet<Core.Destinos> Destinos { get; set; }
+        public DbSet<Core.Solicitud> Solicitud { get; set; }
     }
 }

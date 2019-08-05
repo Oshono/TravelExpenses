@@ -74,6 +74,7 @@ namespace TravelExpenses.Controllers
                           .OrderBy(x => x.Descripcion).ToList();
             var Empresa = _EmpresaData.ObtenerEmpresas();
             var _Gasto = _GastoData.ObtenerGastos();
+            
 
             var IdFolio = _SolicitudesData.ObtenerIdSolicitud();
             SolicitudModel.Solicitudes = IdFolio;
@@ -117,12 +118,12 @@ namespace TravelExpenses.Controllers
         
 
         [HttpPost]
-        public ActionResult Create(List<Solicitud> _solicitudes, List<Destinos> _Destino, List<Gasto> _Gasto)
+        public ActionResult Create(List<Solicitud> _solicitudes, List<Destinos> _Destino, List<Gasto> _Gasto, List<Comentarios> _comentarios)
         {
             _DestinosData.ObtenerDestino(1);
             var result = _DestinosData.ObtenerDestinos(4);
             Solicitud objsolicitudes = new Solicitud();
-
+            var comentarios = new Comentarios();
 
             Destinos destino = new Destinos();
             Gasto gasto = new Gasto();
@@ -166,6 +167,12 @@ namespace TravelExpenses.Controllers
                     gasto.RFC = "456777";
                     gasto.IdGasto = g.IdGasto;
                     _SolicitudesData.InsertarGastos(gasto);
+                });
+                _comentarios.ForEach(c =>
+                {
+                    comentarios.Comentario = c.Comentario;
+                    comentarios.Folio= Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                    _SolicitudesData.InsertarComentarios(comentarios);
                 });
 
                 return Json(gasto.Folio);
@@ -221,7 +228,7 @@ namespace TravelExpenses.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                throw ex;
             }
         }
 
@@ -367,10 +374,11 @@ namespace TravelExpenses.Controllers
             SolicitudModel.Solicitudes = TipoSolicitud;
             var Gastos = _SolicitudesData.ObtenerGastos(Folio);
             var Destinos = _SolicitudesData.DestinosXFolio(Folio);
-
+            var comentarios = _SolicitudesData.ObtenerComentario(Folio);
             SolicitudModel.Gastos = Gastos;
             SolicitudModel.Solicitud = Solicitudes;
             SolicitudModel.Destinos = Destinos;
+            SolicitudModel.comentarios = comentarios;
             if(Solicitudes.Estatus=="Capturada"|| Solicitudes.Estatus == "Incompleta")
             {
                 ViewBag.Deshabilitar = false;

@@ -39,10 +39,13 @@ namespace TravelExpenses.ViewModels
         public int IdGasto { get; set; }
 
         public IEnumerable<Empresas> Empresas { get; set; }
-        public Empresas Empresa{ get; set; }
+        public Empresas Empresa { get; set; }
         public string RFC { get; set; }
 
         public IEnumerable<Gastos> _Gastos { get; set; }
         public Gastos _Gasto { get; set; }
+
+        public IEnumerable<Comentarios> comentarios { get; set; }
+        public Comentarios comentario { get; set; }
     }
 }

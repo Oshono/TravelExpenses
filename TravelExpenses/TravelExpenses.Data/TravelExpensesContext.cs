@@ -28,6 +28,7 @@ namespace TravelExpenses.Data
         public DbSet<Politica> Politica { get; set; }
         public DbSet<PoliticaDetalle> PoliticaDetalle { get; set; }
         public DbSet<CatProdServSAT> CatProdServSAT { get; set; }
+        public DbSet<Observacion> Observacion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
