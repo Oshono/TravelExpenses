@@ -20,12 +20,11 @@
     </div>
 </div>
 
-
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
 
-            <form method="post">
+            <form method="post" asp-controller="Aprobador" asp-action="Detalles">
 
                 <div class="form-group">
                     <div class="row">
@@ -38,22 +37,22 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col-1">
+                <div class="form-row"><div class="col"></div>
+                        <div class="col-md-2 mb-3">
                             <input type="submit" value="Aprobada" onclick="myFunction('1')" class="btn btn-primary" />
                         </div>
-                        <div class="col-1">
-                            <input type="submit" value="Rechazar" onclick="myFunction('0')" class="btn btn-primary" />
-                        </div>
-                        <div class="col-1"></div>
+                    <div class="col-md-2 mb-3">
+                        <input type="submit" value="Rechazar" onclick="myFunction('0')" class="btn btn-primary" />
                     </div>
                 </div>
-
+                
             </form>
 
         </div>
+    </div>
+</div>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
         <div class="card-body">
             <div class="table-responsive">
                 <table id="data-table-basic" class="table table-striped">

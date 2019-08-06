@@ -38,50 +38,24 @@ namespace TravelExpenses.Controllers
         public ActionResult AprobarSolicitud()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorComprobar");
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
             var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
-
             var Estatus = 
                     (from e in SolicitudesData.EstatusSolicitudes()
-                    where e.Status == "PorComprobar" | e.Status == "PorAutorizar"
+                    where e.Status == "Comprobada" | e.Status == "PorAutorizar"
                            select e
                         );
             solicitud.Estatuses = Estatus;
             return View(solicitud);
         }
-        //public IActionResult SolicitudesEstatus(string estatus)
-        //{
-        //    try
-        //    {
-        //        var SolicitudesModel = new SolicitudesViewModel();
-        //        if (estatus == "Todo" || estatus == "--Seleccionar estatus")
-        //        {
-        //            var Solicitud = SolicitudesData.ObtenerSolicitudes();
-        //            SolicitudesModel.Solicitudes = Solicitud;
-        //            return Json(Solicitud);
-        //        }
-        //        else
-        //        {
-        //            var Solicitud = SolicitudesData.ObtenerSolicitudesEstatus(estatus);
-        //            SolicitudesModel.Solicitudes = Solicitud;
-        //            return Json(Solicitud);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //}
-
-
+ 
         public IActionResult SolicitudesEstatus(string estatus)
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            if (estatus.Equals("PorComprobar"))
+            if (estatus.Equals("Comprobada"))
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorComprobar");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
                 solicitud.Solicitudes = PorComprobar;
                 return Json(PorComprobar);
             }
@@ -94,7 +68,7 @@ namespace TravelExpenses.Controllers
             }
             else
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorComprobar");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
                 var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
@@ -130,6 +104,8 @@ namespace TravelExpenses.Controllers
         public ActionResult DetallesPorAutorizar(int Folio)
         {
             var SolicitudModel = new ObservacionViewModel();
+            SolicitudModel.Observacion = new Observacion();
+            SolicitudModel.Observacion.Folio = Folio;
             SolicitudModel.Solicitud = new Solicitud();
             SolicitudModel.Gasto = new Gasto();
 
@@ -153,6 +129,7 @@ namespace TravelExpenses.Controllers
             {
                 ViewBag.Deshabilitar = true;
             }
+
             return View(SolicitudModel);
         }
 
@@ -172,7 +149,7 @@ namespace TravelExpenses.Controllers
             int result = 0;
             if (viewModel.Operacion == 1)
             {
-                result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Autorizar");
+                result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
             }
             else
             {
