@@ -46,7 +46,6 @@
 <h1>Comprobantes</h1>
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
-
         <div class="card-body">
             <div class="table-responsive">
                 <table id="data-table-basic" class="table table-striped">
@@ -92,35 +91,35 @@
                     </thead>
                     <tbody id="tblComprobantes">
                         @if (Model.Comprobantes != null)
-                        { 
+                        {
                             foreach (var comprobante in Model.Comprobantes)
                             {
-                        <tr>
-                            <td>@comprobante.Folio</td>
-                            <td>@comprobante.UUID</td>
-                            <td>@comprobante.Fecha</td>
-                            <td>@comprobante.RFC</td>
-                            <td>@comprobante.NombreProveedor</td>
-                            <td>@comprobante.Moneda</td>
-                            <td>@comprobante.SubTotal</td>
-                            <td>@comprobante.Impuestos</td>
-                            <td>@comprobante.Total</td>
-                            <td>
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-file-download"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-eraser"></i>
-                                </a>
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td><label class="alert-danger">@comprobante.MensajeError</label> @comprobante.Folio</td>
+                                    <td>@comprobante.UUID</td>
+                                    <td>@comprobante.Fecha</td>
+                                    <td>@comprobante.RFC</td>
+                                    <td>@comprobante.NombreProveedor</td>
+                                    <td>@comprobante.Moneda</td>
+                                    <td>@comprobante.SubTotal</td>
+                                    <td>@comprobante.Impuestos</td>
+                                    <td>@comprobante.Total</td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-file-download"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-eraser"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             }
                         }
                     </tbody>
@@ -162,15 +161,15 @@
                     $.each(args[1], function (index, item) {
 
                         console.log(item);
-                        row += "<tr><td>" + item.uuid + "</td><td>"
-                            + item.folio + "</td><td>"
+                        row += "<tr><td><label class='alert-danger'>" + item.mensajeError +"</label>" + item.folio + "</td><td>"
+                            + item.uuid  + "</td><td>"
                             + item.fecha + "</td><td>"
                             + item.rfc + "</td><td>"
                             + item.nombreProveedor + "</td><td>"
                             + item.moneda + "</td><td>"
                             + item.subTotal + "</td><td>"
                             + item.impuestos + "</td><td>"
-                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg'><i class='fas fa-eraser'></i></a></td></tr>";
+                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid +"'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid + "'><i class='fas fa-eraser'></i></a></td></tr>";
                     });
                     $("#tblComprobantes").html(row);  
                     this.removeFile(data);

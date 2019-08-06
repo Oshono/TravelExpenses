@@ -29,7 +29,8 @@ namespace TravelExpenses.Data
         public DbSet<PoliticaDetalle> PoliticaDetalle { get; set; }
         public DbSet<CatProdServSAT> CatProdServSAT { get; set; }
         public DbSet<Observacion> Observacion { get; set; }
-
+        public DbSet<FormaPago> CatFormaPago { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CentroCostoEmpresa>().HasKey(table => new {

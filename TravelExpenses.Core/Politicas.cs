@@ -12,12 +12,15 @@ namespace TravelExpenses.Core
         {
             IdPolitica = 0;
             NumSolicitudes = 0;
+            ImportePermitido = 0;
         }
         [Required, Key]
         public int IdPolitica { get; set; }
         [Required, StringLength(200)]
         public string Nombre { get; set; }
+        [NotMapped]
         public int IdGasto { get; set; }
+        [NotMapped]
         [Range(0.0, float.MaxValue)]
         public decimal ImportePermitido { get; set; }
         [StringLength(20)]

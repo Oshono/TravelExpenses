@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
-using System.Web;
-using System.IO;
-using System.Xml.Linq;
-using System.Globalization;
-using System.Text;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TravelExpenses.Controllers
 {
@@ -27,6 +23,8 @@ namespace TravelExpenses.Controllers
         private readonly IGasto _gastos;
         private readonly IPolitica _politica;
         private readonly IPoliticaDetalle _politicadetalle;
+        private readonly IFormaPago _formaPago;
+        private readonly ICatProdServSATDA _prodserv;
         private readonly IHostingEnvironment _env;
         
         public List<Comprobante> lstComprobantes;
@@ -37,7 +35,9 @@ namespace TravelExpenses.Controllers
                                     IComprobante comprobante,
                                     IGasto gastos,
                                     IPolitica politica,
-                                    IPoliticaDetalle politicadetalle
+                                    IPoliticaDetalle politicadetalle,
+                                    IFormaPago formaPago,
+                                    ICatProdServSATDA prodserv
                                     )
         {
             _rembolso = rembolso;
@@ -47,6 +47,8 @@ namespace TravelExpenses.Controllers
             _gastos = gastos;
             _politica = politica;
             _politicadetalle = politicadetalle;
+            _formaPago = formaPago;
+            _prodserv = prodserv;
         }
 
         // GET: Centro Costos
@@ -108,6 +110,15 @@ namespace TravelExpenses.Controllers
             {                 
                 rembolso.Comprobantes = new List<Comprobante>();
                 rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+
+                foreach(Comprobante comp in rembolso.Comprobantes)
+                { 
+                    if (comp.FormaPago == "01" && comp.Conceptos.Where(x => x.DescripcionProdServ.ToUpper().Contains("GASOLINA") || x.DescripcionProdServ.ToUpper().Contains("ALIMENTO")).Count() > 0)
+                    {
+                        comp.MensajeError = "La forma de pago para Gasolina o Alimenos debe ser diferente de Efectivo";
+                    }
+                }
+
                 var solicitud = _solicitud.ObtenerSolicitudes().Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
                 rembolso.solicitud = solicitud;
             }
@@ -118,10 +129,18 @@ namespace TravelExpenses.Controllers
         public ActionResult Details(string UUID)
         {
             var rembolso = new RembolsoViewModel();
+            var polDetalle = _politicadetalle.ObtenerDetalles();
             rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
+
+           
+
             rembolso.Comprobante.ComprobanteXML = rembolso.Comprobante.Archivos.FirstOrDefault().Extension.Contains("xml");
             var gastos = _gastos.ObtenerGastos();
-            rembolso.Gastos = gastos;
+
+            var result = gastos.Where(a => polDetalle.Any(b => a.IdGasto == b.IdGasto));
+
+
+            rembolso.Gastos = result;
             return View(rembolso);
         }
 
@@ -282,6 +301,7 @@ namespace TravelExpenses.Controllers
                 //// full path to file in temp location
                 var filePath = Path.GetTempFileName();
                 var comprobantes = new List<Comprobante>();
+                
 
                 foreach (var formFile in files)
                 {
@@ -366,20 +386,23 @@ namespace TravelExpenses.Controllers
 
         private List<Comprobante>  CargaXML(IFormFile formFile)
         {
-            var result = new StringBuilder();
-            var comprobante = new List<Comprobante>();
-            using (var reader = new StreamReader(formFile.OpenReadStream()))
+            try
             {
-                while (reader.Peek() >= 0)
-                    result.AppendLine(reader.ReadLine());
-            }
+                var result = new StringBuilder();
+                var comprobante = new List<Comprobante>();
+                var catProdServ = _prodserv.ObtenerCatalogo();
+                using (var reader = new StreamReader(formFile.OpenReadStream()))
+                {
+                    while (reader.Peek() >= 0)
+                        result.AppendLine(reader.ReadLine());
+                }
 
-            XNamespace nsCFDi = "http://www.sat.gob.mx/cfd/3";
-            XNamespace tfd = "http://www.sat.gob.mx/TimbreFiscalDigital";
-            XDocument archivoXML = XDocument.Parse(result.ToString());
+                XNamespace nsCFDi = "http://www.sat.gob.mx/cfd/3";
+                XNamespace tfd = "http://www.sat.gob.mx/TimbreFiscalDigital";
+                XDocument archivoXML = XDocument.Parse(result.ToString());
 
 
-            comprobante = (from e in archivoXML.Elements(nsCFDi + "Comprobante")
+                comprobante = (from e in archivoXML.Elements(nsCFDi + "Comprobante")
                                let r = e.Element(nsCFDi + "Emisor")
                                let i = e.Element(nsCFDi + "Impuestos")
                                let c = e.Element(nsCFDi + "Complemento").Element(tfd + "TimbreFiscalDigital")
@@ -395,54 +418,82 @@ namespace TravelExpenses.Controllers
                                    RFC = (string)r.Attribute("Rfc"),
                                    NombreProveedor = (string)r.Attribute("Nombre"),
                                    RegimenFiscal = (string)r.Attribute("RegimenFiscal"),
+                                   FormaPago = (string)e.Attribute("FormaPago"),
 
-                               }                           
-                           ).ToList();
+                               }
+                               ).ToList();
 
-            
-            List<Concepto> listaConceptos = new List<Concepto>();
-            
-            comprobante[0].Conceptos = listaConceptos;
-            var conceptos = from c in archivoXML.Descendants()
-                            where c.Name.LocalName == "Conceptos"
-                            select c.Elements();
 
-            foreach (IEnumerable<XElement> item in conceptos)
-            {
-                foreach (var conceptoXML in item)
+                List<Concepto> listaConceptos = new List<Concepto>();
+
+                comprobante[0].Conceptos = listaConceptos;
+                var conceptos = from c in archivoXML.Descendants()
+                                where c.Name.LocalName == "Conceptos"
+                                select c.Elements();
+
+
+                foreach (IEnumerable<XElement> item in conceptos)
                 {
-                    Concepto concepto = new Concepto();
-                    concepto.UUID = comprobante.FirstOrDefault().UUID;
-                    concepto.Cantidad = float.Parse(conceptoXML.Attribute("Cantidad").Value);
-                    concepto.ClaveProdServ = conceptoXML.Attribute("ClaveProdServ").Value;                    
-                    if ( conceptoXML.Attribute("Base") != null)
+                    foreach (var conceptoXML in item)
                     {
-                        concepto.Base = float.Parse(conceptoXML.Attribute("Base").Value);
-                    }
-                    concepto.Cantidad = float.Parse(conceptoXML.Attribute("ClaveProdServ").Value);
-                    concepto.ClaveUnidad = conceptoXML.Attribute("ClaveUnidad").Value;
-                    concepto.Descripcion = conceptoXML.Attribute("Descripcion").Value;
-                    concepto.Importe = float.Parse(conceptoXML.Attribute("Importe").Value);
-                    if (conceptoXML.Attribute("Impuesto") != null)
-                    {
-                        concepto.Impuesto = float.Parse(conceptoXML.Attribute("Impuesto").Value);
-                    }
-                    concepto.NoIdentificacion = conceptoXML.Attribute("NoIdentificacion").Value;
-                    if ( conceptoXML.Attribute("TasaOCuota") != null)
-                    {
-                        concepto.TasaOCuota = float.Parse(conceptoXML.Attribute("TasaOCuota").Value);
-                    }
-                    if ( conceptoXML.Attribute("TipoFactor") != null)
-                    {
-                        concepto.TipoFactor = conceptoXML.Attribute("TipoFactor").Value;
-                    }
-                    concepto.Unidad = conceptoXML.Attribute("Unidad").Value;
-                    concepto.ValorUnitario = float.Parse(conceptoXML.Attribute("ValorUnitario").Value);
-                    listaConceptos.Add(concepto);
-                }
-            }
+                        Concepto concepto = new Concepto();
+                        concepto.UUID = comprobante.FirstOrDefault().UUID;
+                        concepto.Cantidad = float.Parse(conceptoXML.Attribute("Cantidad").Value);
+                        concepto.ClaveProdServ = conceptoXML.Attribute("ClaveProdServ").Value;
+                        if (conceptoXML.Attribute("Base") != null)
+                        {
+                            concepto.Base = float.Parse(conceptoXML.Attribute("Base").Value);
+                        }
+                        concepto.Cantidad = float.Parse(conceptoXML.Attribute("ClaveProdServ").Value);
+                        concepto.ClaveUnidad = conceptoXML.Attribute("ClaveUnidad").Value;
+                        concepto.Descripcion = conceptoXML.Attribute("Descripcion").Value;
 
-            return comprobante;
+                        var catprodserv = catProdServ.FirstOrDefault(x => x.ClaveProdServ == concepto.ClaveProdServ);
+
+                        if (catprodserv != null)
+                        {
+                            concepto.DescripcionProdServ = catprodserv.Descripcion;
+
+                            
+                            if ((concepto.DescripcionProdServ.ToUpper().Contains("GASOLINA") || concepto.DescripcionProdServ.ToUpper().Contains("ALIMENTO")))
+                            {
+                                foreach (Comprobante comp in comprobante)
+                                {
+                                    if (comp.FormaPago == "01")
+                                    {
+                                        comp.MensajeError = "La forma de pago para Gasolina o Alimenos debe ser diferente de Efectivo";
+                                    }
+                                }
+                                
+                            }
+
+                        }
+                        concepto.Importe = float.Parse(conceptoXML.Attribute("Importe").Value);
+                        if (conceptoXML.Attribute("Impuesto") != null)
+                        {
+                            concepto.Impuesto = float.Parse(conceptoXML.Attribute("Impuesto").Value);
+                        }
+                        concepto.NoIdentificacion = conceptoXML.Attribute("NoIdentificacion").Value;
+                        if (conceptoXML.Attribute("TasaOCuota") != null)
+                        {
+                            concepto.TasaOCuota = float.Parse(conceptoXML.Attribute("TasaOCuota").Value);
+                        }
+                        if (conceptoXML.Attribute("TipoFactor") != null)
+                        {
+                            concepto.TipoFactor = conceptoXML.Attribute("TipoFactor").Value;
+                        }
+                        concepto.Unidad = conceptoXML.Attribute("Unidad").Value;
+                        concepto.ValorUnitario = float.Parse(conceptoXML.Attribute("ValorUnitario").Value);
+                        listaConceptos.Add(concepto);
+                    }
+                }
+
+                return comprobante;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
     }

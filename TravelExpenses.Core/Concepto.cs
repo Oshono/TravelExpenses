@@ -40,7 +40,7 @@ namespace TravelExpenses.Core
         public double Impuesto { get; set; }
         public double Base { get; set; }
         public int IdGasto { get; set; }
-        [NotMapped]
+        
         public string DescripcionProdServ { get; set; }
         [NotMapped]
         public string MensajeError { get; set; }

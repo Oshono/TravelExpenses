@@ -110,15 +110,19 @@ namespace TravelExpenses.Controllers
                    
             try
             {
+                var ImportePermitido = politicaModel.Politica.ImportePermitido;
+                var IdGasto = politicaModel.Politica.IdGasto;
+                politicaModel.Politica.IdGasto = 0;
+                politicaModel.Politica.ImportePermitido = 0;
                 _politica.Guardar(politicaModel.Politica);
                 if (politicaModel.Politica.IdGasto > 0)
                 {
                     PoliticaDetalle pDetalle = new PoliticaDetalle();
-                    pDetalle.IdGasto = politicaModel.Politica.IdGasto;
+                    pDetalle.IdGasto = IdGasto;
                     pDetalle.IdPolitica = politicaModel.Politica.IdPolitica;
-                    pDetalle.ImportePermitido = politicaModel.Politica.ImportePermitido;
+                    pDetalle.ImportePermitido = ImportePermitido;
                     pDetalle.Activo = true;
-                    _polDetalle.Guardar(pDetalle);
+                    _polDetalle.Guardar(pDetalle);                    
                 }
             }
             catch
