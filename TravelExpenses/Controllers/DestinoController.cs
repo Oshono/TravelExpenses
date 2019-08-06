@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,11 +23,12 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Centro Costos
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult Lista(string ClavePais)
         {
             List<Destino> ciudades = new List<Destino>();
@@ -52,21 +54,21 @@ namespace TravelExpenses.Controllers
         //    var ciudades = _ubicacion.ObtenerDestinos(0, ClavePais);            
         //    return Json(ciudades);
         //}
-
+        [Authorize]
         [HttpPost]
         public ActionResult CargaCiudades(int IdEstado, string ClavePais)
         {
             var ciudades = _ubicacion.ObtenerCiudades(ClavePais, IdEstado);
             return Json(ciudades);
         }
-
+        [Authorize]
         [HttpPost]
         public ActionResult CargaDestinos(int IdEstado, string ClavePais)
         {
             var destinos = _ubicacion.ObtenerDestinos(IdEstado, ClavePais);
             return Json(destinos);
         }
-
+        [Authorize]
         [HttpPost]
         public ActionResult CargaEstados(string ClavePais)
         {
@@ -75,6 +77,7 @@ namespace TravelExpenses.Controllers
         }
 
         // POST: gastos/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -92,6 +95,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
+        [Authorize]
         public ActionResult Edit()
         {
             var destinoModel = new DestinoViewModel();
@@ -103,6 +107,7 @@ namespace TravelExpenses.Controllers
 
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DestinoViewModel Destino)
         {

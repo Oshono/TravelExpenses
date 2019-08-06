@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,11 +23,12 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Centro Costos
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult Lista()
         {            
             var centroModel = new CentroCostoEmpresaViewModel();
@@ -37,6 +39,7 @@ namespace TravelExpenses.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CargaCentroCostoEmpresa(string RFC)
         {
             var centroCostos = _centroEmpresa.ObtenerCentrosCostos().OrderBy(x=>x.Nombre).ToList();
@@ -53,6 +56,7 @@ namespace TravelExpenses.Controllers
 
         // POST: gastos/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -69,6 +73,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
+        [Authorize]
         public ActionResult Edit(string ClaveCentroCosto, string RFC)
         {
             var centroModel = new CentroCostoEmpresaViewModel();
@@ -85,6 +90,7 @@ namespace TravelExpenses.Controllers
 
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CentroCostoEmpresaViewModel centroCostoModel)
         {
@@ -119,6 +125,7 @@ namespace TravelExpenses.Controllers
 
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Lista(CentroCostoEmpresaViewModel centroCostoModel)
         {

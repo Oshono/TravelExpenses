@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,11 +23,12 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Departamentos
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult Lista()
         {
             var departamentos = _departamento.ObtenerDepartamentos();
@@ -39,6 +41,7 @@ namespace TravelExpenses.Controllers
          
         // POST: Departamentos/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -55,6 +58,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Departamentos/Edit/5
+        [Authorize]
         public ActionResult Edit(string ClaveDepto)
         {
             var deptoModel = new DepartamentoViewModel();
@@ -72,6 +76,7 @@ namespace TravelExpenses.Controllers
 
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DepartamentoViewModel depto)
         {

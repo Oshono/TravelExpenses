@@ -27,7 +27,7 @@ namespace TravelExpenses.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult ListaEmpresas()
         {
             var empresas = _empresa.ObtenerEmpresas();
@@ -39,6 +39,7 @@ namespace TravelExpenses.Controllers
          
         // POST: Empresa/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -55,6 +56,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Empresa/Edit/RFC
+        [Authorize]
         public ActionResult Edit(string RFC)
         {
             var empresaModel = new EmpresaViewModel();
@@ -69,6 +71,7 @@ namespace TravelExpenses.Controllers
         
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public   ActionResult Edit(EmpresaViewModel miempresa)
         {

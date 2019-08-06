@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelExpenses.Controllers
 {
@@ -49,11 +50,12 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: Centro Costos
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult Lista()
         {
             
@@ -65,6 +67,7 @@ namespace TravelExpenses.Controllers
 
         // POST: gastos/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -79,7 +82,8 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
-        
+
+        [Authorize]
         public ActionResult Delete(string UUID)
         {
             try
@@ -95,6 +99,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
+        [Authorize]
         public ActionResult Edit(string Folio)
         {
             int FolioSolicitud = 0;
@@ -109,6 +114,7 @@ namespace TravelExpenses.Controllers
             return View( rembolso);
         }
 
+        [Authorize]
         public ActionResult Details(string UUID)
         {
             var rembolso = new RembolsoViewModel();
@@ -120,6 +126,7 @@ namespace TravelExpenses.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Details(RembolsoViewModel rembolso)
         { 
             if (rembolso.Comprobante != null)
@@ -175,6 +182,7 @@ namespace TravelExpenses.Controllers
         }
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CentroCostoViewModel centroCostoModel)
         {
@@ -265,6 +273,7 @@ namespace TravelExpenses.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public  ActionResult  FileUpload(RembolsoViewModel rembolso)
         {
             try
@@ -298,6 +307,7 @@ namespace TravelExpenses.Controllers
             }
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Download(string UUID)
         {
             var comprobante =_comprobante.ObtenerComprobantesXID(UUID);            
@@ -345,6 +355,7 @@ namespace TravelExpenses.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
         {
             _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Comprobada");

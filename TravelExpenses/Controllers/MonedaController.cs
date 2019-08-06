@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,11 +23,12 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: moneda Costos
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public ActionResult Lista()
         {
             var monedas = _moneda.ObtenerMonedas();
@@ -39,6 +41,7 @@ namespace TravelExpenses.Controllers
 
         // POST: gastos/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -55,6 +58,7 @@ namespace TravelExpenses.Controllers
         }
 
         // GET: gastos/Edit/5
+        [Authorize]
         public ActionResult Edit(string ClaveMoneda)
         {
             var monedaModel = new MonedaViewModel();
@@ -72,6 +76,7 @@ namespace TravelExpenses.Controllers
 
         // POST: Empresa/Edit/5
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(MonedaViewModel MonedaModel)
         {
