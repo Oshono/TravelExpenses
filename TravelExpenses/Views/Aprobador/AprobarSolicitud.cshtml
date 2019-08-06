@@ -42,14 +42,8 @@
 
                                 <td>@item.Estatus</td>
 
-                                @*<td>@item.Folio</td>
-                                    <td>@item.IdTipoSolicitud</td>
-                                    <td>@item.Empresa</td>
-                                    <td>@item.UserName</td>
-                                    <td>@item.FechaSolicitud</td>
-                                    <td>@item.Estatus</td>*@
                                 <td>
-                                    @if (item.Estatus.Equals("PorComprobar"))
+                                    @if (item.Estatus.Equals("Comprobada"))
                                     {
                                         <a class="btn btn-lg" asp-controller="Aprobador" asp-action="Detalles" asp-route-folio="@item.Folio">
                                             <i class="fas fa-edit"></i>
@@ -105,13 +99,13 @@
                                     + '<td>' + item.importeComprobado +'</td>'
                                     + '<td>' + item.estatus+'</td>'
                                     + '<td>'
-                                        +'<a class="btn btn-lg" href="/Aprobador/DetallesPorAutorizar?folio=' + item.folio + '">' +
-                                        +"<i class='fas fa-edit'></i>"
+                                        +'<a class="btn btn-lg" href="/Aprobador/DetallesPorAutorizar?folio=' + item.folio + '">' 
+                                        + "<i class='fas fa-edit'></i>"
                                         +'</a>' 
                                     +'</td>'
                                 +'</tr>';
                         }
-                        else if (item.estatus == "PorComprobar") {
+                        else if (item.estatus == "Comprobada") {
 
                             row +=
                                 '<tr>' 
@@ -122,8 +116,8 @@
                                 + '<td>' + item.importeComprobado +'</td>'
                                 + '<td>' + item.estatus+'</td>'
                                 + '<td>'
-                                    +'<a class="btn btn-lg" href="/Aprobador/Detalles?folio=' + item.folio + '">' +
-                                    +"Editar"
+                                    +'<a class="btn btn-lg"  href="/Aprobador/Detalles?folio=' + item.folio + '">' 
+                                    + "<i class='fas fa-edit'></i>"
                                     +'</a>' 
                                 +'</td>'
                                 +'</tr>';
