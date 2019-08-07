@@ -40,17 +40,24 @@ namespace TravelExpenses.Services
                 mail.To.Add(new MailAddress(email));
 
                 // Smtp client
-                var client = new SmtpClient()
-                {
-                    Port = _emailSettings.MailPort,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Host = _emailSettings.MailServer,
-                    EnableSsl = true,
-                    Credentials = credentials
-                };
+                //var client = new SmtpClient()
+                //{
+                //    Port = _emailSettings.MailPort,
+                //    DeliveryMethod = SmtpDeliveryMethod.Network,
+                //    UseDefaultCredentials = false,
+                //    Host = _emailSettings.MailServer,
+                //    EnableSsl = true,
+                //    Credentials = credentials
+                //};
+                var client = new SmtpClient();
+                client.Port = _emailSettings.MailPort;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Host = _emailSettings.MailServer;
+                client.EnableSsl = true;
+                client.Credentials = credentials;
 
-                // Send it...         
+
                 client.Send(mail);
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using TravelExpenses.Services;
 
 namespace TravelExpenses.Controllers
 {
@@ -15,15 +16,18 @@ namespace TravelExpenses.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
         public RolesController(
             ApplicationDbContext context,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+             IEmailSender emailSender)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -120,6 +124,8 @@ namespace TravelExpenses.Controllers
             if(vm.Role!=null)
             {
                 await _userManager.AddToRoleAsync(user, vm.Role);
+                await _emailSender.SendEmailAsync(vm.UserEmail, "Permisos otorgados.",
+                       $"Se te ha otorgado permisos de "+ vm.Role);
                 return RedirectToAction("Index");
             }
 
