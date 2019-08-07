@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace TravelExpenses.Core
@@ -10,7 +11,11 @@ namespace TravelExpenses.Core
         public string Estado { get; set; }
         public string Pais { get; set; }
         public string Ciudad { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime FechaSalida { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime FechaLlegada { get; set; }
         public string Motivo { get; set; }
 
