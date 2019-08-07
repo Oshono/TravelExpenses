@@ -45,13 +45,13 @@
                 
                 <br />
                 <div class="row">
-                    @if (@Model.Solicitud.Estatus == "Incompleta" || @Model.Solicitud.Estatus == "Capturada")
+                    @if (@Model.Solicitud.Estatus == "Incompleta" || @Model.Solicitud.Estatus == "Capturada" || @Model.Solicitud.Estatus=="Rechazada")
                     {
 
                         <div class="col-4">
                             Concepto
                             <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo"
-                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))">
+                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion" ))">
                                 <option value="">-- Seleccione una concepto</option>
 
                             </select>
@@ -64,11 +64,7 @@
 
                         </div>
                         <div class="col-4">
-                            @*Moneda:*@
-                            @*<select asp-for="Moneda.ClaveMoneda" class="form-control input-sm Moneda"
-                                    asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
-                                <option value="">--Selecciona una moneda</option>
-                            </select>*@
+                             
                         </div>
                     }
                     else
@@ -291,6 +287,7 @@
                             <h3>Comentarios</h3>
                             
                             <div class="container">
+                                <input value="Agregar" type="button" id="Button" class="btn" onclick="RegistrarComentario()"/>
                                 <div class="table table-responsive">
                                     <table class="table table-hover text-center">
                                         <thead>
@@ -329,7 +326,11 @@
     function RegistrarGasto() {
         var Folio = $("#folio").val();  
         window.location.href = "./RegistrarGasto?Folio=" + Folio;
+    }
 
+    function RegistrarComentario() {
+        var Folio = $("#folio").val();
+        window.location.href = "./Comentarios?Folio=" + Folio;
     }
 
     function RegistrarDestino() {
