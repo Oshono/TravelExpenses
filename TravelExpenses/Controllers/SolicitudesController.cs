@@ -361,33 +361,42 @@ namespace TravelExpenses.Controllers
         public ActionResult Edit(int Folio)
         {
             //var Gasto = _SolicitudesData.ObtenerGastos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
-
-            var SolicitudModel = new SolicitudesViewModel();
-            SolicitudModel.Solicitud = new Solicitud();
-            SolicitudModel.Gasto = new Gasto();
-
-            var Moneda = _MonedaData.ObtenerMonedas()
-                          .OrderBy(x => x.Descripcion).ToList();
-            SolicitudModel.Monedas = Moneda;
-            var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud(); 
-            var Solicitudes = _SolicitudesData.SolicitudesXFolio(Folio);
-            SolicitudModel.Solicitudes = TipoSolicitud;
-            var Gastos = _SolicitudesData.ObtenerGastos(Folio);
-            var Destinos = _SolicitudesData.DestinosXFolio(Folio);
-            var comentarios = _SolicitudesData.ObtenerComentario(Folio);
-            SolicitudModel.Gastos = Gastos;
-            SolicitudModel.Solicitud = Solicitudes;
-            SolicitudModel.Destinos = Destinos;
-            SolicitudModel.comentarios = comentarios;
-            if(Solicitudes.Estatus=="Capturada"|| Solicitudes.Estatus == "Incompleta")
+            try
             {
-                ViewBag.Deshabilitar = false;
+
+
+                var SolicitudModel = new SolicitudesViewModel();
+                SolicitudModel.Solicitud = new Solicitud();
+                SolicitudModel.Gasto = new Gasto();
+
+                var Moneda = _MonedaData.ObtenerMonedas()
+                              .OrderBy(x => x.Descripcion).ToList();
+                SolicitudModel.Monedas = Moneda;
+                var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
+                var Solicitudes = _SolicitudesData.SolicitudesXFolio(Folio);
+                SolicitudModel.Solicitudes = TipoSolicitud;
+                var Gastos = _SolicitudesData.ObtenerGastos(Folio);
+                var Destinos = _SolicitudesData.DestinosXFolio(Folio);
+                var comentarios = _SolicitudesData.ObtenerComentario(Folio);
+                SolicitudModel.Gastos = Gastos;
+                SolicitudModel.Solicitud = Solicitudes;
+                SolicitudModel.Destinos = Destinos;
+                SolicitudModel.comentarios = comentarios;
+                if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta" || Solicitudes.Estatus == "Rechazada")
+                {
+                    ViewBag.Deshabilitar = false;
+                }
+                else
+                {
+                    ViewBag.Deshabilitar = true;
+                }
+                return View(SolicitudModel);
             }
-            else
+            catch (Exception)
             {
-                ViewBag.Deshabilitar = true;
+
+                return Redirect("../");
             }
-            return View(SolicitudModel);
 
         }
 
@@ -560,6 +569,32 @@ namespace TravelExpenses.Controllers
 
             SolicitudModel.Monedas = Moneda;
             return View(SolicitudModel);
+        }
+
+        public ActionResult Comentarios()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Comentarios(List<Comentarios> _comentarios)
+        {
+            var comentarios = new Comentarios();
+            try
+            {
+                _comentarios.ForEach(c=>{
+                    comentarios.Comentario = c.Comentario;
+                    comentarios.Folio = c.Folio;
+                    _SolicitudesData.InsertarComentarios(comentarios);
+                });
+                
+                return Json(1);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpPost]
