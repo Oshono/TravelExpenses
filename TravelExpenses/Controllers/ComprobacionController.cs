@@ -8,18 +8,17 @@ using TravelExpenses.Data;
 using TravelExpenses.TravelExpenses.Data;
 using TravelExpenses.ViewModels;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace TravelExpenses.Controllers
 {
-    public class AprobadorController : Controller
+
+    public class ComprobacionController : Controller
     {
         private readonly ISolicitudes SolicitudesData;
         private readonly IComprobante _comprobante;
         private readonly IGasto _gastos;
         private readonly IObservacionDA _ObservacionDA;
         private readonly IMoneda _MonedaData;
-        public AprobadorController(ISolicitudes solicitudes,
+        public ComprobacionController(ISolicitudes solicitudes,
             IComprobante comprobante,
             IGasto gastos,
             IObservacionDA ObservacionDA,
@@ -35,41 +34,41 @@ namespace TravelExpenses.Controllers
 
         // GET: /<controller>/
 
-        public ActionResult AprobarSolicitud()
+        public ActionResult ComprobacionSolicitud()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
-            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
+            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
-            var Estatus = 
+            var Estatus =
                     (from e in SolicitudesData.EstatusSolicitudes()
-                    where e.Status == "Comprobada" | e.Status == "PorAutorizar"
-                           select e
+                     where e.Status == "PorLiberar" | e.Status == "Revisada"
+                     select e
                         );
             solicitud.Estatuses = Estatus;
             return View(solicitud);
         }
- 
+
         public IActionResult SolicitudesEstatus(string estatus)
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            if (estatus.Equals("Comprobada"))
+            if (estatus.Equals("PorLiberar"))
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
                 solicitud.Solicitudes = PorComprobar;
                 return Json(PorComprobar);
             }
-            else if (estatus.Equals("PorAutorizar"))
+            else if (estatus.Equals("Revisada"))
             {
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
                 solicitud.Solicitudes = PorAutorizar;
                 return Json(PorAutorizar);
 
             }
             else
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorComprobar");
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
             }
@@ -77,14 +76,6 @@ namespace TravelExpenses.Controllers
         }
 
 
-
-        public ActionResult Aprobar(string Folio)
-        {
-            ObservacionViewModel solicitud = new ObservacionViewModel();
-            solicitud.Solicitudes = SolicitudesData.ObtenerSolicitudes();
-
-            return View("AprobarSolicitud",solicitud);
-        }
         public ActionResult Detalles(string Folio)
         {
             int FolioSolicitud = 0;
@@ -150,27 +141,28 @@ namespace TravelExpenses.Controllers
             if (viewModel.Operacion == 1)
             {
                 string estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio).Estatus;
-                if (estatus.Equals("PorAutorizar"))
+                if (estatus.Equals("PorLiberar"))
                 {
-                    result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
+                    result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorComprobar");
                 }
-                else if (estatus.Equals("Comprobada"))
+                else if (estatus.Equals("Revisada"))
                 {
-                    result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Revisada");
+                    result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Cerrada");
                 }
             }
             else
             {
                 result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Rechazada");
             }
-            if (result!= 0)
+            if (result != 0)
             {
                 var parametos = new Comentarios
-                    { Comentario = viewModel.Observacion.Descripcion, Folio  = viewModel.Observacion.Folio };
+                    { Comentario = viewModel.Observacion.Descripcion, Folio = viewModel.Observacion.Folio };
                 SolicitudesData.InsertarComentarios(parametos);
             }
-            return RedirectToAction("AprobarSolicitud","Aprobador");
+            return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
         }
 
     }
+
 }

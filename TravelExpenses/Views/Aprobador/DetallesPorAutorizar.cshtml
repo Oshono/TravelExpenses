@@ -1,4 +1,4 @@
-﻿@model TravelExpenses.ViewModels.ObservacionViewModel
+﻿    @model TravelExpenses.ViewModels.ObservacionViewModel
 @{
     ViewData["Title"] = "create";
     Layout = "/Pages/Shared/_Layout.cshtml";
@@ -170,8 +170,8 @@
                                     <td>@destino.IdDestinos</td>
                                     <td>@destino.Nombre</td>
                                     <td>@destino.Descripcion</td>
-                                    <td>@destino.FechaSalida</td>
-                                    <td>@destino.FechaLlegada</td>
+                                    <td>@destino.FechaSalida.ToString("dd/MM/yyy")</td>
+                                    <td>@destino.FechaLlegada.ToString("dd/MM/yyy")</td>
                                     <td>@destino.Motivo</td>
                                     @*<td>@destino.Folio</td>*@
                                     <td>

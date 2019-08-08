@@ -147,6 +147,11 @@ namespace TravelExpenses
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/Account/Login");
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //Redirecciona a login cuando expira la sesión
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/Login";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
