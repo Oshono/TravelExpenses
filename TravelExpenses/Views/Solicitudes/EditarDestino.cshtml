@@ -10,20 +10,19 @@
         <input asp-for="Destino.Folio" class="form-control" hidden id="folio" />
         <input asp-for="Destino.IdDestinos" class="form-control" hidden />
 
-        <label asp-for="ClavePais" class="control-label">País</label>
-        <select asp-for="Pais.ClavePais" class="form-control input-sm Pais" onchange="CargaEstados(this.value);" title="--Seleccione un país"
+        <select asp-for="@Model.Destino.ClavePais" class="form-control input-sm Pais" onchange="CargaEstados(this.value);" title="--Seleccione un país"
                 asp-items="@(new SelectList(Model.Paises, "ClavePais", "Nombre"))">
             <option value="">--Seleccione un País</option>
         </select>
 
-        <label asp-for="IdEstado" class="control-label">Estado</label>
-        <select asp-for="Estado.IdEstado" class="form-control input-sm"
-                asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" onchange="CargaCiudades(this.value);" id="Estado">
+        <label asp-for="@Model.Destino.IdEstado" class="control-label">Estado</label>
+        <select asp-for="@Model.Destino.IdEstado" class="form-control input-sm"
+                asp-items="@(new SelectList(Model.Estados, "IdEstado", "Descripcion"))" onchange="CargaCiudades(this.value);" title="--Seleccione un estado" id="Estado">
             <option value="">--Seleccione un Estado</option>
         </select>
 
         <label asp-for="@Model.Destino.IdCiudad" class="control-label">Ciudad</label>
-        <select asp-for="@Model.Ciudad.IdCiudad" class="form-control input-sm"
+        <select asp-for="@Model.Destino.IdCiudad" class="form-control input-sm"
                 asp-items="@(new SelectList(Model.Ciudades, "IdCiudad", "Descripcion"))" id="Ciudad">
             <option value="">--Seleccione una Ciudad</option>
         </select>
@@ -33,19 +32,32 @@
         <input asp-for="Destino.Motivo" class="form-control" id="Motivo" />
         <span asp-validation-for="@Model.Destino.Motivo" class="text-danger"></span>
 
+        @{ 
+            var fechaSalida = @Model.Destino.FechaSalida.ToString("yyyy-MM-dd");
+            var fechaLlegada = @Model.Destino.FechaLlegada.ToString("yyyy-MM-dd");
+        }
         <label asp-for="@Model.Destino.FechaSalida" class="control-label">Fecha de Salida</label>
-        <input asp-for="@Model.Destino.FechaSalida" class="form-control" id="FechaSalida" />
+        <input asp-for="Destino.FechaSalida" class="form-control" id="FechaSalida" value="@fechaSalida"/>
         <span asp-validation-for="@Model.Destino.FechaSalida" class="text-danger"></span>
 
         <label asp-for="@Model.Destino.FechaLlegada" class="control-label">Fecha de llegada</label>
-        <input asp-for="Destino.FechaLlegada" class="form-control" id="FechaLlegada" />
+        <input asp-for="Destino.FechaLlegada" class="form-control" id="FechaLlegada" value="@fechaLlegada"/>
         <span asp-validation-for="@Model.Destino.FechaLlegada" class="text-danger"></span>
         <br />
         <input type="button" onclick="EditarDestino()" class="btn btn-primary" value="Guardar" />
+        <input type="button" class="btn btn-info" value="Cancelar" onclick="Regresar()" />
     </form>
     </div>
     <script>
-
+        function Regresar() {
+            
+            var urlGet = window.location;
+            var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+            var [, protocolo, servidor, path] = url_analizada;
+            var Folio = path.split("=", 2)
+            window.history.back() = "./Edit?Folio=" + Folio[1];
+            //window.location.href = "/Solicitudes/Edit?Folio=" + Folio[1];
+        }
         function EditarDestino() {
 
             var Folio = $("#folio").val();
@@ -65,7 +77,11 @@
             }
                 else if(Motivo == "" || FechaLlegada == "" || FechaLlegada == "") {
                 alert("Llenar todos los campos");
-            } else {
+            }
+            else if (FechaSalida > FechaLlegada) {
+                alert("La fecha de llegada no puede ser menor que la fecha de salida");
+            }
+            else {
                 
                 $.ajax({
                     url: url,
@@ -78,13 +94,14 @@
 
                     },
                     error: function (error) {
-                        console.log(error);
+                        alert("¡Algo salió mal!");
                     }
                 });
             }
         }
 
         function CargaEstados(ClavePais) {
+            
             var url = "/Solicitudes/CargaEstados/";
             $('#Estado').css({ visibility: 'hidden' });
             $('#Ciudad').css({ visibility: 'hidden' });
@@ -123,8 +140,9 @@
         }
 
         function CargaCiudades(IdEstado) {
+            
             var url = "/Solicitudes/CargaCiudades/";
-            var ClavePais = $("#Pais_ClavePais").val();
+            var ClavePais = $(".Pais").children("option:selected").val();
             $('#Ciudad').css({ visibility: 'hidden' });
             $('#newCiudad').removeAttr('style');
             $.ajax({

@@ -5,11 +5,11 @@
 }
 <h1>Gastos</h1>
 <form id="FormGastos">
-    <input asp-for="Gasto.IdGastos" class="form-control"  hidden />
+    <input asp-for="Gasto.IdGastos" class="form-control" hidden />
     <input asp-for="Gasto.Folio" class="form-control" id="IdGasto" hidden />
 
-    <label asp-for="IdGasto" class="control-label">Concepto</label>
-    <select asp-for="_Gasto.IdGasto" class="form-control input-sm concepto"
+    <label asp-for="@Model.Gasto.IdGasto" class="control-label">Concepto</label>
+    <select asp-for="@Model.Gasto.IdGasto" class="form-control input-sm concepto"
             asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
         <option value="">-- Seleccione un concepto</option>
     </select>
@@ -18,8 +18,8 @@
     <input asp-for="Gasto.ImporteSolicitado" class="form-control" id="ImporteGasto" />
     <span asp-validation-for="@Model.Gasto.ImporteSolicitado" class="text-danger"></span>
 
-    <label asp-for="ClaveMoneda" class="control-label">Moneda </label>
-    <select asp-for="Gasto.ClaveMoneda" class="form-control input-sm MonedaGasto"
+    <label asp-for="@Model.Gasto.ClaveMoneda" class="control-label">Moneda </label>
+    <select asp-for="@Model.Gasto.ClaveMoneda" class="form-control input-sm MonedaGasto"
             asp-items="@(new SelectList(Model.Monedas, "ClaveMoneda", "Descripcion"))">
         <option value="">-- Seleccione una moneda</option>
     </select>
@@ -28,9 +28,20 @@
     <span asp-validation-for="@Model.Gasto.TipoCambios" class="text-danger"></span>
     <br />
     <input type="button" class="btn btn-primary" value="Guardar" onclick="EditarGasto()" />
+    <input type="button" class="btn btn-info" value="Cancelar" onclick="Regresar()" />
+
 </form>
 
 <script>
+    function Regresar() {
+
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2)
+
+        window.history.back() = "./Edit?Folio=" + Folio[1];
+    }
     function EditarGasto() {
         
         var url = "/Solicitudes/EditarGastos/"

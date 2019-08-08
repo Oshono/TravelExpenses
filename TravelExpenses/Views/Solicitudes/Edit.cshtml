@@ -48,16 +48,17 @@
                     @if (@Model.Solicitud.Estatus == "Incompleta" || @Model.Solicitud.Estatus == "Capturada" || @Model.Solicitud.Estatus=="Rechazada")
                     {
 
-                        <div class="col-4">
-                            Concepto
-                            <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo"
-                                    asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion" ))">
-                                <option value="">-- Seleccione una concepto</option>
+                    <div class="col-4">
+                        Concepto
+                        
+                        <select asp-for="@Model.Solicitud.IdTipoSolicitud" class="form-control input-sm Tipo"
+                                asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion" ))">
+                            <option value="">-- Seleccione una concepto</option>
 
-                            </select>
-                            <input asp-for="Solicitud.Folio" hidden id="folio" />
+                        </select>
+                        <input asp-for="Solicitud.Folio" hidden id="folio" />
 
-                        </div>
+                    </div>
                         <div class="col-4">
                             Importe Solicitado
                             <input asp-for="@Model.Solicitud.ImporteSolicitado" disabled required class="form-control" id="Importe"/>
@@ -158,8 +159,8 @@
                                                         <td>@destino.IdDestinos</td>
                                                         <td>@destino.Nombre</td>
                                                         <td>@destino.Descripcion</td>
-                                                        <td>@destino.FechaSalida</td>
-                                                        <td>@destino.FechaLlegada</td>
+                                                        <td>@destino.FechaSalida.ToShortDateString()</td>
+                                                        <td>@destino.FechaLlegada.ToShortDateString()</td>
                                                         <td>@destino.Motivo</td>
                                                         @*<td>@destino.Folio</td>*@
                                                         <td>
@@ -287,7 +288,7 @@
                             <h3>Comentarios</h3>
                             
                             <div class="container">
-                                <input value="Agregar" type="button" id="Button" class="btn" onclick="RegistrarComentario()"/>
+                                <input value="Agregar" type="button" id="Button" class="btn" onclick="RegistrarComentario()" disabled="@ViewBag.Deshabilitar"/>
                                 <div class="table table-responsive">
                                     <table class="table table-hover text-center">
                                         <thead>
