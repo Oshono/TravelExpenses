@@ -48,14 +48,25 @@
                 </div>
             </div>
             <br />
+            <div class="row">
+                <div class="col">
 
-            <input type="button" onclick="EditarDestino(this.value)" class="btn btn-primary" value="Guardar" />
-
+                    <input type="button" onclick="EditarDestino(this.value)" class="btn btn-primary" value="Guardar" />
+                
+                    <input type="button" class="btn btn-info" value="Cancelar" onclick="Regresar()" />
+                </div> 
+            </div> 
         </div>
     </form>
 </div>
 <script>
-
+    function Regresar() {
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2)
+        window.location.href = "./Edit?Folio=" + Folio[1];
+    }
         function EditarDestino(_destinos) {
             var arr = [];
             var urlGet = window.location;

@@ -1,0 +1,84 @@
+﻿@model TravelExpenses.ViewModels.SolicitudesViewModel
+@{
+    ViewData["Title"] = "create";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+@*<div>
+
+        @Html.ActionLink("Link","ListarDestinos","Solicitudes")
+
+
+    @*<partial name="ListarDestinos" model="new TravelExpenses.Core.Destinos { }"/>*@
+@*</div>*@
+<h1>Solicitudes</h1>
+
+
+<div class="text-left">
+    <div class="card">
+        <form id="comentarios">
+            <div class="card-header">
+                <div class="row">
+                    <input type="button" class="btn btn-primary" value="Guardar" onclick="RegistrarComentario(this.value)" /> <br />
+
+                    <input type="button" class="btn btn-info" style="margin-left:8px;" value="Cancelar" onclick="Regresar()" /> <br />
+                </div>
+            </div>
+            <div class="card-body ">
+
+                <h3>Comentarios</h3>
+                <textarea id="Comentarios_" cols="5" rows="7" class="form-control" placeholder="Escribe comentario" style="border-color:gray;"></textarea>
+                <hr />
+
+
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function Regresar() {
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2)
+        window.location.href = "./Edit?Folio=" + Folio[1];
+    }
+    function RegistrarComentario(_comentarios) {
+        debugger;
+        var arr = [];
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2)
+        var url = "/Solicitudes/Comentarios/";
+        var Comentarios = $("#Comentarios_").val();
+        
+        arr.push({
+            Comentario: Comentarios,
+            Folio: Folio[1]
+        });
+        
+        _comentarios = arr;
+        if (Comentarios == "") {
+            alert("Favor de capturar comentario");
+        }
+        else {
+
+            $.ajax({
+                url: url,
+                data: { _comentarios: _comentarios },
+                type: "post",
+                cache: false,
+                success: function (response) {
+                    alert("Comentario Insertado.\n");
+                    window.location.href = "./Edit?Folio=" + Folio[1];
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    }
+
+</script>

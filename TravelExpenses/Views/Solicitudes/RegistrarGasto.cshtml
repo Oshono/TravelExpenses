@@ -27,10 +27,26 @@
     <input asp-for="Gasto.TipoCambios" class="form-control" id="TipoCambio" />
     <span asp-validation-for="@Model.Gasto.TipoCambios" class="text-danger"></span>
     <br />
-    <input type="button" class="btn btn-primary" value="Guardar" onclick="RegistrarGasto(this.value)" />
+
+    <div class="row">
+        <div class="col">
+            <input type="button" class="btn btn-primary" value="Guardar" onclick="RegistrarGasto(this.value)" />
+         
+            <input type="button" class="btn btn-info" value="Cancelar" onclick="Regresar()" />
+        </div> 
+    </div>
+    
+     
 </form>
 
 <script>
+    function Regresar() {
+        var urlGet = window.location;
+        var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
+        var [, protocolo, servidor, path] = url_analizada;
+        var Folio = path.split("=", 2)
+        window.location.href = "./Edit?Folio=" + Folio[1];
+    }
     function RegistrarGasto(_gastos) {
         var arr = [];
         var urlGet = window.location;
