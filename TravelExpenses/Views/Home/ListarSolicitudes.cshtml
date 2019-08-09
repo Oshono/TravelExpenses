@@ -99,7 +99,7 @@
                                 </td>
                             }
                             @if (@item.Estatus == "Incompleta"|| @item.Estatus == "PorAutorizar" ||
-                              @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar"|| @item.Estatus == "Rechazada"||@item.Estatus=="Cancelada")
+                             @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar"|| @item.Estatus == "Rechazada"|| @item.Estatus=="Cancelada"|| @item.Estatus == "Revisada")
                             {
                                 <td>
                                     <a class="btn btn-lg">
@@ -151,24 +151,21 @@
                 else {
                     $.each(response, function (index, item) {
                         if (item.estatus == "Incompleta" ) {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + "$" + item.importeSolicitado + " " + item.claveMoneda +
-                                "</td><td>" + "$" + item.importeComprobado + " " + item.claveMoneda + "</td><td>" + item.estatus +
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" +item.importeSolicitado + "</td><td>" + item.importeComprobado + "</td><td>" + item.estatus +
                                 "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" +
                                 "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
                         }
                         else if (item.estatus == "PorAutorizar" || item.estatus == "PorComprobar" ||
-                            item.estatus == "PorLiberar" || item.estatus == "Rechazada" || item.estatus == "Cancelada")
+                            item.estatus == "PorLiberar" || item.estatus == "Rechazada" || item.estatus == "Cancelada" || item.estatus =="Revisada")
                         {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + "$" + item.importeSolicitado + " " + item.claveMoneda +
-                                "</td><td>" + "$" + item.importeComprobado + " " + item.claveMoneda + "</td><td>" + item.estatus +
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitado+"</td><td>"+ item.importeComprobado+ "</td><td>" + item.estatus +
                                 "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg' > <i class='fas fa-ban'></i></a >" +
                                 "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
                         }
                         else if (item.estatus == "Capturada") {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + "$" + item.importeSolicitado + " " + item.claveMoneda +
-                                "</td><td>" + "$" + item.importeComprobado + " " + item.claveMoneda + "</td><td>" + item.estatus +
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>"+ item.importeSolicitado+"</td><td>" + item.importeComprobado + "</td><td>" + item.estatus +
                                 "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
@@ -176,8 +173,7 @@
                         
 
                         else {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" +"$"+ item.importeSolicitado + " " +item.claveMoneda+
-                                "</td><td>" + "$" + item.importeComprobado + " " +item.claveMoneda+ "</td><td>" + item.estatus +
+                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>"+ item.importeSolicitado+"</td><td>"+ item.importeComprobado + "</td><td>" + item.estatus +
                                 "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td><td>" +
                                 "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";

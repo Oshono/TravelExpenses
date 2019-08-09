@@ -413,20 +413,24 @@ namespace TravelExpenses.Controllers
         public ActionResult EditarDestino(int IdDestinos)
         {
             var SolicitudModel = new SolicitudesViewModel();
-            Destinos obj = new Destinos();
-             
+            //SolicitudModel.Solicitud = new Solicitud();
+            //var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud(); 
+            //SolicitudModel.Solicitudes = TipoSolicitud;
+
+            SolicitudModel.Pais= new Paises();
+
             var destinos = _SolicitudesData.ObtenerDestinosFolio(IdDestinos);
 
-            var Pais = _UbicacionData.ObtenerPaises();
-            var Estado = _UbicacionData.ObtenerEstados("");
+            var Pais = _UbicacionData.ObtenerPaises(); 
+            SolicitudModel.Paises = Pais;
+            var Estado = _UbicacionData.ObtenerEstados(destinos.ClavePais);
 
-            var Ciudad = _UbicacionData.ObtenerCiudades("",0);
+            var Ciudad = _UbicacionData.ObtenerCiudades(destinos.ClavePais,destinos.IdEstado);
 
             SolicitudModel.Estados = Estado;
-            SolicitudModel.Destino = destinos;
+            SolicitudModel.Destino = destinos; 
             SolicitudModel.Ciudades = Ciudad;
 
-            SolicitudModel.Paises = Pais; 
              
             return View(SolicitudModel); 
             
@@ -452,9 +456,9 @@ namespace TravelExpenses.Controllers
 
                 objDestinos.FechaSalida = _destinos.Destino.FechaSalida;
                 objDestinos.FechaLlegada = _destinos.Destino.FechaLlegada;
-                objDestinos.ClavePais = _destinos.Pais.ClavePais;
-                objDestinos.IdCiudad = _destinos.Ciudad.IdCiudad;
-                objDestinos.IdEstado = _destinos.Estado.IdEstado;
+                objDestinos.ClavePais = _destinos.Destino.ClavePais;
+                objDestinos.IdCiudad = _destinos.Destino.IdCiudad;
+                objDestinos.IdEstado = _destinos.Destino.IdEstado;
                 objDestinos.Motivo = _destinos.Destino.Motivo;
                 objDestinos.IdDestinos = _destinos.Destino.IdDestinos;
                 _SolicitudesData.Destinos_Upd(objDestinos);
@@ -491,7 +495,7 @@ namespace TravelExpenses.Controllers
                 var objDestinos = new Gasto();
                 objDestinos.ImporteSolicitado = Gastos_.Gasto.ImporteSolicitado;
                 objDestinos.TipoCambios = Gastos_.Gasto.TipoCambios;
-                objDestinos.IdGasto = Gastos_._Gasto.IdGasto;
+                objDestinos.IdGasto = Gastos_.Gasto.IdGasto;
                 objDestinos.ClaveMoneda = Gastos_.Gasto.ClaveMoneda;
                 objDestinos.IdGastos = Gastos_.Gasto.IdGastos;
                 _SolicitudesData.Gastos_Upd(objDestinos);
@@ -543,15 +547,15 @@ namespace TravelExpenses.Controllers
 
                 objSolicitud.Folio = _Solicitud.Solicitud.Folio;
                 objSolicitud.ClaveMoneda = "MXN";
-                objSolicitud.IdTipoSolicitud = _Solicitud.IdTipoSolicitud;
+                objSolicitud.IdTipoSolicitud = _Solicitud.Solicitud.IdTipoSolicitud;
                 objSolicitud.ImporteSolicitado = _Solicitud.Solicitud.ImporteSolicitado;
                 _SolicitudesData.SolicitudesUpd(objSolicitud);
                 return Json(objSolicitud);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
