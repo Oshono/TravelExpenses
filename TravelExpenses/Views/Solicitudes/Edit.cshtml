@@ -216,6 +216,7 @@
                                                 <th>Concepto</th>
                                                 <th>Monto Máximo</th>
                                                 <th>Importe Solicitado</th>
+                                                <th>Cantidad comprobada</th>
                                                 <th>Descripcion</th>
                                                 <th>Tipo Cambio</th>
                                                 <th>Editar</th>
@@ -241,6 +242,7 @@
                                                     {
                                                         <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
                                                     }
+                                                        <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
                                                     <td>@g.Descripcion</td>
                                                     <td>@g.TipoCambios</td>
                                                     <td>

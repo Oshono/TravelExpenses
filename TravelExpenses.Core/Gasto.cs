@@ -17,5 +17,6 @@ namespace TravelExpenses.Core
         public string Descripcion { get; set; }
         public string Nombre { get; set; }
         public string Empresa { get; set; }
+        public double CantidadComprobada { get; set; }
     }
 }
