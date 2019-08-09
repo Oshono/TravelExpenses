@@ -9,5 +9,10 @@ namespace TravelExpenses.Core
         public int IdComentarios { get; set; }
         public string Comentario { get; set; }
         public int Folio { get; set; }
+
+        public static implicit operator Comentarios(List<Comentarios> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
