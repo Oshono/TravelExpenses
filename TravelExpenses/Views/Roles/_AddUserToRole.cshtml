@@ -4,6 +4,7 @@
 }
 
 <div>
+    
     <form asp-controller="Roles" asp-action="UpdateUserRole" method="post">
         <h2>Agregar Roles a usuario</h2>
 
@@ -48,8 +49,8 @@
                 </option>
             }
         </select>
-
-
+        <br />
+        
         <input type="submit" class="btn btn-primary" value="Eliminar Usuario" onclick="document.getElementById('DeleteUser').value = 'true'" />
         <input type="submit" class="btn btn-primary" value="Consultar Permisos" onclick="document.getElementById('Consultar').value = 'true'" />
         <input type="submit" class="btn btn-primary" value="Agregar Role" />
