@@ -8,7 +8,7 @@
         <h2>Agregar Roles a usuario</h2>
 
         <label>Usuario</label>
-        <select asp-for="UserEmail" class="form-control" onchange="SelectItem()">
+        <select asp-for="UserEmail" class="form-control" >
             <option>Selecciona un usuario</option>
 
             @{
@@ -22,22 +22,23 @@
 
         </select>
         <label>Centro de Costos</label>
-        <select asp-for="ClaveCentroCosto" class="form-control" onchange="SelectItem()">
+       
+        <select asp-for="ClaveCentroCosto" class="form-control" >
             <option>Selecciona un Centro de Costos</option>
 
             @{
                 foreach (var item in Model.CentroCostos)
                 {
-                    <option>
+                    <option value="@item.ClaveCentroCosto">
                         @item.Nombre
-                     </option>
+                    </option>
                 }
             }
 
         </select>
 
         <label>Roles a agregar</label>
-        <select asp-for="Role" class="form-control" onchange="SelectItem()">
+        <select asp-for="Role" class="form-control" >
             <option>Selecciona un Role</option>
 
             @foreach (var role in Model.Roles)
@@ -47,7 +48,7 @@
                 </option>
             }
         </select>
-        
+
 
         <input type="submit" class="btn btn-primary" value="Eliminar Usuario" onclick="document.getElementById('DeleteUser').value = 'true'" />
         <input type="submit" class="btn btn-primary" value="Consultar Permisos" onclick="document.getElementById('Consultar').value = 'true'" />
@@ -61,11 +62,3 @@
    
 </div>
 
-<script>
-
-    function SelectItem() {
-       
-    }
-
-
-</script>

@@ -116,6 +116,7 @@ namespace TravelExpenses.Controllers
         public async Task<IActionResult> UpdateUserRole(UpdateUserRoleViewModel vm)
         {
             var user = await _userManager.FindByEmailAsync(vm.UserEmail);
+            var CostosUsuario = new CentroCostoUsuario();
 
             if (vm.Delete)
             {
@@ -134,9 +135,13 @@ namespace TravelExpenses.Controllers
                 
             if(vm.Role!=null)
             {
+                CostosUsuario.ClaveCentroCosto = vm.ClaveCentroCosto;
+                CostosUsuario.Id = user.Id;
                 await _userManager.AddToRoleAsync(user, vm.Role);
+                _centro.GuardarCentroConstosUsuario(CostosUsuario);
                 await _emailSender.SendEmailAsync(vm.UserEmail, "Permisos otorgados.",
                        $"Se te ha otorgado permisos de "+ vm.Role);
+
                 return RedirectToAction("Index");
             }
 
