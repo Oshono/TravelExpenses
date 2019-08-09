@@ -516,8 +516,15 @@
         console.log(ele[item]['Ciudad'])
 
         var destino = $("#Destino").val();
-        destino = ele[item]['Ciudad'];
-         
+
+        destino = ele[item];
+        ele.push({
+            destino
+        })
+        for (var i = 0; i <= ele.length; i++) {
+            ele.splice(i, 1);
+        }
+        console.log(ele);
         //$('#data').html(destino);
         //$('#dataModal').modal("show");
 
