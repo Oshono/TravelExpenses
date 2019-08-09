@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using TravelExpenses.Services;
+using TravelExpenses.Core;
 
 namespace TravelExpenses.Controllers
 {
@@ -17,26 +18,32 @@ namespace TravelExpenses.Controllers
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly ICentroCosto _centro;
 
         public RolesController(
             ApplicationDbContext context,
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-             IEmailSender emailSender)
+             IEmailSender emailSender,
+             ICentroCosto centro)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
             _emailSender = emailSender;
+            _centro = centro;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string Mesaje)
         {
             var roles = _context.Roles.ToList();
             var users = _context.Users.ToList();
             var userRoles = _context.UserRoles.ToList();
+            var centroCostos = _centro.ObtenerCentroCostos();
 
-            var convertedUsers = users.Select(x => new UsersViewModel
+            IEnumerable<CentroCosto> costos = centroCostos;
+
+           var convertedUsers = users.Select(x => new UsersViewModel
             {
                 Email = x.Email,
                 Roles = roles
@@ -47,10 +54,16 @@ namespace TravelExpenses.Controllers
                     })
             });
 
+           //DisplayViewModel Model = new DisplayViewModel();
+           // Model.CentroCostos=new IEnumerable<CentroCosto>({ });
+
+
             return View(new DisplayViewModel
             {
                 Roles = roles.Select(x => x.NormalizedName),
-                Users = convertedUsers
+                Users = convertedUsers,
+                CentroCostos= costos,
+                Mesaje=Mesaje//.Select(x=>x.Nombre)
             });
         }
 
@@ -105,12 +118,13 @@ namespace TravelExpenses.Controllers
         public async Task<IActionResult> UpdateUserRole(UpdateUserRoleViewModel vm)
         {
             var user = await _userManager.FindByEmailAsync(vm.UserEmail);
+            var CostosUsuario = new CentroCostoUsuario();
 
             if (vm.Delete)
             {
                 await _userManager.RemoveFromRoleAsync(user, vm.Role);
                 await _userManager.DeleteAsync(user);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { Mesaje = "Eliminacion de Role "+vm.Role+ " al usuario"+ user.UserName });
             }
                 
             if (vm.DeleteUser)
@@ -123,10 +137,14 @@ namespace TravelExpenses.Controllers
                 
             if(vm.Role!=null)
             {
+                CostosUsuario.ClaveCentroCosto = vm.ClaveCentroCosto;
+                CostosUsuario.Id = user.Id;
                 await _userManager.AddToRoleAsync(user, vm.Role);
+                _centro.GuardarCentroConstosUsuario(CostosUsuario);
                 await _emailSender.SendEmailAsync(vm.UserEmail, "Permisos otorgados.",
                        $"Se te ha otorgado permisos de "+ vm.Role);
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", new { Mesaje = "Exitoso Role agragado a "+user.UserName });
             }
 
             if (vm.Consultar)
@@ -135,7 +153,7 @@ namespace TravelExpenses.Controllers
                 return RedirectToAction("ConsultarPermisos","Roles", new { Email = vm.UserEmail })
 ;            }
             else
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",new  { Mesaje="Selesione una opcion valida"});
 
            
         }
@@ -145,6 +163,8 @@ namespace TravelExpenses.Controllers
     {
         public IEnumerable<string> Roles { get; set; }
         public IEnumerable<UsersViewModel> Users { get; set; }
+        public IEnumerable<CentroCosto> CentroCostos { get; set; }
+        public string Mesaje { get; set; }
 
     }
 
@@ -152,6 +172,7 @@ namespace TravelExpenses.Controllers
     {
         public string Email { get; set; }
         public IEnumerable<UsersRole> Roles { get; set; }
+        public string ClaveCentroCosto { get; set; }
     }
 
     public class UsersRole
@@ -168,12 +189,13 @@ namespace TravelExpenses.Controllers
     {
         public IEnumerable<UsersViewModel> Users { get; set; }
         public IEnumerable<string> Roles { get; set; }
-
+        public IEnumerable<CentroCosto> CentroCostos { get; set; }
 
         public string UserEmail { get; set; }
         public string Role { get; set; }
         public bool Delete { get; set; }
         public bool DeleteUser { get; set; }
         public bool Consultar { get; set; }
+        public string ClaveCentroCosto { get; set; }
     }
 }

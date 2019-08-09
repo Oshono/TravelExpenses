@@ -68,7 +68,7 @@ namespace TravelExpenses.Controllers
             else
             {
                 var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorComprobar");
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
             }
@@ -78,50 +78,67 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Detalles(string Folio)
         {
-            int FolioSolicitud = 0;
-            var rembolso = new ObservacionViewModel();
-            if (int.TryParse(Folio, out FolioSolicitud))
+            try
             {
-                rembolso.Comprobantes = new List<Comprobante>();
-                rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-                var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
-                rembolso.Solicitud = solicitud;
-                rembolso.Observacion = new Observacion();
-                rembolso.Observacion.Folio = Convert.ToInt16(Folio);
+                int FolioSolicitud = 0;
+                var rembolso = new ObservacionViewModel();
+                if (int.TryParse(Folio, out FolioSolicitud))
+                {
+                    rembolso.Comprobantes = new List<Comprobante>();
+                    rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+                    var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                    rembolso.Solicitud = solicitud;
+                    rembolso.Observacion = new Observacion();
+                    rembolso.Observacion.Folio = Convert.ToInt16(Folio);
+                    var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+                    rembolso.comentarios = comentarios;
+                }
+                return View(rembolso);
             }
-            return View(rembolso);
+            catch (Exception e)
+            {
+                return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
+            }
+            
         }
 
         public ActionResult DetallesPorAutorizar(int Folio)
         {
-            var SolicitudModel = new ObservacionViewModel();
-            SolicitudModel.Observacion = new Observacion();
-            SolicitudModel.Observacion.Folio = Folio;
-            SolicitudModel.Solicitud = new Solicitud();
-            SolicitudModel.Gasto = new Gasto();
-
-            var Moneda = _MonedaData.ObtenerMonedas()
-                .OrderBy(x => x.Descripcion).ToList();
-            SolicitudModel.Monedas = Moneda;
-            var TipoSolicitud = SolicitudesData.ObtenerTipoSolicitud();
-            var Solicitudes = SolicitudesData.SolicitudesXFolio(Folio);
-            SolicitudModel.Solicitudes = TipoSolicitud;
-            var Gastos = SolicitudesData.ObtenerGastos(Folio);
-            var Destinos = SolicitudesData.DestinosXFolio(Folio);
-
-            SolicitudModel._GastosA = Gastos;
-            SolicitudModel.Solicitud = Solicitudes;
-            SolicitudModel.Destinos = Destinos;
-            if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta")
+            try
             {
-                ViewBag.Deshabilitar = false;
+                var SolicitudModel = new ObservacionViewModel();
+                SolicitudModel.Solicitud = new Solicitud();
+                SolicitudModel.Gasto = new Gasto();
+
+                var Moneda = _MonedaData.ObtenerMonedas()
+                    .OrderBy(x => x.Descripcion).ToList();
+                SolicitudModel.Monedas = Moneda;
+                var TipoSolicitud = SolicitudesData.ObtenerTipoSolicitud();
+                var Solicitudes = SolicitudesData.SolicitudesXFolio(Folio);
+                SolicitudModel.Solicitudes = TipoSolicitud;
+                var Gastos = SolicitudesData.ObtenerGastos(Folio);
+                var Destinos = SolicitudesData.DestinosXFolio(Folio);
+                var comentarios = SolicitudesData.ObtenerComentario(Folio);
+                SolicitudModel._GastosA = Gastos;
+                SolicitudModel.Solicitud = Solicitudes;
+                SolicitudModel.Destinos = Destinos;
+                SolicitudModel.comentarios = comentarios;
+                if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta" || Solicitudes.Estatus == "Rechazada")
+                {
+                    ViewBag.Deshabilitar = false;
+                }
+                else
+                {
+                    ViewBag.Deshabilitar = true;
+                }
+                return View(SolicitudModel);
             }
-            else
+            catch (Exception)
             {
-                ViewBag.Deshabilitar = true;
+
+                return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
             }
 
-            return View(SolicitudModel);
         }
 
         public ActionResult DetallesComprobacion(string UUID)

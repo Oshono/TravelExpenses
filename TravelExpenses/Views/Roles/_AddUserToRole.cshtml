@@ -4,11 +4,12 @@
 }
 
 <div>
+    
     <form asp-controller="Roles" asp-action="UpdateUserRole" method="post">
         <h2>Agregar Roles a usuario</h2>
 
-
-        <select asp-for="UserEmail" class="form-control" onchange="SelectItem()">
+        <label>Usuario</label>
+        <select asp-for="UserEmail" class="form-control" >
             <option>Selecciona un usuario</option>
 
             @{
@@ -21,20 +22,37 @@
             }
 
         </select>
+        <label>Centro de Costos</label>
+       
+        <select asp-for="ClaveCentroCosto" class="form-control" >
+            <option>Selecciona un Centro de Costos</option>
 
-        <input type="submit" class="btn btn-primary" value="Eliminar Usuario" onclick="document.getElementById('DeleteUser').value = 'true'" />
-        <input type="submit" class="btn btn-primary" value="Consultar Permisos" onclick="document.getElementById('Consultar').value = 'true'" />
-        @*<input type="button" class="btn btn-primary" value="Consultar" onclick="location.href='@Url.Action("ObternerPermisos", "Roles", new {email=Model.Users})'" />*@
-        <h4>Roles a agregar</h4>
-        <ul>
+            @{
+                foreach (var item in Model.CentroCostos)
+                {
+                    <option value="@item.ClaveCentroCosto">
+                        @item.Nombre
+                    </option>
+                }
+            }
+
+        </select>
+
+        <label>Roles a agregar</label>
+        <select asp-for="Role" class="form-control" >
+            <option>Selecciona un Role</option>
+
             @foreach (var role in Model.Roles)
             {
-                <li>
-                    <input type="radio" asp-for="Role" value="@role" />
+                <option>
                     @role
-                </li>
+                </option>
             }
-        </ul>
+        </select>
+        <br />
+        
+        <input type="submit" class="btn btn-primary" value="Eliminar Usuario" onclick="document.getElementById('DeleteUser').value = 'true'" />
+        <input type="submit" class="btn btn-primary" value="Consultar Permisos" onclick="document.getElementById('Consultar').value = 'true'" />
         <input type="submit" class="btn btn-primary" value="Agregar Role" />
         <input type="hidden" class="btn btn-primary" asp-for="Delete" value="false" id="Eliminar" />
         <input type="hidden" class="btn btn-primary" asp-for="DeleteUser" value="false" id="DeleteUser" />
@@ -45,11 +63,3 @@
    
 </div>
 
-<script>
-
-    function SelectItem() {
-       
-    }
-
-
-</script>

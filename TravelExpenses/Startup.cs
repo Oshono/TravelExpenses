@@ -84,7 +84,7 @@ namespace TravelExpenses
                  options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20);
                  options.Lockout.MaxFailedAccessAttempts = 100;
                  options.Lockout.AllowedForNewUsers = true;
 
