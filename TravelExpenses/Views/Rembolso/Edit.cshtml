@@ -6,41 +6,49 @@
 <div class="dropzone-area">
     <div class="container">
         @if (Model.solicitud != null)
-        { 
+        {
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label">Folio Solicitud: @Model.solicitud.Folio</label>
                         <label class="control-label">Departamento: @Model.solicitud.Departamento</label>
                         <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.solicitud.ImporteSolicitado)
-                    </div>                
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    Enviar para Autorización
+                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@Model.solicitud.Folio">
+                        <i class="fas fa-paper-plane"></i>
+                    </a>
                 </div>
             </div>
         }
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="dropdone-nk mg-t-30">
-                        <div class="cmp-tb-hd">
-                            <h2>Arrastre y suelte los documentos</h2>
-                            <p>Solo puede subir archivos XML, PDF o imagénes.</p>
-                        </div>
-                        <div id="dropzone1" class="multi-uploader-cs">
-                            <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
-                                <input type="hidden" asp-for="@Model.solicitud.Folio" />
-                                <div class="dz-message needsclick download-custom">
-                                    <i class="alert-info"></i>
-                                    <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
-                                    <p>
-                                        <span class="note needsclick">(Los archivos se guardan <strong>automaticamente</strong>)</span>
-                                    </p>
-                                </div>
+                    <div class="cmp-tb-hd">
+                        <h2>Arrastre y suelte los documentos</h2>
+                        <p>Solo puede subir archivos XML, PDF o imagénes.</p>
+                    </div>
+                    <div id="dropzone1" class="multi-uploader-cs">
+                        <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
+                            <input type="hidden" asp-for="@Model.solicitud.Folio" />
+                            <div class="dz-message needsclick download-custom">
+                                <i class="alert-info"></i>
+                                <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
+                                <p>
+                                    <span class="note needsclick">(Los archivos se guardan <strong>automaticamente</strong>)</span>
+                                </p>
+                            </div>
 
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 <h1>Comprobantes</h1>

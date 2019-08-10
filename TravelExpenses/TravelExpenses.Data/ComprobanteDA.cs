@@ -46,24 +46,32 @@ namespace TravelExpenses.Data
 
         public Comprobante ObtenerComprobantesXID(string UUID)
         {
-            var catProdServ = _prodserv.ObtenerCatalogo();
-
             var comprobante =  db.Comprobante.Where(x=>x.UUID == UUID).FirstOrDefault();
             comprobante.Archivos = db.Archivos.Where(x=>x.UUID == UUID).ToList();
-            comprobante.Conceptos = db.Concepto.Where(x => x.UUID == UUID).ToList();
+            comprobante.Conceptos = db.Concepto.Join(db.CatProdServSAT,
+                                                    x=>x.ClaveProdServ, y=>y.ClaveProdServ,
+                                                    (x, y) => new Concepto
+                                                    {
+                                                        IdConcepto = x.IdConcepto,
+                                                        UUID = x.UUID,
+                                                        Importe = x.Importe,
+                                                        ValorUnitario = x.ValorUnitario,
+                                                        Descripcion = x.Descripcion,
+                                                        Unidad = x.Unidad,
+                                                        ClaveUnidad = x.ClaveUnidad,
+                                                        Cantidad = x.Cantidad,
+                                                        NoIdentificacion = x.NoIdentificacion,
+                                                        ClaveProdServ = x.ClaveProdServ,
+                                                        TasaOCuota = x.TasaOCuota,
+                                                        TipoFactor = x.TipoFactor,
+                                                        Impuesto = x.Impuesto,
+                                                        Base = x.Base,
+                                                        IdGasto = x.IdGasto,
+                                                        DescripcionProdServ = y.Descripcion,
+                                                        MensajeError = x.MensajeError,
+                                                    }) .Where(x => x.UUID == UUID).ToList();
 
-            if (comprobante.Conceptos.Count() > 0)
-            {
-                foreach (var concepto in comprobante.Conceptos)
-                {
-                    var catprodserv = catProdServ.FirstOrDefault(x => x.ClaveProdServ == concepto.ClaveProdServ);
 
-                    if (catprodserv != null)
-                    {
-                        concepto.DescripcionProdServ = catprodserv.Descripcion;
-                    }
-                }
-            }
             return comprobante;
         }
         public int Guardar(Comprobante comprobante)
