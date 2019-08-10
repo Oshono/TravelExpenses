@@ -171,7 +171,7 @@
                                                     <th>Motivo</th>
 
                                                     @*<th>Editar</th>
-                                                    <th>Eliminar</th>*@
+                                    <th>Eliminar</th>*@
 
                                                 </tr>
                                             </thead>
@@ -188,34 +188,34 @@
                                                         <td>@destino.Motivo</td>
                                                         @*<td>@destino.Folio</td>*@
                                                         @*<td>
-                                                            @if (@ViewBag.Deshabilitar == true)
-                                                            {
-                                                                <a class="btn btn-lg">
-                                                                    <i class="fas fa-ban "></i>
-                                                                </a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarDestino" asp-route-IdDestinos="@destino.IdDestinos" id="accion">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                            }
-                                                        </td>
+                                            @if (@ViewBag.Deshabilitar == true)
+                                            {
+                                                <a class="btn btn-lg">
+                                                    <i class="fas fa-ban "></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarDestino" asp-route-IdDestinos="@destino.IdDestinos" id="accion">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            }
+                                        </td>
 
-                                                        <td>
-                                                            @if (@ViewBag.Deshabilitar == true)
-                                                            {
-                                                                <a class="btn btn-lg">
-                                                                    <i class="fas fa-ban "></i>
-                                                                </a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="btn btn-lg" onclick="EliminarDestino(@destino.IdDestinos)" id="accion">
-                                                                    <i class="fas fa-eraser"></i>
-                                                                </a>
-                                                            }
-                                                        </td>*@
+                                        <td>
+                                            @if (@ViewBag.Deshabilitar == true)
+                                            {
+                                                <a class="btn btn-lg">
+                                                    <i class="fas fa-ban "></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-lg" onclick="EliminarDestino(@destino.IdDestinos)" id="accion">
+                                                    <i class="fas fa-eraser"></i>
+                                                </a>
+                                            }
+                                        </td>*@
                                                     </tr>
 
                                                 }
@@ -237,15 +237,14 @@
                                         <thead>
 
                                             <tr>
-                                                <th>#</th>
                                                 <th>Empresa</th>
                                                 <th>Concepto</th>
                                                 <th>Monto Máximo</th>
                                                 <th>Importe Solicitado</th>
-                                                <th>Descripcion</th>
+                                                <th>Cantidad comprobada</th>
+                                                <th>Moneda</th>
                                                 <th>Tipo Cambio</th>
-                                                <th>Editar</th>
-                                                <th>Eliminar</th>
+
 
 
                                             </tr>
@@ -254,51 +253,24 @@
                                             @foreach (var g in @Model._GastosA)
                                             {
                                                 <tr>
-                                                    <td>@g.IdGastos</td>
                                                     <td>@g.Empresa</td>
                                                     <td>@g.Nombre</td>
 
 
-                                                    <td>@g.MontoMaximo</td>
+                                                    <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
                                                     @if (@g.MontoMaximo < @g.ImporteSolicitado)
                                                     {
-                                                        <td style="color:red;">@g.ImporteSolicitado</td>
+                                                        <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
                                                     }
                                                     else
                                                     {
-                                                        <td style="color:green;">@g.ImporteSolicitado</td>
+                                                        <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
                                                     }
+                                                    <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
                                                     <td>@g.Descripcion</td>
                                                     <td>@g.TipoCambios</td>
-                                                    <td>
-                                                        @if (@ViewBag.Deshabilitar == true)
-                                                        {
-                                                            <a class="btn btn-lg">
-                                                                <i class="fas fa-ban "></i>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @if (@ViewBag.Deshabilitar == true)
-                                                        {
-                                                            <a class="btn btn-lg">
-                                                                <i class="fas fa-ban "></i>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion">
-                                                                <i class="fas fa-eraser"></i>
-                                                            </a>
-                                                        }
-
-                                                    </td>
+                                                   
+                                                    
                                                 </tr>
                                             }
                                         </tbody>
@@ -311,7 +283,6 @@
                             <h3>Comentarios</h3>
 
                             <div class="container">
-                                <input value="Agregar" type="button" id="Button" class="btn" onclick="RegistrarComentario()" disabled="@ViewBag.Deshabilitar" />
                                 <div class="table table-responsive">
                                     <table class="table table-hover text-center">
                                         <thead>
