@@ -1,7 +1,7 @@
 ﻿@model TravelExpenses.ViewModels.RembolsoViewModel
 <link rel="stylesheet" href="~/vendors/dropzone/dropzone.css">
 
-<h1>Rembolso</h1>
+<h1>Reembolso</h1>
 
 <div class="dropzone-area">
     <div class="container">
@@ -68,13 +68,7 @@
                             </th>
                             <th>
                                 Moneda
-                            </th>
-                            <th>
-                                Subtotal
-                            </th>
-                            <th>
-                                Impuestos
-                            </th>
+                            </th>                            
                             <th>
                                 Total
                             </th>
@@ -83,6 +77,9 @@
                             </th>
                             <th>
                                 Descargar
+                            </th>
+                            <th>
+                                Solicitar Autorización
                             </th>
                             <th>
                                 Eliminar
@@ -94,32 +91,41 @@
                         {
                             foreach (var comprobante in Model.Comprobantes)
                             {
-                                <tr>
-                                    <td><label class="alert-danger">@comprobante.MensajeError</label> @comprobante.Folio</td>
-                                    <td>@comprobante.UUID</td>
-                                    <td>@comprobante.Fecha</td>
-                                    <td>@comprobante.RFC</td>
-                                    <td>@comprobante.NombreProveedor</td>
-                                    <td>@comprobante.Moneda</td>
-                                    <td>@comprobante.SubTotal</td>
-                                    <td>@comprobante.Impuestos</td>
-                                    <td>@comprobante.Total</td>
-                                    <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
-                                            <i class="fas fa-file-download"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
-                                            <i class="fas fa-eraser"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(comprobante.MensajeError))
+                                {
+                                    <label class="alert-danger">comprobante.MensajeError</label>
+                                }
+                                @comprobante.Folio
+                            </td>
+                            <td>@comprobante.UUID</td>
+                            <td>@comprobante.Fecha.ToShortDateString()</td>
+                            <td>@comprobante.RFC</td>
+                            <td>@comprobante.NombreProveedor</td>
+                            <td>@comprobante.Moneda</td>
+                            <td>@string.Format("{0:C}", @comprobante.Total)</td>
+                            <td align="center">
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-file-download"></i>
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@comprobante.FolioSolicitud">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
+                                    <i class="fas fa-eraser"></i>
+                                </a>
+                            </td>
+                        </tr>
                             }
                         }
                     </tbody>
@@ -161,15 +167,25 @@
                     $.each(args[1], function (index, item) {
 
                         console.log(item);
-                        row += "<tr><td><label class='alert-danger'>" + item.mensajeError +"</label>" + item.folio + "</td><td>"
+
+                        var mensaje = '';
+
+                        if (item.mensajeError != null)
+                        {
+                            mensaje = "<label class='alert-danger'>" + item.mensajeError + "</label>";
+                        }
+
+                        row += "<tr><td>" + mensaje + item.folio + "</td><td>"
                             + item.uuid  + "</td><td>"
                             + item.fecha + "</td><td>"
                             + item.rfc + "</td><td>"
                             + item.nombreProveedor + "</td><td>"
                             + item.moneda + "</td><td>"
-                            + item.subTotal + "</td><td>"
-                            + item.impuestos + "</td><td>"
-                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid +"'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid + "'><i class='fas fa-eraser'></i></a></td></tr>";
+                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid
+                            + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid
+                            + "'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/EnviarReembolso?UUID=" + item.uuid
+                            + "'><i class='fas fa-paper-plane'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid
+                            + "'><i class='fas fa-eraser'></i></a></td></tr>";
                     });
                     $("#tblComprobantes").html(row);  
                     this.removeFile(data);
