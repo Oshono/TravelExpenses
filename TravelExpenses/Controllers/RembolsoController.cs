@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -246,6 +247,7 @@ namespace TravelExpenses.Controllers
             var InputFileName = Path.GetFileNameWithoutExtension(file.FileName).Replace(",", "-");
             InputFileName = InputFileName.Replace(" ", "-") + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var Extension = Path.GetExtension(file.FileName);
 
@@ -259,13 +261,39 @@ namespace TravelExpenses.Controllers
             }
             else
             {
+
+                //Generar solicitud
+                var miSolicitud = new Solicitud();
+
+                var maxFolio = _solicitud.ObtenerIdSolicitud().FirstOrDefault().IdFolio + 1;
+                FolioSolicitud = maxFolio;
+
+                miSolicitud.FechaSolicitud = DateTime.Now;
+                miSolicitud.Folio = maxFolio;
+                miSolicitud.IdTipoSolicitud = 2;
+                miSolicitud.Departamento = "TI";
+                miSolicitud.Empresa = "CAP000101";  //Leer empresa de Usuario
+                miSolicitud.ImporteSolicitado = 0;
+                miSolicitud.ImporteComprobado = 0;
+                miSolicitud.Estatus = "PorComprobar";
+                miSolicitud.IdEstado = 0;
+                miSolicitud.Id = userId;
+                miSolicitud.RFC = "CAP000101";
+                miSolicitud.ClaveMoneda = "MXN";
+
+
+                var miFolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
+
+
+
                 comprobante.Add (new Comprobante());
                 comprobante.FirstOrDefault().UUID = Guid.NewGuid().ToString();
                 comprobante.FirstOrDefault().Fecha = DateTime.Now;
-                comprobante.FirstOrDefault().Folio = "Sin Folio";
+                comprobante.FirstOrDefault().Folio = comprobante.FirstOrDefault().UUID;
                 comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
                 comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
-                comprobante.FirstOrDefault().FolioSolicitud = FolioSolicitud;
+                comprobante.FirstOrDefault().FolioSolicitud = maxFolio;
+                
             }
 
             comprobante.FirstOrDefault().Archivos = new List<Archivo>();
@@ -274,7 +302,7 @@ namespace TravelExpenses.Controllers
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().NombreArchivo = InputFileName;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().Ruta = "\\UploadFile\\" + InputFileName;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().Extension = Extension;
-            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Usuario = "b2b8325e-5ff6-4a36-b028-48b1c0f87c6e";
+            comprobante.FirstOrDefault().Archivos.FirstOrDefault().Usuario = userId;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().FechaAlta = DateTime.Now;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().UUID = comprobante.FirstOrDefault().UUID;
             
@@ -374,15 +402,21 @@ namespace TravelExpenses.Controllers
             };
         }
 
-        [HttpPost]
+        //[HttpPost]
+        //[Authorize]
+        //public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
+        //{
+        //    _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Comprobada");
+        //    return Redirect("/rembolso/Lista");
+        //}
+
+        
         [Authorize]
-        public ActionResult EnviarReembolso(RembolsoViewModel rembolso)
+        public ActionResult EnviarReembolso(int FolioSolicitud)
         {
-            _solicitud.ActualizarEstatus(rembolso.Comprobante.FolioSolicitud, "Comprobada");
+            _solicitud.ActualizarEstatus(FolioSolicitud, "Comprobada");
             return Redirect("/rembolso/Lista");
         }
-
-
 
         private List<Comprobante>  CargaXML(IFormFile formFile)
         {
@@ -444,7 +478,6 @@ namespace TravelExpenses.Controllers
                         {
                             concepto.Base = float.Parse(conceptoXML.Attribute("Base").Value);
                         }
-                        concepto.Cantidad = float.Parse(conceptoXML.Attribute("ClaveProdServ").Value);
                         concepto.ClaveUnidad = conceptoXML.Attribute("ClaveUnidad").Value;
                         concepto.Descripcion = conceptoXML.Attribute("Descripcion").Value;
 
