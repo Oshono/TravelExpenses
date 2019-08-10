@@ -25,7 +25,8 @@ namespace TravelExpenses.ViewModels
         public string Error { get; set; }
         public IEnumerable<Estatus> Estatuses { get; set; }
         public Estatus Estatus { get; set; }
-
+        public IEnumerable<Comentarios> comentarios { get; set; }
+        public Comentarios comentario { get; set; }
 
     }
 }

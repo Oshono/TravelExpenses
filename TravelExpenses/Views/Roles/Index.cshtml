@@ -5,12 +5,19 @@
 
     <div>
         <br />
+        @if (Model.Mesaje!= null)
+        {
+            <div class="alert alert-info alert-dismissible fade show">
+                <p><strong>Completado:</strong>@Model.Mesaje</p>
+            </div>
+        }
+        <p> </p>
         <div class="row w-100 mx-0">
-            <partial name="_AddUserToRole" model="new TravelExpenses.Controllers.UpdateUserRoleViewModel() { Users = Model.Users, Roles = Model.Roles }">
+            <partial name="_AddUserToRole" model="new TravelExpenses.Controllers.UpdateUserRoleViewModel() { Users = Model.Users, Roles = Model.Roles,CentroCostos=Model.CentroCostos }">
         </div>
 
         <br />
-        <div class="class=" col-lg-6">
+        @*<div class="class=" col-lg-6">
             <h2>Lista de Roles</h2>
             <br />
             <ul>
@@ -21,10 +28,10 @@
                     </li>
                 }
             </ul>
-        </div>
-        <div class="class=" col-lg-6">
+        </div>*@
+        @*<div class="class=" col-lg-6">
             <partial name="_CreateRole" model="new TravelExpenses.Controllers.RoleViewModel()">
-        </div>
+        </div>*@
         <div class="row w-100 mx-0">
             <br />
             <br />

@@ -21,6 +21,7 @@ namespace TravelExpenses.Data
         public DbSet<Solicitud> Solicitudes { get; set; }
         public DbSet<Destinos> Destinos { get; set; }
         public DbSet<CentroCosto> CatCentroCostos { get; set; }
+        public DbSet<CentroCostoUsuario> CatCentroCostoUsuario { get; set; }
         public DbSet<CentroCostoEmpresa> CentroCosto_Empresa { get; set; }
         public DbSet<Ciudades> Ciudades { get; set; }
         public DbSet<Paises> Paises { get; set; }
@@ -42,6 +43,8 @@ namespace TravelExpenses.Data
                 table.IdPolitica,
                 table.IdGasto
             });
+
+            builder.Entity<CentroCostoUsuario>().HasKey(table => new { table.ClaveCentroCosto, table.Id });
         }
     }
 }

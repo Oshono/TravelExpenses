@@ -59,10 +59,41 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+        public int GuardarCentroConstosUsuario(CentroCostoUsuario centroCostoUsuario)
+        {
+            try
+            {
+                int result = 0;
+                if (centroCostoUsuario != null)
+                {
+                    if (ExistsUser(centroCostoUsuario.ClaveCentroCosto,centroCostoUsuario.Id))
+                    {
+                        db.Update(centroCostoUsuario);
+                    }
+                    else
+                    {
+                        db.Add(centroCostoUsuario);
+                    }
+
+                    result = Commit();
+
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         private bool Exists(string ClaveCentroCosto)
         {
             return db.CatCentroCostos.Any(e => e.ClaveCentroCosto == ClaveCentroCosto);
+        }
+        private bool ExistsUser(string ClaveCentroCosto,string Id)
+        {
+            return db.CatCentroCostoUsuario.Any(e => e.ClaveCentroCosto == ClaveCentroCosto && e.Id==Id);
         }
         public int Commit()
         {
