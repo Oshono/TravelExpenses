@@ -39,8 +39,8 @@
                                 <td>@item.Folio</td>
                                 <td>@item.Descripcion</td>
                                 <td>@item.UserName</td>
-                                <td>@item.ImporteSolicitado </td>
-                                <td>@item.ImporteComprobado </td>
+                                <td>@string.Format("{0:C}", item.ImporteSolicitado) </td>
+                                <td>@string.Format("{0:C}", item.ImporteComprobado )</td>
 
                                 <td>@item.Estatus</td>
 
@@ -97,8 +97,8 @@
                                     + '<td>' + item.folio +'</td>'
                                     + '<td>' + item.descripcion +'</td>'
                                     + '<td>' + item.userName +'</td>'
-                                    + '<td>' + item.importeSolicitado +'</td>'
-                                    + '<td>' + item.importeComprobado +'</td>'
+                                    + '<td>' + item.importeSolicitadoC +'</td>'
+                                    + '<td>' + item.importeComprobadoC +'</td>'
                                     + '<td>' + item.estatus+'</td>'
                                     + '<td>'
                                         +'<a class="btn btn-lg" href="/Aprobador/DetallesPorAutorizar?folio=' + item.folio + '">' 
@@ -114,8 +114,8 @@
                                 + '<td>' + item.folio +'</td>'
                                 + '<td>' + item.descripcion +'</td>'
                                 + '<td>' + item.userName +'</td>'
-                                + '<td>' + item.importeSolicitado +'</td>'
-                                + '<td>' + item.importeComprobado +'</td>'
+                                + '<td>' + item.importeSolicitadoC +'</td>'
+                                + '<td>' + item.importeComprobadoC +'</td>'
                                 + '<td>' + item.estatus+'</td>'
                                 + '<td>'
                                     +'<a class="btn btn-lg"  href="/Aprobador/Detalles?folio=' + item.folio + '">' 

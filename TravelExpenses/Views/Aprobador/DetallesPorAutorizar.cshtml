@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-4">
                             Importe Solicitado
-                            <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.ImporteSolicitado" class="form-control" disabled />
+                            <input asp-for="Solicitud.Descripcion" value="@string.Format("{0:C}", Model.Solicitud.ImporteSolicitado)" class="form-control" disabled />
                         </div>
                         <div class="col-4">
                             @*Moneda:

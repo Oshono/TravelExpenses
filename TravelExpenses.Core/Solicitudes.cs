@@ -28,6 +28,17 @@ namespace TravelExpenses.Core
         public string Empresa { get; set; }
         public double ImporteSolicitado { get; set; }
         public double ImporteComprobado { get; set; }
+
+        public string ImporteSolicitadoC {
+            get
+            {
+               return string.Format("{0:C}", this.ImporteSolicitado);
+            }
+        }
+        public string ImporteComprobadoC {
+            get { return string.Format("{0:C}", this.ImporteComprobado); }
+        } 
+
         public string Estatus { get; set; }
         public int IdEstado { get; set; }
         public string Id { get; set; }
