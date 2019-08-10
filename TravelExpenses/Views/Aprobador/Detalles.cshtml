@@ -132,9 +132,9 @@
                                             <td>@comprobante.RFC</td>
                                             <td>@comprobante.NombreProveedor</td>
                                             <td>@comprobante.Moneda</td>
-                                            <td>@comprobante.SubTotal</td>
-                                            <td>@comprobante.Impuestos</td>
-                                            <td>@comprobante.Total</td>
+                                            <td>@string.Format("{0:C}", comprobante.SubTotal)</td>
+                                            <td>@string.Format("{0:C}", comprobante.Impuestos)</td>
+                                            <td>@string.Format("{0:C}", comprobante.Total)</td>
                                             <td>
                                                 <a class="btn btn-lg" asp-controller="Aprobador" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
                                                     <i class="fas fa-edit"></i>
