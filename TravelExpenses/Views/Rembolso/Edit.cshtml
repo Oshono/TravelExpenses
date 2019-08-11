@@ -3,205 +3,274 @@
 
 <h1>Reembolso</h1>
 
-<div class="dropzone-area">
+<div >
     <div class="container">
-        @if (Model.solicitud != null)
-        {
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label">Folio Solicitud: @Model.solicitud.Folio</label>
-                        <label class="control-label">Departamento: @Model.solicitud.Departamento</label>
-                        <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.solicitud.ImporteSolicitado)
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    Enviar para Autorización
-                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@Model.solicitud.Folio">
-                        <i class="fas fa-paper-plane"></i>
-                    </a>
-                </div>
-            </div>
-        }
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="dropdone-nk mg-t-30">
-                    <div class="cmp-tb-hd">
-                        <h2>Arrastre y suelte los documentos</h2>
-                        <p>Solo puede subir archivos XML, PDF o imagénes.</p>
-                    </div>
-                    <div id="dropzone1" class="multi-uploader-cs">
-                        <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
-                            <input type="hidden" asp-for="@Model.solicitud.Folio" />
-                            <div class="dz-message needsclick download-custom">
-                                <i class="alert-info"></i>
-                                <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
-                                <p>
-                                    <span class="note needsclick">(Los archivos se guardan <strong>automaticamente</strong>)</span>
-                                </p>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#Comprobantes">Comprobantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <div id="Comprobantes" class="container tab-pane active">
+                @if (Model.solicitud != null)
+                {
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                <label class="control-label">Folio Solicitud: @Model.solicitud.Folio</label>
+                                <label class="control-label">Departamento: @Model.solicitud.Departamento</label>
+                                <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.solicitud.ImporteSolicitado)
                             </div>
-
-                        </form>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@Model.solicitud.Folio">
+                                    Enviar para Autorización
+                                    <i class="fas fa-paper-plane" style="color:blue"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                }
+                <div class="row dropzone-area">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="dropdone-nk mg-t-30">
+                            <div class="cmp-tb-hd">
+                                <h2>Arrastre y suelte los documentos</h2>
+                                <p>Solo puede subir archivos XML, PDF o imagénes.</p>
+                            </div>
+                            <div id="dropzone1" class="multi-uploader-cs">
+                                <form action="/Rembolso/FileUpload" class="dropzone dropzone-nk needsclick" id="UploadFiles">
+                                    <input type="hidden" asp-for="@Model.solicitud.Folio" />
+                                    <div class="dz-message needsclick download-custom">
+                                        <i class="alert-info"></i>
+                                        <h2>Suelte los archivos a subir o de clic y agreguelos</h2>
+                                        <p>
+                                            <span class="note needsclick">(Los archivos se guardan <strong>automaticamente</strong>)</span>
+                                        </p>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Gastos" class="container tab-pane fade">
+
+                <br>
+                <h3>Gastos</h3>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-hover text-center">
+                                <thead>
+
+                                    <tr>
+                                        <th>Concepto </th>
+                                        <th>Monto Máximo Permitido</th>
+                                        <th>Importe Solicitado </th>
+                                        <th>Importe Comprobado </th>
+                                        <th>Moneda</th>
+                                        <th>Tipo de Cambio </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var g in @Model.MisGastos)
+                                    {
+                                        <tr>
+                                            
+                                            <td>@g.Nombre</td>
+
+
+                                            <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
+                                            @if (@g.MontoMaximo < @g.ImporteSolicitado)
+                                            {
+                                                <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                            }
+                                            <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                            <td>@g.Descripcion</td>
+                                            <td>@g.TipoCambios</td>
+                                            
+                                            
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <br />
+            </div>
+        </div>
+    </div>
+
+    
+    </div>
+
+    <h1>Comprobantes</h1>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="data-table-basic" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Folio
+                                </th>
+                                <th>
+                                    UUID
+                                </th>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    RFC
+                                </th>
+                                <th>
+                                    Proveedor
+                                </th>
+                                <th>
+                                    Moneda
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                                <th>
+                                    Importe Comprobado
+                                </th>
+                                <th>
+                                    Detalles
+                                </th>
+                                <th>
+                                    Descargar
+                                </th>
+                                <th>
+                                    Solicitar Autorización
+                                </th>
+                                <th>
+                                    Eliminar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprobantes">
+                            @if (Model.Comprobantes != null)
+                            {
+                                foreach (var comprobante in Model.Comprobantes)
+                                {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(comprobante.MensajeError))
+                                    {
+                                        <label class="alert-danger">comprobante.MensajeError</label>
+                                    }
+                                    @comprobante.Folio
+                                </td>
+                                <td>@comprobante.UUID</td>
+                                <td>@comprobante.Fecha.ToShortDateString()</td>
+                                <td>@comprobante.RFC</td>
+                                <td>@comprobante.NombreProveedor</td>
+                                <td>@comprobante.Moneda</td>
+                                <td>@string.Format("{0:C}", @comprobante.Total)</td>
+                                <td>@string.Format("{0:C}", @comprobante.ImporteComprobado)</td>
+                                <td align="center">
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                        <i class="fas fa-file-download"></i>
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@comprobante.FolioSolicitud">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
+                                        <i class="fas fa-eraser"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<h1>Comprobantes</h1>
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="data-table-basic" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Folio
-                            </th>
-                            <th>
-                                UUID
-                            </th>
-                            <th>
-                                Fecha
-                            </th>
-                            <th>
-                                RFC
-                            </th>
-                            <th>
-                                Proveedor
-                            </th>
-                            <th>
-                                Moneda
-                            </th>                            
-                            <th>
-                                Total
-                            </th>
-                            <th>
-                                Detalles
-                            </th>
-                            <th>
-                                Descargar
-                            </th>
-                            <th>
-                                Solicitar Autorización
-                            </th>
-                            <th>
-                                Eliminar
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="tblComprobantes">
-                        @if (Model.Comprobantes != null)
-                        {
-                            foreach (var comprobante in Model.Comprobantes)
-                            {
-                        <tr>
-                            <td>
-                                @if (!string.IsNullOrEmpty(comprobante.MensajeError))
-                                {
-                                    <label class="alert-danger">comprobante.MensajeError</label>
+    <script src="~/vendors/dropzone/dropzone.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <script type="text/javascript">
+
+
+        Dropzone.options.UploadFiles = {
+            addRemoveLinks: true,
+            paramName: "file",
+            maxFilesize: 2,
+            maxFiles: 5,
+            acceptedFiles: "text/xml, application/pdf,image/* ",
+            uploadMultiple: false,
+            dictMaxFilesExceeded: "El máximo permitido son 2 Mb",
+            init: function () {
+                this.on("success", function (data) {
+                    var args = Array.prototype.slice.call(arguments);
+                    if (args[1].includes("ERROR")) {
+                        alert(args[1]);
+                        this.removeFile(data);
+                    }
+                    else {
+                        alert("Archivo agregado");
+                        if (args[1].length > 0) {
+                            var row = "";
+                            $.each(args[1], function (index, item) {
+
+                                console.log(item);
+
+                                var mensaje = '';
+
+                                if (item.mensajeError != null) {
+                                    mensaje = "<label class='alert-danger'>" + item.mensajeError + "</label>";
                                 }
-                                @comprobante.Folio
-                            </td>
-                            <td>@comprobante.UUID</td>
-                            <td>@comprobante.Fecha.ToShortDateString()</td>
-                            <td>@comprobante.RFC</td>
-                            <td>@comprobante.NombreProveedor</td>
-                            <td>@comprobante.Moneda</td>
-                            <td>@string.Format("{0:C}", @comprobante.Total)</td>
-                            <td align="center">
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                            <td align="center">
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-file-download"></i>
-                                </a>
-                            </td>
-                            <td align="center">
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@comprobante.FolioSolicitud">
-                                    <i class="fas fa-paper-plane"></i>
-                                </a>
-                            </td>
-                            <td align="center">
-                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
-                                    <i class="fas fa-eraser"></i>
-                                </a>
-                            </td>
-                        </tr>
-                            }
+
+                                row += "<tr><td>" + mensaje + item.folio + "</td><td>"
+                                    + item.uuid + "</td><td>"
+                                    + item.fecha + "</td><td>"
+                                    + item.rfc + "</td><td>"
+                                    + item.nombreProveedor + "</td><td>"
+                                    + item.moneda + "</td><td>"
+                                    + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid
+                                    + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid
+                                    + "'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/EnviarReembolso?UUID=" + item.uuid
+                                    + "'><i class='fas fa-paper-plane'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid
+                                    + "'><i class='fas fa-eraser'></i></a></td></tr>";
+                            });
+                            $("#tblComprobantes").html(row);
                         }
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="~/vendors/dropzone/dropzone.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-
-<script type="text/javascript">
+                        this.removeFile(data);
+                    }
+                });
+            }
+        };
 
 
-    Dropzone.options.UploadFiles = {
-        addRemoveLinks: true,
-        paramName: "file",
-        maxFilesize: 2,
-        maxFiles: 5,
-        acceptedFiles: "text/xml, application/pdf,image/* ",
-        uploadMultiple: false,
-        dictMaxFilesExceeded: "El máximo permitido son 2 Mb",        
-        init: function () {
-            this.on("success", function (data)
-            {
-                var args = Array.prototype.slice.call(arguments);
-                if (args[1].includes("ERROR"))
-                {
-                    alert(args[1]);
-                    this.removeFile(data);
-                }
-                else
-                {
-                    alert("Archivo agregado");
-                                      
-                    var row = "";
-                    $.each(args[1], function (index, item) {
 
-                        console.log(item);
-
-                        var mensaje = '';
-
-                        if (item.mensajeError != null)
-                        {
-                            mensaje = "<label class='alert-danger'>" + item.mensajeError + "</label>";
-                        }
-
-                        row += "<tr><td>" + mensaje + item.folio + "</td><td>"
-                            + item.uuid  + "</td><td>"
-                            + item.fecha + "</td><td>"
-                            + item.rfc + "</td><td>"
-                            + item.nombreProveedor + "</td><td>"
-                            + item.moneda + "</td><td>"
-                            + item.total + "</td><td><a class='btn btn - lg' href='/Rembolso/Details?UUID=" + item.uuid
-                            + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid
-                            + "'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/EnviarReembolso?UUID=" + item.uuid
-                            + "'><i class='fas fa-paper-plane'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid
-                            + "'><i class='fas fa-eraser'></i></a></td></tr>";
-                    });
-                    $("#tblComprobantes").html(row);  
-                    this.removeFile(data);
-                }
-            });
-        }
-    };
- 
-    
-
-</script>
+    </script>

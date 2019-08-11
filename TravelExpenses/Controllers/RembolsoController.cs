@@ -123,6 +123,10 @@ namespace TravelExpenses.Controllers
                 var solicitud = _solicitud.ObtenerSolicitudes().Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
                 rembolso.solicitud = solicitud;
             }
+            var _Gasto = _gastos.ObtenerGastos();
+
+            var misGastos = _solicitud.ObtenerGastos(FolioSolicitud);
+            rembolso.MisGastos = misGastos;
             return View( rembolso);
         }
 
@@ -162,10 +166,12 @@ namespace TravelExpenses.Controllers
 
                 if (rembolso.Concepto != null && rembolso.Concepto.Descripcion != string.Empty)
                 {
+
                     if (rembolso.Comprobante.Conceptos == null)
                     { 
                         rembolso.Comprobante.Conceptos = new List<Concepto>();                        
                     }
+                    rembolso.Concepto.CantidadComprobada = rembolso.Concepto.Importe;
                     rembolso.Comprobante.Conceptos.Add(rembolso.Concepto);
                     rembolso.Concepto = new Concepto();
                 }
@@ -284,17 +290,18 @@ namespace TravelExpenses.Controllers
 
 
                 var miFolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
-
+                FolioSolicitud = miFolioSolicitud;
 
 
                 comprobante.Add (new Comprobante());
                 comprobante.FirstOrDefault().UUID = Guid.NewGuid().ToString();
                 comprobante.FirstOrDefault().Fecha = DateTime.Now;
-                comprobante.FirstOrDefault().Folio = comprobante.FirstOrDefault().UUID;
+                comprobante.FirstOrDefault().Folio = "Sin Folio";
                 comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
                 comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
                 comprobante.FirstOrDefault().FolioSolicitud = miFolioSolicitud;
-                
+                comprobante.FirstOrDefault().Impuestos = 0;
+
             }
 
             comprobante.FirstOrDefault().Archivos = new List<Archivo>();
@@ -346,9 +353,9 @@ namespace TravelExpenses.Controllers
                             return Json("ERROR-El archivo ya se encuentra registrado");
                         }
                     }
-                } 
+                }
 
-                return Json(comprobantes);
+                return Json(comprobantes);                
             }
             catch (Exception ex)
             {
