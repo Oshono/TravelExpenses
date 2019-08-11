@@ -26,16 +26,14 @@
                             <label class="control-label">Departamento: @Model.solicitud.Departamento</label>
                             <label class="control-label">Importe Solicitado: </label> @String.Format("{0:C}", Model.solicitud.ImporteSolicitado)
                         </div>    
-                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                <form method="post">
-                                    @*<a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@Model.solicitud.Folio">
-                Enviar para Autorización
-                <i class="fas fa-paper-plane" style="color:blue"></i>
-            </a>*@
+                        @if(@Model.DetallesAsociados == true)
+                        { 
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" >
+                                <form method="post">                        
                                     <button asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@Model.solicitud.Folio" class="btn btn-primary">Solicitar Autorización</button>
-                                    </form>
+                                </form>
                             </div>
-                        
+                        }
                     </div>
                 }
                 <div class="row dropzone-area">
