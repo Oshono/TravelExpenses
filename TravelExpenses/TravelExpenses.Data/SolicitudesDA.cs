@@ -45,8 +45,8 @@ namespace TravelExpenses.Data
                 parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
                 using (IDbConnection conn = connection)
                 {
-                    var result = connection.Execute("Solicitudes_Ins", parameters, commandType: CommandType.StoredProcedure);
-                    return result;
+                    var result = connection.ExecuteScalar("Solicitudes_Ins", parameters, commandType: CommandType.StoredProcedure).ToString();
+                    return int.Parse(result);
                 }
             }
             catch (Exception ex)

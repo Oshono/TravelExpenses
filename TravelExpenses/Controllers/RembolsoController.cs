@@ -129,20 +129,25 @@ namespace TravelExpenses.Controllers
         [Authorize]
         public ActionResult Details(string UUID)
         {
-            var rembolso = new RembolsoViewModel();
-            var polDetalle = _politicadetalle.ObtenerDetalles();
-            rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
+            if (!string.IsNullOrEmpty(UUID))
+            { 
+                var rembolso = new RembolsoViewModel();
+                var polDetalle = _politicadetalle.ObtenerDetalles();
+                rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
 
            
 
-            rembolso.Comprobante.ComprobanteXML = rembolso.Comprobante.Archivos.FirstOrDefault().Extension.Contains("xml");
-            var gastos = _gastos.ObtenerGastos();
+                rembolso.Comprobante.ComprobanteXML = rembolso.Comprobante.Archivos.FirstOrDefault().Extension.Contains("xml");
+                var gastos = _gastos.ObtenerGastos();
 
-            var result = gastos.Where(a => polDetalle.Any(b => a.IdGasto == b.IdGasto));
+                var result = gastos.Where(a => polDetalle.Any(b => a.IdGasto == b.IdGasto));
 
 
-            rembolso.Gastos = result;
-            return View(rembolso);
+                rembolso.Gastos = result;
+                return View(rembolso);
+            }
+            else
+                return RedirectToAction("Lista", "Rembolso");
         }
 
         [HttpPost]
@@ -264,12 +269,8 @@ namespace TravelExpenses.Controllers
 
                 //Generar solicitud
                 var miSolicitud = new Solicitud();
-
-                var maxFolio = _solicitud.ObtenerIdSolicitud().FirstOrDefault().IdFolio + 1;
-                FolioSolicitud = maxFolio;
-
+                
                 miSolicitud.FechaSolicitud = DateTime.Now;
-                miSolicitud.Folio = maxFolio;
                 miSolicitud.IdTipoSolicitud = 2;
                 miSolicitud.Departamento = "TI";
                 miSolicitud.Empresa = "CAP000101";  //Leer empresa de Usuario
@@ -292,7 +293,7 @@ namespace TravelExpenses.Controllers
                 comprobante.FirstOrDefault().Folio = comprobante.FirstOrDefault().UUID;
                 comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
                 comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
-                comprobante.FirstOrDefault().FolioSolicitud = maxFolio;
+                comprobante.FirstOrDefault().FolioSolicitud = miFolioSolicitud;
                 
             }
 
