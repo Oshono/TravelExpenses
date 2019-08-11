@@ -191,8 +191,8 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <label asp-for="IdGasto" class="control-label">Concepto</label>
-                                        <select asp-for="_Gasto.IdGasto" class="form-control input-sm concepto"
-                                                asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
+                                        <select asp-for="Politica.IdGasto" class="form-control input-sm concepto"
+                                                asp-items="@(new SelectList(Model.Politicas, "IdGasto", "Nombre"))">
                                             <option value="0">-- Seleccione un concepto</option>
                                         </select>
 

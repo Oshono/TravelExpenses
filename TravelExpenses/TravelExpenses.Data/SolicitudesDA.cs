@@ -557,5 +557,24 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public IEnumerable<Politicas> ObtenerPoliticas(string ID)
+        { 
+            try
+            {
+                var parameters = new DynamicParameters();
+                using(IDbConnection conn = connection)
+                {
+                    parameters.Add("@ID", ID);
+                    var reader = connection.Query<Politicas>("CatGastosPoliticas_Obt", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x=>x.IdGasto);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

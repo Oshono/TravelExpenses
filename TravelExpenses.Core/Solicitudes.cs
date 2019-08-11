@@ -50,5 +50,16 @@ namespace TravelExpenses.Core
         public string MonedaNombre { get; set; }
         public string Comentarios { get; set; }
         public string CantidadComprobada { get; set; }
+        
+    }
+
+    public class Politicas
+    {
+
+        public int IdGasto { get; set; }
+        public string Nombre { get; set; }
+        public double ImportePermitido { get; set; }
+        public string ClaveCentroCosto { get; set; }
+        public int NumSolicitudes { get; set; }
     }
 }

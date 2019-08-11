@@ -12,6 +12,10 @@ namespace TravelExpenses.ViewModels
         public Solicitud Solicitud { get; set; }
         public int IdTipoSolicitud { get; set; }
 
+        public IEnumerable<Politicas> Politicas{ get; set; }
+        public Politicas Politica { get; set; }
+        
+
         public IEnumerable<Estatus> Estatuses { get; set; }
         public Estatus Estatus { get; set; }
         public int IdEstatus { get; set; }

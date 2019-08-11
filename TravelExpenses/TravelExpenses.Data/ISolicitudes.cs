@@ -33,5 +33,6 @@ namespace TravelExpenses.Data
         int SolicitudesUpd(Solicitud solicitud);
         int InsertarComentarios(Comentarios Comentarios);
         IEnumerable<Comentarios> ObtenerComentario(int Folio);
+        IEnumerable<Politicas> ObtenerPoliticas(string ID);
     }
 }
