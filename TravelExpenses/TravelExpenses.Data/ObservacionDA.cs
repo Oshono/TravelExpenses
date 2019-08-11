@@ -49,6 +49,51 @@ namespace TravelExpenses.TravelExpenses.Data
             }
         }
 
+        public IEnumerable<Solicitud> ObtenerSolicitudes(string id)
+        {
+
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                using (IDbConnection conn = Connection)
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@ID", id);
+                    var reader = Connection.Query<Solicitud>("SolicitudesObt_Centrocosto", queryParameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Folio);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus, string ID)
+        {
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Estatus))
+                {
+                    return ObtenerSolicitudes(ID).Where(x => x.Estatus == Estatus);
+                }
+                else
+                {
+                    return ObtenerSolicitudes(ID);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public Observacion Add(Observacion newRestaurant)
         {
             db.Add(newRestaurant);

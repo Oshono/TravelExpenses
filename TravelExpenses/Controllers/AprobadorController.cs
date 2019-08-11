@@ -39,8 +39,9 @@ namespace TravelExpenses.Controllers
         public ActionResult AprobarSolicitud()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
             var Estatus = 
                     (from e in SolicitudesData.EstatusSolicitudes()
@@ -56,21 +57,21 @@ namespace TravelExpenses.Controllers
             ObservacionViewModel solicitud = new ObservacionViewModel();
             if (estatus.Equals("Comprobada"))
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar;
                 return Json(PorComprobar);
             }
             else if (estatus.Equals("PorAutorizar"))
             {
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorAutorizar;
                 return Json(PorAutorizar);
 
             }
             else
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
             }
