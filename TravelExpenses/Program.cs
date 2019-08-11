@@ -29,10 +29,26 @@ namespace TravelExpenses
                 //dbContext.Database.Migrate();
 
                 var adminRole = new IdentityRole("Admin");
+                var SolRole = new IdentityRole("Solicitante");
+                var AproRole = new IdentityRole("Aprobador");
+                var ProcRole = new IdentityRole("Procesador");
+
+
+                //IdentityRole role =await roleMgr.FindByNameAsync("TEST");
+                //var result = roleMgr.DeleteAsync(role);
+
+                //roleMgr.DeleteAsync(new IdentityRole("TEST"));
+                //roleMgr.DeleteAsync(new IdentityRole("Revisor"));
+                //roleMgr.DeleteAsync(new IdentityRole("Usuario"));
+
 
                 if (!dbContext.Roles.Any())
                 {
                     roleMgr.CreateAsync(adminRole).GetAwaiter().GetResult();
+                    roleMgr.CreateAsync(SolRole).GetAwaiter().GetResult();
+                    roleMgr.CreateAsync(AproRole).GetAwaiter().GetResult();
+                    roleMgr.CreateAsync(ProcRole).GetAwaiter().GetResult();
+                   
                 }
 
                 if (!dbContext.Users.Any(u => u.UserName == "Administrador"))
