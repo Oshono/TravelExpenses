@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Core;
@@ -37,8 +38,8 @@ namespace TravelExpenses.Controllers
         public ActionResult ComprobacionSolicitud()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
-            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
             var Estatus =
                     (from e in SolicitudesData.EstatusSolicitudes()
@@ -52,7 +53,7 @@ namespace TravelExpenses.Controllers
         public ActionResult SolicitudCerradas()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Cerrada");
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Cerrada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             solicitud.Solicitudes = PorComprobar;
             var Estatus =
                 (from e in SolicitudesData.EstatusSolicitudes()
@@ -68,21 +69,21 @@ namespace TravelExpenses.Controllers
             ObservacionViewModel solicitud = new ObservacionViewModel();
             if (estatus.Equals("PorLiberar"))
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar;
                 return Json(PorComprobar);
             }
             else if (estatus.Equals("Revisada"))
             {
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorAutorizar;
                 return Json(PorAutorizar);
 
             }
             else
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar");
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("PorLiberar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("Revisada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
             }
@@ -101,7 +102,7 @@ namespace TravelExpenses.Controllers
                 {
                     rembolso.Comprobantes = new List<Comprobante>();
                     rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-                    var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                    var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
                     rembolso.Solicitud = solicitud;
                     rembolso.Observacion = new Observacion();
                     rembolso.Observacion.Folio = Convert.ToInt16(Folio);
@@ -129,7 +130,7 @@ namespace TravelExpenses.Controllers
                 {
                     rembolso.Comprobantes = new List<Comprobante>();
                     rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-                    var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                    var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
                     rembolso.Solicitud = solicitud;
                     rembolso.Observacion = new Observacion();
                     rembolso.Observacion.Folio = Convert.ToInt16(Folio);

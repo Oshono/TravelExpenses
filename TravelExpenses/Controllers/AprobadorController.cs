@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Core;
@@ -38,8 +39,8 @@ namespace TravelExpenses.Controllers
         public ActionResult AprobarSolicitud()
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
-            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
             var Estatus = 
                     (from e in SolicitudesData.EstatusSolicitudes()
@@ -55,21 +56,21 @@ namespace TravelExpenses.Controllers
             ObservacionViewModel solicitud = new ObservacionViewModel();
             if (estatus.Equals("Comprobada"))
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar;
                 return Json(PorComprobar);
             }
             else if (estatus.Equals("PorAutorizar"))
             {
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorAutorizar;
                 return Json(PorAutorizar);
 
             }
             else
             {
-                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada");
-                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar");
+                var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorAutorizar = SolicitudesData.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
                 return Json(solicitud.Solicitudes);
             }
@@ -81,7 +82,7 @@ namespace TravelExpenses.Controllers
         public ActionResult Aprobar(string Folio)
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
-            solicitud.Solicitudes = SolicitudesData.ObtenerSolicitudes();
+            solicitud.Solicitudes = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return View("AprobarSolicitud",solicitud);
         }
@@ -96,7 +97,7 @@ namespace TravelExpenses.Controllers
                 {
                     rembolso.Comprobantes = new List<Comprobante>();
                     rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-                    var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                    var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
                     rembolso.Solicitud = solicitud;
                     rembolso.Observacion = new Observacion();
                     rembolso.Observacion.Folio = Convert.ToInt16(Folio);

@@ -9,6 +9,7 @@ using TravelExpenses.Models;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
+using System.Security.Claims;
 namespace TravelExpenses.Controllers
 {
     public class HomeController : Controller
@@ -47,7 +48,7 @@ namespace TravelExpenses.Controllers
                 var SolicitudesModel = new SolicitudesViewModel();
                 if (estatus == "Todo" || estatus == "--Seleccionar estatus")
                 {
-                    var Solicitud = _SolicitudesData.ObtenerSolicitudes();
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                     SolicitudesModel.Solicitudes = Solicitud;
                     return Json(Solicitud);
                 }
@@ -83,7 +84,7 @@ namespace TravelExpenses.Controllers
         public IActionResult ListarSolicitudes()
         {
             var SolicitudesModel = new SolicitudesViewModel();
-            var Solicitud = _SolicitudesData.ObtenerSolicitudes();
+            var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var Estatus = _SolicitudesData.EstatusSolicitudes();
 
 

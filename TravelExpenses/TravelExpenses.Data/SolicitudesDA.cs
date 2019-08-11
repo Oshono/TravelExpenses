@@ -171,7 +171,7 @@ namespace TravelExpenses.Data
             }
         }
 
-        public IEnumerable<Solicitud> ObtenerSolicitudes()
+        public IEnumerable<Solicitud> ObtenerSolicitudes(string ID)
         {
             
             try
@@ -180,7 +180,8 @@ namespace TravelExpenses.Data
             
                 using (IDbConnection conn = connection)
                 {
-                    var reader = connection.Query<Solicitud>("Solicitudes_Sel", null, commandType: CommandType.StoredProcedure);
+                    parameters.Add("@ID", ID);
+                    var reader = connection.Query<Solicitud>("Solicitudes_Sel", parameters, null, commandType: CommandType.StoredProcedure);
                     return reader.OrderBy(x => x.Folio);
                 }
             }
@@ -263,18 +264,18 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
-        public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus)
+        public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus,string ID)
         {
 
             try
             {
                 if (!string.IsNullOrEmpty(Estatus))
                 {
-                    return ObtenerSolicitudes().Where(x => x.Estatus == Estatus);
+                    return ObtenerSolicitudes(ID).Where(x => x.Estatus == Estatus);
                 }
                 else
                 {
-                    return ObtenerSolicitudes();
+                    return ObtenerSolicitudes(ID);
                 }
                
             }
