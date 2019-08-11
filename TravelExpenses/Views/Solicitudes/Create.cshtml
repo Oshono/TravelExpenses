@@ -149,8 +149,8 @@
                                                     <th>Fecha de Salida</th>
                                                     <th>Fecha de Llegada</th>
                                                     <th>Motivo</th>
-                                                    <th>Editar</th>
-                                                    <th>Eliminar</th>
+                                                    @*<th>Editar</th>
+                                                    <th>Eliminar</th>*@
                                                 </tr>
                                             </thead>
                                             <tbody id="tblDestinos">
@@ -239,8 +239,8 @@
                                                     <th>Importe Solicitado </th>
                                                     <th>Moneda</th>
                                                     <th>Tipo de Cambio </th>
-                                                    <th>Editar</th>
-                                                    <th>Eliminar</th>
+                                                    @*<th>Editar</th>
+                                                    <th>Eliminar</th>*@
                                                 </tr>
                                             </thead>
                                             <tbody id="tablaGastos">
@@ -338,9 +338,12 @@
             }
             arrG.forEach((index, item) => {
 
+                //row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 111 +
+                //    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] +
+                //    "</td><td>" + "<a class='btn btn-lg' id='accion' onclick='Eliminar(" + item + ");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>" + "</td></tr>";
+
                 row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 111 +
-                    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] +
-                    "</td><td>" + "<a class='btn btn-lg' id='accion' onclick='Eliminar(" + item + ");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>" + "</td></tr>";
+                    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] + "</td></tr>";
             });
 
             $("#tablaGastos").html(row);
@@ -390,9 +393,12 @@
             }); 
             arr.forEach((index, item) => {
 
+                //row += "<tr><td>" + arr[item]["Pais"] + "</td><td>" + arr[item]["Ciudad"] +
+                //    "</td><td>" + arr[item]["FechaSalida"] + "</td><td>" + arr[item]["FechaLlegada"] + "</td><td>" + arr[item]['Motivo'] +
+                //    "</td><td>" + "<a class='btn btn-lg' id='accion'  data-toggle='modal' data-target='#exampleModalLong'  onclick='EliminarItem("+item+");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>"+ "</td></tr>";
+
                 row += "<tr><td>" + arr[item]["Pais"] + "</td><td>" + arr[item]["Ciudad"] +
-                    "</td><td>" + arr[item]["FechaSalida"] + "</td><td>" + arr[item]["FechaLlegada"] + "</td><td>" + arr[item]['Motivo'] +
-                    "</td><td>" + "<a class='btn btn-lg' id='accion'  data-toggle='modal' data-target='#exampleModalLong'  onclick='EliminarItem("+item+");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>"+ "</td></tr>";
+                    "</td><td>" + arr[item]["FechaSalida"] + "</td><td>" + arr[item]["FechaLlegada"] + "</td><td>" + arr[item]['Motivo']+ "</td></tr>";
             });
             $("#tblDestinos").html(row);
 
