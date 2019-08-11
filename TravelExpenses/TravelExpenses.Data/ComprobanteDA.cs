@@ -69,6 +69,7 @@ namespace TravelExpenses.Data
                                                         IdGasto = x.IdGasto,
                                                         DescripcionProdServ = y.Descripcion,
                                                         MensajeError = x.MensajeError,
+                                                        CantidadComprobada = x.CantidadComprobada
                                                     }).Where(x => x.UUID == UUID).ToList();
 
             if (comprobante.Conceptos.Count < 1)

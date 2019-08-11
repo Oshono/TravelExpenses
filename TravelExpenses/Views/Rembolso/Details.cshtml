@@ -193,6 +193,7 @@
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].Unidad" id="Unidad" class="control-label" readonly="readonly" />
                                                         </td>
                                                         <td>
+                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].CantidadComprobada" />
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].Cantidad" id="Cantidad" class="control-label" style="width:100%" readonly="readonly" />
                                                         </td>
                                                         <td>
