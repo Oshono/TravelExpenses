@@ -32,7 +32,7 @@ namespace TravelExpenses.Data
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Folio", solicitud.Folio);
+                //parameters.Add("@Folio", solicitud.Folio);
                 parameters.Add("@IdTipoSolicitud", solicitud.IdTipoSolicitud);
                 parameters.Add("@Departamento", solicitud.Departamento);
                 parameters.Add("@Empresa", solicitud.Empresa); 
