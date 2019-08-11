@@ -132,10 +132,7 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
                                             <input type="submit" value="Agregar Concepto" class="btn btn-primary" />
-                                        </div>
-                                            @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
-                <button asp-controller="Rembolso" asp-action="EnviarReembolso" class="btn btn-primary">Solicitar Autorización</button>
-            </div>*@
+                                        </div>                                           
                                         </div>
                                     </div>
                             </div>
@@ -145,28 +142,25 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="20%">
+                                                <th scope="col">
                                                     Descripción
                                                 </th>
-                                                <th width="20%">
+                                                <th scope="col">
                                                     Descripción SAT
                                                 </th>
-                                                <th width="10%">
+                                                <th scope="col">
                                                     Importe
-                                                </th>
-                                                <th width="10%">
-                                                    Valor Unitario
-                                                </th>
-                                                <th width="5%">
+                                                </th>                                                 
+                                                <th scope="col">
                                                     Unidad
                                                 </th>
-                                                <th width="5%">
+                                                <th scope="col">
                                                     Cantidad
                                                 </th>
-                                                <th width="25%">
+                                                <th scope="col">
                                                     Gasto
                                                 </th>
-                                                <th width="5%">
+                                                <th scope="col">
                                                     Borrar
                                                 </th>
                                             </tr>
@@ -178,12 +172,12 @@
                                                 {
 
                                                     <tr>
-                                                        <td>
+                                                        <th scope="row">
                                                             <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
                                                             <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].NoIdentificacion" />
 
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].Descripcion" id="Descripcion" class="control-label" readonly="readonly" />
-                                                        </td>
+                                                        </th>
                                                         <td>
                                                             <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveProdServ" />
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].DescripcionProdServ" id="DescripcionProdServ" class="control-label" readonly="readonly" />
@@ -192,21 +186,18 @@
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].Importe" id="Importe" class="control-label" readonly="readonly" />
                                                             <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
                                                             <label class="alert-danger">@Model.Comprobante.Conceptos[i].MensajeError</label>
-                                                        </td>
-                                                        <td>
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].ValorUnitario" id="ValorUnitario" class="control-label" readonly="readonly" />
-                                                            
-                                                        </td>
+                                                        </td> 
+                                                         
                                                         <td>
                                                             <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveUnidad" />
                                                             <input asp-for="@Model.Comprobante.Conceptos[i].Unidad" id="Unidad" class="control-label" readonly="readonly" />
                                                         </td>
                                                         <td>
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Cantidad" id="Cantidad" class="control-label" readonly="readonly" />
+                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Cantidad" id="Cantidad" class="control-label" style="width:100%" readonly="readonly" />
                                                         </td>
-                                                        <td width="25%">
+                                                        <td>
                                                             <select asp-for="@Model.Comprobante.Conceptos[i].IdGasto" class="form-control" title="--Seleccione un gasto"
-                                                                    asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))">
+                                                                    asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))" style="width:100%">
                                                                 <option value="">--Seleccione un Gasto</option>
                                                             </select>
                                                         </td>

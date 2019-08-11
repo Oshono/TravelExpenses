@@ -19,13 +19,17 @@ namespace TravelExpenses.Core
         public DateTime Fecha { get; set; }
         
         public double SubTotal { get; set; }
-        public double? Impuestos { get; set; }
+        public double Impuestos { get; set; }
         [DataType(DataType.Currency)]
         [Column(TypeName = "float")]
         public double Retenciones { get; set; }
         [DataType(DataType.Currency)]
         [Column(TypeName = "float")]
         public double Total { get; set; }
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "float")]
+        [NotMapped]
+        public double ImporteComprobado { get; set; }
         public string RegimenFiscal { get; set; }
         public string Moneda { get; set; }
         public string FormaPago { get; set; }
