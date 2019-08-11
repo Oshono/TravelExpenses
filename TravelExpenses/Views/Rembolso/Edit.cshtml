@@ -156,10 +156,7 @@
                                 </th>
                                 <th>
                                     Descargar
-                                </th>
-                                <th>
-                                    Solicitar Autorización
-                                </th>
+                                </th>                               
                                 <th>
                                     Eliminar
                                 </th>
@@ -194,12 +191,7 @@
                                     <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
                                         <i class="fas fa-file-download"></i>
                                     </a>
-                                </td>
-                                <td align="center">
-                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="EnviarReembolso" asp-route-foliosolicitud="@comprobante.FolioSolicitud">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </a>
-                                </td>
+                                </td>                                
                                 <td align="center">
                                     <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
                                         <i class="fas fa-eraser"></i>
