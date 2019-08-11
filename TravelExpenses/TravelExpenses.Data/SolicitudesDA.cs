@@ -42,7 +42,7 @@ namespace TravelExpenses.Data
                 //parameters.Add("@IdEstado", solicitud.IdEstado);
                 parameters.Add("@Id", solicitud.Id);
                 parameters.Add("@RFC", solicitud.RFC);
-                parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
+                //parameters.Add("@ClaveMoneda", solicitud.ClaveMoneda);
                 using (IDbConnection conn = connection)
                 {
                     var result = connection.ExecuteScalar("Solicitudes_Ins", parameters, commandType: CommandType.StoredProcedure).ToString();

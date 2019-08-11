@@ -183,15 +183,15 @@ namespace TravelExpenses.Controllers
                 {
                     //objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
                     objsolicitudes.IdTipoSolicitud = s.IdTipoSolicitud;
-                    objsolicitudes.Departamento = "TI";
+                    objsolicitudes.Departamento = string.Empty;
                     objsolicitudes.Empresa = "";
                     objsolicitudes.ImporteSolicitado = s.ImporteSolicitado;
                     objsolicitudes.ImporteComprobado = s.ImporteComprobado;
                     objsolicitudes.Estatus = "Capturada";
                     objsolicitudes.IdEstado = s.IdEstado;
                     objsolicitudes.Id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    objsolicitudes.RFC = "456777";
-                    objsolicitudes.ClaveMoneda = "ABC";
+                    objsolicitudes.RFC = string.Empty;
+                    objsolicitudes.ClaveMoneda = string.Empty;
                     var Folio = _SolicitudesData.InsertarSolicitud(objsolicitudes);
                     HttpContext.Session.SetInt32("FolioSol",Folio );
                 });
@@ -291,19 +291,20 @@ namespace TravelExpenses.Controllers
             var objGastos = new Gasto();
             try
             {
+                
 
                 //objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
                 objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
-                objsolicitudes.Departamento = "TI";
+                objsolicitudes.Departamento = string.Empty; 
                 objsolicitudes.Empresa = "";
                 objsolicitudes.ImporteSolicitado = 0;
                 objsolicitudes.ImporteComprobado = _solicitudes.Solicitud.ImporteComprobado;
                 objsolicitudes.Estatus = "Incompleta";
                 objsolicitudes.IdEstado = _solicitudes.Solicitud.IdEstado;
                 objsolicitudes.Id =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                objsolicitudes.RFC = "456777";
-                objsolicitudes.ClaveMoneda = "MXN";
-               var result= _SolicitudesData.InsertarSolicitud(objsolicitudes); 
+                objsolicitudes.RFC = string.Empty;
+                objsolicitudes.ClaveMoneda = string.Empty;
+                var result= _SolicitudesData.InsertarSolicitud(objsolicitudes); 
                 return Json(result);
             }
             catch (Exception ex)

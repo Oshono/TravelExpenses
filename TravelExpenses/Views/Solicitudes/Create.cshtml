@@ -25,9 +25,9 @@
 
                     <div class="col-4">
                         Concepto
-                        <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo"
+                        <select asp-for="IdTipoSolicitud" class="form-control input-sm Tipo" disabled
                                 asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion"))">
-                            <option value="">--Selecciona un concepto</option>
+                            
                         </select> 
                     </div>
 
