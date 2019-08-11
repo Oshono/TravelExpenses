@@ -18,6 +18,7 @@ namespace TravelExpenses.Core
             Impuesto = 0;
             Base = 0;
             IdGasto = 0;
+            CantidadComprobada = 0;
         }
         [Key]
         public int IdConcepto { get; set; }
@@ -38,6 +39,7 @@ namespace TravelExpenses.Core
         public double TasaOCuota { get; set; }
         public string TipoFactor { get; set; }
         public double Impuesto { get; set; }
+        public double CantidadComprobada { get; set; }
         public double Base { get; set; }
         public int IdGasto { get; set; }
         
