@@ -19,53 +19,62 @@
                 }
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <input type="hidden" asp-for="@Model.Comprobante.FolioSolicitud" />
-                                            <label class="control-label">UUID</label>
-                                            <input asp-for=@Model.Comprobante.UUID class="form-control" placeholder="UUID" />
-                                            <span asp-validation-for=@Model.Comprobante.UUID class="text-danger"></span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">Folio</label>
-                                            <input asp-for=@Model.Comprobante.Folio class="form-control" placeholder="Folio" />
-                                            <span asp-validation-for=@Model.Comprobante.Folio class="text-danger"></span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">Fecha</label>
-                                            <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="RFC de la Empresa" />
-                                            <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">RFC</label>
-                                            <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
-                                            <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
-                                        </div>
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                            <label class="control-label">Nombre Proveedor</label>
-                                            <input asp-for=@Model.Comprobante.NombreProveedor class="form-control" placeholder="Nombre o Razón Social" />
-                                            <span asp-validation-for=@Model.Comprobante.NombreProveedor class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Lista">
+                                                    Ir a Listado  <i class="fas fa-long-arrow-alt-left"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <input type="hidden" asp-for="@Model.Comprobante.FolioSolicitud" />
+                                                <label class="control-label">UUID</label>
+                                                <input asp-for=@Model.Comprobante.UUID class="form-control" placeholder="UUID" />
+                                                <span asp-validation-for=@Model.Comprobante.UUID class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">Folio</label>
+                                                <input asp-for=@Model.Comprobante.Folio class="form-control" placeholder="Folio" />
+                                                <span asp-validation-for=@Model.Comprobante.Folio class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">Fecha</label>
+                                                <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="RFC de la Empresa" />
+                                                <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">RFC</label>
+                                                <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
+                                                <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                                <label class="control-label">Nombre Proveedor</label>
+                                                <input asp-for=@Model.Comprobante.NombreProveedor class="form-control" placeholder="Nombre o Razón Social" />
+                                                <span asp-validation-for=@Model.Comprobante.NombreProveedor class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">SubTotal</label>
+                                                <input asp-for=@Model.Comprobante.SubTotal class="form-control" placeholder="SubTotal de la Empresa" />
+                                                <span asp-validation-for=@Model.Comprobante.SubTotal class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">Impuestos</label>
+                                                <input asp-for=@Model.Comprobante.Impuestos class="form-control" placeholder="Impuestos" />
+                                                <span asp-validation-for=@Model.Comprobante.Impuestos class="text-danger"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label">Total</label>
+                                                <input asp-for=@Model.Comprobante.Total class="form-control" placeholder="Total" />
+                                                <span asp-validation-for=@Model.Comprobante.Total class="text-danger"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">SubTotal</label>
-                                            <input asp-for=@Model.Comprobante.SubTotal class="form-control" placeholder="SubTotal de la Empresa"/>                                            
-                                            <span asp-validation-for=@Model.Comprobante.SubTotal class="text-danger"></span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">Impuestos</label>
-                                            <input asp-for=@Model.Comprobante.Impuestos class="form-control" placeholder="Impuestos" />
-                                            <span asp-validation-for=@Model.Comprobante.Impuestos class="text-danger" ></span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="control-label">Total</label>
-                                            <input asp-for=@Model.Comprobante.Total class="form-control" placeholder="Total"/>
-                                            <span asp-validation-for=@Model.Comprobante.Total class="text-danger" ></span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             @if (!Model.Comprobante.ComprobanteXML)
