@@ -123,8 +123,8 @@ namespace TravelExpenses.Controllers
             if (vm.Delete)
             {
                 await _userManager.RemoveFromRoleAsync(user, vm.Role);
-                await _userManager.DeleteAsync(user);
-                return RedirectToAction("Index", new { Mesaje = "Eliminacion de Role "+vm.Role+ " al usuario"+ user.UserName });
+                //await _userManager.DeleteAsync(user);
+                return RedirectToAction("Index", new { Mesaje = "Eliminacion de Role "+vm.Role });
             }
                 
             if (vm.DeleteUser)
@@ -132,10 +132,10 @@ namespace TravelExpenses.Controllers
                 await _userManager.DeleteAsync(user);
                 //await _userManager.SetLockoutEnabledAsync(user, true);
                 //await _userManager.SetLockoutEndDateAsync(user, DateTime.Now);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { Mesaje = "Eliminacion de Role " + vm.Role + " al usuario" + user.UserName });
             }
                 
-            if(vm.Role!=null)
+            if(vm.Role!=null && vm.ClaveCentroCosto!= "Selecciona un Centro de Costos")
             {
                 CostosUsuario.ClaveCentroCosto = vm.ClaveCentroCosto;
                 CostosUsuario.Id = user.Id;
@@ -144,7 +144,7 @@ namespace TravelExpenses.Controllers
                 await _emailSender.SendEmailAsync(vm.UserEmail, "Permisos otorgados.",
                        $"Se te ha otorgado permisos de "+ vm.Role);
 
-                return RedirectToAction("Index", new { Mesaje = "Exitoso Role agragado a "+user.UserName });
+                return RedirectToAction("Index", new { Mesaje = "Exitoso Role agragado a "+user.UserName+"Asociado al centro de costo "+vm.ClaveCentroCosto });
             }
 
             if (vm.Consultar)
