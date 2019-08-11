@@ -510,6 +510,7 @@ namespace TravelExpenses.Controllers
 
                         }
                         concepto.Importe = float.Parse(conceptoXML.Attribute("Importe").Value);
+                        concepto.CantidadComprobada = concepto.Importe;
                         if (conceptoXML.Attribute("Impuesto") != null)
                         {
                             concepto.Impuesto = float.Parse(conceptoXML.Attribute("Impuesto").Value);
