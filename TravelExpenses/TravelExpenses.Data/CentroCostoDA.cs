@@ -86,6 +86,10 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+        public IEnumerable<CentroCostoUsuario> ConsultarControCostoPorUsuario(string id)
+        {
+            return db.CatCentroCostoUsuario.Where(x => x.Id== id);
+        }
 
         private bool Exists(string ClaveCentroCosto)
         {

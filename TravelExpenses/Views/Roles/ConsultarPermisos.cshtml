@@ -2,22 +2,29 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+
 
 @foreach (var user in Model.Users)
 {
-    
+
     <h4>@user.Email</h4>
-    
-    
-        
-            @foreach (var role in user.Roles)
-            {
-                <li>
-                    @role.Name
-                </li>
-            }
-       
-   
+
+
+    <h4>Roles</h4>
+    @foreach (var role in user.Roles)
+    {
+        <li>
+            @role.Name
+        </li>
+    }
+
+}
+
+<h4>Centro de Costo</h4>
+
+@foreach (var cosa in Model.CentroCostos)
+{
+    <li>
+        @cosa.Nombre
+    </li>
 }
