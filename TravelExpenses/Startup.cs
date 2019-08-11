@@ -180,7 +180,7 @@ namespace TravelExpenses
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=ListarSolicitudes}/{id?}");
+                    template: "{controller=Home}/{action=Default}/{id?}");
             });
 
         }

@@ -30,6 +30,11 @@ namespace TravelExpenses.Controllers
             return View();
         }
         [Authorize]
+        public IActionResult Default()
+        {
+            return View();
+        }
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
