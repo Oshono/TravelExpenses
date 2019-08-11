@@ -8,7 +8,7 @@
         {
 
             <li class="nav-item">
-                <a class="nav-link" asp-page="/">
+                <a class="nav-link" asp-page="/" asp-controller="Home" asp-action="Default">
                     <i class="mdi mdi-home menu-icon"></i>
                     <span class="menu-title">Inicio</span>
                 </a>
@@ -58,6 +58,22 @@
             if (User.IsInRole("Solicitante") || User.IsInRole("Procesador") || User.IsInRole("Aprobador") || User.IsInRole("Admin"))
             {
                 <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
+                        <i class="mdi mdi-account menu-icon"></i>
+                        <span class="menu-title">Solicitudes</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic2">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" asp-controller="Home" asp-action="ListarSolicitudes">Solicitudes</a></li>
+
+                        </ul>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Solicitante") || User.IsInRole("Procesador") || User.IsInRole("Aprobador") || User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic3">
 
                         <i class="mdi mdi-backup-restore"></i>
@@ -88,28 +104,13 @@
                     </div>
                 </li>
             }
-            if (User.IsInRole("Solicitante") || User.IsInRole("Procesador") || User.IsInRole("Aprobador") || User.IsInRole("Admin"))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
-                        <i class="mdi mdi-account menu-icon"></i>
-                        <span class="menu-title">Solicitudes</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="ui-basic2">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" asp-controller="Home" asp-action="ListarSolicitudes">Solicitudes</a></li>                            
 
-                        </ul>
-                    </div>
-                </li>
-            }
             if (User.IsInRole("Procesador") || User.IsInRole("Admin"))
             {
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic2">
                         <i class="mdi mdi-account menu-icon"></i>
-                        <span class="menu-title">Revisor</span>
+                        <span class="menu-title">Procesador</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="ui-basic2">
