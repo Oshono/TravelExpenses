@@ -58,28 +58,28 @@ namespace TravelExpenses.Controllers
             try
             {
 
-
+                var usuario=User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Sol = _SolicitudesData.ObtenerIdSolicitud().ToList();
-                HttpContext.Session.SetInt32("Folio", Convert.ToInt32(Sol[0].IdFolio) + 1);
+                //HttpContext.Session.SetInt32("Folio", Convert.ToInt32(Sol[0].IdFolio) + 1);
 
                 List<Solicitud> Solicitud = new List<Solicitud>();
                 Solicitud = _SolicitudesData.ObtenerIdSolicitud().ToList();
                 //ViewBag.Sol = Convert.ToInt32(Solicitud[0].IdFolio) + 1;
 
-                ViewBag.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                //ViewBag.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
                 var SolicitudModel = new SolicitudesViewModel();
 
                 var Pais = _UbicacionData.ObtenerPaises();
                 var Estado = _UbicacionData.ObtenerEstados("");
                 var Ciudad = _UbicacionData.ObtenerCiudades("MEX", 1);
                 var TipoSolicitud = _SolicitudesData.ObtenerTipoSolicitud();
-                var Destino = _DestinosData.ObtenerDestinos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
+                var Destino = _DestinosData.ObtenerDestinos(0);
                 //var Gasto = _SolicitudesData.ObtenerGastos(Convert.ToInt32(HttpContext.Session.GetInt32("Folio")));
                 var Moneda = _MonedaData.ObtenerMonedas()
                               .OrderBy(x => x.Descripcion).ToList();
                 var Empresa = _EmpresaData.ObtenerEmpresas();
                 var _Gasto = _GastoData.ObtenerGastos();
-
+                var politica = _SolicitudesData.ObtenerPoliticas(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 var IdFolio = _SolicitudesData.ObtenerIdSolicitud();
                 SolicitudModel.Solicitudes = IdFolio;
@@ -94,13 +94,14 @@ namespace TravelExpenses.Controllers
                 SolicitudModel.Empresas = Empresa;
                 SolicitudModel._Gastos = _Gasto;
                 //SolicitudModel.Gastos = Gasto;
-
+                SolicitudModel.Politicas = politica;
                 ViewBag.Hidden = true;
 
                 return View(SolicitudModel);
             }
             catch (Exception)
             {
+                var politica = _SolicitudesData.ObtenerPoliticas(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 Sol = _SolicitudesData.ObtenerIdSolicitud().ToList();
                 //HttpContext.Session.SetInt32("Folio", Convert.ToInt32(Sol[0].IdFolio));
 
@@ -136,7 +137,7 @@ namespace TravelExpenses.Controllers
                 SolicitudModel.Empresas = Empresa;
                 SolicitudModel._Gastos = _Gasto;
                 //SolicitudModel.Gastos = Gasto;
-
+                SolicitudModel.Politicas = politica;
                 ViewBag.Hidden = true;
 
                 return View(SolicitudModel);
@@ -191,7 +192,8 @@ namespace TravelExpenses.Controllers
                     objsolicitudes.Id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     objsolicitudes.RFC = "456777";
                     objsolicitudes.ClaveMoneda = "ABC";
-                    _SolicitudesData.InsertarSolicitud(objsolicitudes);
+                    var Folio = _SolicitudesData.InsertarSolicitud(objsolicitudes);
+                    HttpContext.Session.SetInt32("FolioSol",Folio );
                 });
 
                 _Destino.ForEach(d =>
@@ -202,7 +204,7 @@ namespace TravelExpenses.Controllers
                     destino.Motivo = d.Motivo;
                     destino.FechaSalida = d.FechaSalida;
                     destino.FechaLlegada = d.FechaLlegada;
-                    destino.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                    destino.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("FolioSol"));
                     _DestinosData.InsertarDestino(destino);
                 });
 
@@ -212,7 +214,7 @@ namespace TravelExpenses.Controllers
                     gasto.MontoMaximo = 5000;
                     gasto.ImporteSolicitado = g.ImporteSolicitado;
                     gasto.TipoCambios = g.TipoCambios;
-                    gasto.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                    gasto.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("FolioSol"));
                     gasto.RFC = "456777";
                     gasto.IdGasto = g.IdGasto;
                     _SolicitudesData.InsertarGastos(gasto);
@@ -220,7 +222,7 @@ namespace TravelExpenses.Controllers
                 _comentarios.ForEach(c =>
                 {
                     comentarios.Comentario = c.Comentario;
-                    comentarios.Folio= Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                    comentarios.Folio= Convert.ToInt32(HttpContext.Session.GetInt32("FolioSol"));
                     _SolicitudesData.InsertarComentarios(comentarios);
                 });
 
@@ -290,7 +292,7 @@ namespace TravelExpenses.Controllers
             try
             {
 
-                objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
+                //objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
                 objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
                 objsolicitudes.Departamento = "TI";
                 objsolicitudes.Empresa = "";
@@ -301,8 +303,8 @@ namespace TravelExpenses.Controllers
                 objsolicitudes.Id =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 objsolicitudes.RFC = "456777";
                 objsolicitudes.ClaveMoneda = "MXN";
-                _SolicitudesData.InsertarSolicitud(objsolicitudes); 
-                return Json(objsolicitudes.Folio);
+               var result= _SolicitudesData.InsertarSolicitud(objsolicitudes); 
+                return Json(result);
             }
             catch (Exception ex)
             {

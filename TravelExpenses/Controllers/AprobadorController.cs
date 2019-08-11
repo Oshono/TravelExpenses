@@ -140,6 +140,7 @@ namespace TravelExpenses.Controllers
                 if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta" || Solicitudes.Estatus == "Rechazada")
                 {
                     ViewBag.Deshabilitar = false;
+
                 }
                 else
                 {
@@ -171,9 +172,9 @@ namespace TravelExpenses.Controllers
             int result = 0;
             if (viewModel.Operacion == 1)
             {
-                var estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio);
+                var estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio).Estatus;
 
-                if (estatus.Estatus.Equals("PorAutorizar"))
+                if (estatus.Equals("PorAutorizar"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
                 }

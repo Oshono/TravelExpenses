@@ -49,6 +49,20 @@ namespace TravelExpenses.Controllers
             return View(solicitud);
         }
 
+        public ActionResult SolicitudCerradas()
+        {
+            ObservacionViewModel solicitud = new ObservacionViewModel();
+            var PorComprobar = SolicitudesData.ObtenerSolicitudesXEstatus("Cerrada");
+            solicitud.Solicitudes = PorComprobar;
+            var Estatus =
+                (from e in SolicitudesData.EstatusSolicitudes()
+                    where e.Status == "Cerrada"
+                    select e
+                );
+            solicitud.Estatuses = Estatus;
+            return View(solicitud);
+        }
+
         public IActionResult SolicitudesEstatus(string estatus)
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
@@ -74,6 +88,7 @@ namespace TravelExpenses.Controllers
             }
 
         }
+
 
 
         public ActionResult Detalles(string Folio)
@@ -102,6 +117,34 @@ namespace TravelExpenses.Controllers
                 return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
             }
             
+        }
+
+        public ActionResult DetallesSolicitudCerradas(string Folio)
+        {
+            try
+            {
+                int FolioSolicitud = 0;
+                var rembolso = new ObservacionViewModel();
+                if (int.TryParse(Folio, out FolioSolicitud))
+                {
+                    rembolso.Comprobantes = new List<Comprobante>();
+                    rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+                    var solicitud = SolicitudesData.ObtenerSolicitudes().Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                    rembolso.Solicitud = solicitud;
+                    rembolso.Observacion = new Observacion();
+                    rembolso.Observacion.Folio = Convert.ToInt16(Folio);
+                    var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+                    rembolso.comentarios = comentarios;
+                    rembolso.Observacion = new Observacion();
+                    rembolso.Observacion.Folio = Convert.ToInt32(Folio);
+                }
+                return View(rembolso);
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
+            }
+
         }
 
         public ActionResult DetallesPorAutorizar(int Folio)

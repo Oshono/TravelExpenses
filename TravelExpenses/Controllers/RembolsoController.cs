@@ -122,6 +122,7 @@ namespace TravelExpenses.Controllers
 
                 var solicitud = _solicitud.ObtenerSolicitudes().Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
                 rembolso.solicitud = solicitud;
+                rembolso.DetallesAsociados = rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) > 0 ).Count () < 1;
             }
             var _Gasto = _gastos.ObtenerGastos();
 

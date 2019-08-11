@@ -17,5 +17,6 @@ namespace TravelExpenses.ViewModels
         public IEnumerable<Gastos> Gastos { get; set; }
         public Solicitud solicitud { get; set; }
         public IEnumerable<Gasto> MisGastos { get; set; }
+        public bool DetallesAsociados { get; set; }
     }
 }
