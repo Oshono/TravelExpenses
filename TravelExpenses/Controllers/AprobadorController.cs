@@ -102,6 +102,8 @@ namespace TravelExpenses.Controllers
                     rembolso.Observacion.Folio = Convert.ToInt16(Folio);
                     var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
                     rembolso.comentarios = comentarios;
+                    rembolso.Observacion = new Observacion();
+                    rembolso.Observacion.Folio = Convert.ToInt32(Folio);
                 }
                 return View(rembolso);
             }
@@ -133,6 +135,8 @@ namespace TravelExpenses.Controllers
                 SolicitudModel.Solicitud = Solicitudes;
                 SolicitudModel.Destinos = Destinos;
                 SolicitudModel.comentarios = comentarios;
+                SolicitudModel.Observacion = new Observacion();
+                SolicitudModel.Observacion.Folio = Folio;
                 if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta" || Solicitudes.Estatus == "Rechazada")
                 {
                     ViewBag.Deshabilitar = false;
@@ -167,8 +171,9 @@ namespace TravelExpenses.Controllers
             int result = 0;
             if (viewModel.Operacion == 1)
             {
-                string estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio).Estatus;
-                if (estatus.Equals("PorAutorizar"))
+                var estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio);
+
+                if (estatus.Estatus.Equals("PorAutorizar"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
                 }
