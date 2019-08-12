@@ -10,8 +10,8 @@
 
     <label asp-for="@Model.Gasto.IdGasto" class="control-label">Concepto</label>
     <select asp-for="@Model.Gasto.IdGasto" class="form-control input-sm concepto"
-            asp-items="@(new SelectList(Model._Gastos, "IdGasto", "Nombre"))">
-        <option value="">-- Seleccione un concepto</option>
+            asp-items="@(new SelectList(Model.Politicas, "IdGasto", "Nombre"))">
+        <option value="0">-- Seleccione un concepto</option>
     </select>
 
     <label asp-for="@Model.Gasto.ImporteSolicitado" class="control-label">Importe</label>

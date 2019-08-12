@@ -53,15 +53,14 @@
                         
                         <select asp-for="@Model.Solicitud.IdTipoSolicitud" class="form-control input-sm Tipo" disabled
                                 asp-items="@(new SelectList(Model.Solicitudes, "IdTipoSolicitud", "Descripcion" ))">
-                            
-
+                             
                         </select>
                         <input asp-for="Solicitud.Folio" hidden id="folio" />
 
                     </div>
                         <div class="col-4">
                             Importe Solicitado
-                            <input asp-for="@Model.Solicitud.ImporteSolicitado" disabled required class="form-control" id="Importe"/>
+                            <input asp-for="@Model.Solicitud.ImporteSolicitadoC" disabled required class="form-control" id="Importe"/>
 
                         </div>
                         <div class="col-4">
@@ -77,7 +76,7 @@
                         </div>
                         <div class="col-4">
                             Importe Solicitado
-                            <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.ImporteSolicitado" class="form-control" disabled/> 
+                            <input asp-for="Solicitud.Descripcion" value="@Model.Solicitud.ImporteSolicitadoC" class="form-control" disabled/> 
                         </div>
                         <div class="col-4">
                             @*Moneda:
@@ -96,7 +95,7 @@
                     <h3 style="color:red;"> @ViewBag.Mensaje</h3>
                     <div class="row">
                         <div class="col-5">
-                            <a href="~/" class="btn" id="Button">Cerrar</a>
+                            <a href="~/Home/ListarSolicitudes" class="btn" id="Button">Cerrar</a>
 
                             <input type="Button" value="Guardar" onclick="ModificarSolicitud()" class="btn" id="Button" disabled="@ViewBag.Deshabilitar" />
                             @*<a href="#" class="btn" id="Button">Enviar a autorización</a>*@
@@ -185,7 +184,7 @@
                                                             }
                                                             else
                                                             {
-                                                                <a class="btn btn-lg" onclick="EliminarDestino(@destino.IdDestinos)" id="accion">
+                                                                <a class="btn btn-lg" onclick="EliminarDestino(@destino.IdDestinos)" id="accion" style="cursor:pointer">
                                                                     <i class="fas fa-eraser"></i>
                                                                 </a>
                                                             }
@@ -268,7 +267,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion">
+                                                            <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion" style="cursor:pointer">
                                                                 <i class="fas fa-eraser"></i>
                                                             </a>
                                                         }
@@ -359,7 +358,7 @@
                 cache: false,
                 success: function (response) {
                     alert("Solicitud actualizada");
-                    window.location.href = "../";
+                    window.location.href = "../Home/ListarSolicitudes";
                 },
                 error: function (error) {
                     alert("Error: " + error);
@@ -395,22 +394,22 @@
 
         var Folio = $("#folio").val();
         var url = "/Solicitudes/EliminarGasto/";
-        alert("Hola");
-        //$.ajax({
-        //    url: url,
-        //    data: { IdGastos: IdGastos},
-        //    type: "POST",
-        //    cache: false,
-        //    success: function (response) {
-        //        alert("Dato eliminado");
-        //        window.location.href = "./Edit?Folio=" + Folio;
-        //    },
-        //    error: function (error) {
-        //        alert("Error: " + error);
-        //        console.log(error);
-        //    }
+        
+        $.ajax({
+            url: url,
+            data: { IdGastos: IdGastos},
+            type: "POST",
+            cache: false,
+            success: function (response) {
+                alert("Dato eliminado");
+                window.location.href = "./Edit?Folio=" + Folio;
+            },
+            error: function (error) {
+                alert("Error: " + error);
+                console.log(error);
+            }
 
-        //});
+        });
     }
 
     function CargaEstados(ClavePais) {

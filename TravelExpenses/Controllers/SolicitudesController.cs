@@ -182,7 +182,7 @@ namespace TravelExpenses.Controllers
                 _solicitudes.ForEach(s =>
                 {
                     //objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
-                    objsolicitudes.IdTipoSolicitud = s.IdTipoSolicitud;
+                    objsolicitudes.IdTipoSolicitud = 1;
                     objsolicitudes.Departamento = string.Empty;
                     objsolicitudes.Empresa = "";
                     objsolicitudes.ImporteSolicitado = s.ImporteSolicitado;
@@ -294,7 +294,7 @@ namespace TravelExpenses.Controllers
                 
 
                 //objsolicitudes.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("Folio"));
-                objsolicitudes.IdTipoSolicitud = _solicitudes.IdTipoSolicitud;
+                objsolicitudes.IdTipoSolicitud = 1;
                 objsolicitudes.Departamento = string.Empty; 
                 objsolicitudes.Empresa = "";
                 objsolicitudes.ImporteSolicitado = 0;
@@ -309,7 +309,7 @@ namespace TravelExpenses.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                throw ex;
             }
         }
 
@@ -420,6 +420,7 @@ namespace TravelExpenses.Controllers
                 var SolicitudModel = new SolicitudesViewModel();
                 SolicitudModel.Solicitud = new Solicitud();
                 SolicitudModel.Gasto = new Gasto();
+                var politica = _SolicitudesData.ObtenerPoliticas(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 var Moneda = _MonedaData.ObtenerMonedas()
                               .OrderBy(x => x.Descripcion).ToList();
@@ -434,6 +435,7 @@ namespace TravelExpenses.Controllers
                 SolicitudModel.Solicitud = Solicitudes;
                 SolicitudModel.Destinos = Destinos;
                 SolicitudModel.comentarios = comentarios;
+                SolicitudModel.Politicas = politica;
                 if (Solicitudes.Estatus == "Capturada" || Solicitudes.Estatus == "Incompleta" || Solicitudes.Estatus == "Rechazada")
                 {
                     ViewBag.Deshabilitar = false;
@@ -531,7 +533,8 @@ namespace TravelExpenses.Controllers
             var _Gasto = _GastoData.ObtenerGastos();
             var Moneda = _MonedaData.ObtenerMonedas()
                           .OrderBy(x => x.Descripcion).ToList();
-
+            var politica = _SolicitudesData.ObtenerPoliticas(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            SolicitudModel.Politicas = politica;
             SolicitudModel.Gasto = Gastos_;
             SolicitudModel._Gastos = _Gasto; 
             SolicitudModel.Monedas = Moneda;
@@ -599,7 +602,7 @@ namespace TravelExpenses.Controllers
 
                 objSolicitud.Folio = _Solicitud.Solicitud.Folio;
                 objSolicitud.ClaveMoneda = "MXN";
-                objSolicitud.IdTipoSolicitud = _Solicitud.Solicitud.IdTipoSolicitud;
+                objSolicitud.IdTipoSolicitud = 1;
                 objSolicitud.ImporteSolicitado = _Solicitud.Solicitud.ImporteSolicitado;
                 _SolicitudesData.SolicitudesUpd(objSolicitud);
                 return Json(objSolicitud);
@@ -622,7 +625,8 @@ namespace TravelExpenses.Controllers
                           .OrderBy(x => x.Descripcion).ToList();
             SolicitudModel._Gastos = _Gasto;
             SolicitudModel.Solicitudes = TipoSolicitud;
-
+            var politica = _SolicitudesData.ObtenerPoliticas(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            SolicitudModel.Politicas = politica;
             SolicitudModel.Monedas = Moneda;
             return View(SolicitudModel);
         }

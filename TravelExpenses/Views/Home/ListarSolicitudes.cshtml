@@ -51,7 +51,7 @@
                 <br />
             </div>
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped" >
                     <thead>
                         <tr>
                             <th>Folio</th>
@@ -98,7 +98,7 @@
                                     </a>
                                 </td>
                             }
-                            @if (@item.Estatus == "Incompleta"|| @item.Estatus == "PorAutorizar" ||
+                            @if (@item.Estatus == "Incompleta"|| @item.Estatus == "PorAutorizar" || @item.Estatus == "Cerrada" ||
                              @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar"|| @item.Estatus == "Rechazada"|| @item.Estatus=="Cancelada"|| @item.Estatus == "Revisada")
                             {
                                 <td>
@@ -157,7 +157,7 @@
                                 "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
                         }
                         else if (item.estatus == "PorAutorizar" || item.estatus == "PorComprobar" ||
-                            item.estatus == "PorLiberar" || item.estatus == "Rechazada" || item.estatus == "Cancelada" || item.estatus =="Revisada")
+                            item.estatus == "PorLiberar" || item.estatus == "Rechazada" || item.estatus == "Cancelada" || item.estatus =="Revisada" || item.estatus == "Cerrada")
                         {
                             row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC+"</td><td>"+ item.importeComprobadoC+ "</td><td>" + item.estatus +
                                 "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
