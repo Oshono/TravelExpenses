@@ -48,13 +48,16 @@ namespace TravelExpenses.Controllers
                 var SolicitudesModel = new SolicitudesViewModel();
                 if (estatus == "Todo" || estatus == "--Seleccionar estatus")
                 {
-                    var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                    //var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                     SolicitudesModel.Solicitudes = Solicitud;
                     return Json(Solicitud);
                 }
                 else
                 {
-                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    //var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
                     SolicitudesModel.Solicitudes = Solicitud;
                     return Json(Solicitud);
                 }
