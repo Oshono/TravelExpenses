@@ -13,7 +13,7 @@ namespace TravelExpenses.Data
         IEnumerable<Solicitud> ObtenerSolicitudes(string ID);
          
         IEnumerable<Solicitud> ObtenerIdSolicitud();
-        IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus);
+        IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus,string ID);
         int ModificarEstatus(int Folio);
         int ActualizarEstatus(int Folio, string Estatus);
         IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus,string ID);

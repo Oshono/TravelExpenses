@@ -54,7 +54,7 @@ namespace TravelExpenses.Controllers
                 }
                 else
                 {
-                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus);
+                    var Solicitud = _SolicitudesData.ObtenerSolicitudesEstatus(estatus,User.FindFirst(ClaimTypes.NameIdentifier).Value);
                     SolicitudesModel.Solicitudes = Solicitud;
                     return Json(Solicitud);
                 }
@@ -72,13 +72,13 @@ namespace TravelExpenses.Controllers
         {
 
             _SolicitudesData.ModificarEstatus(Folio);
-            return Redirect("./");
+            return Redirect("./ListarSolicitudes");
         }
 
         public ActionResult EliminarSolicitud(int Folio)
         {
             _SolicitudesData.EliminarSolicitud(Folio);
-            return Redirect("./");
+            return Redirect("./ListarSolicitudes");
         }
         [Authorize]
         public IActionResult ListarSolicitudes()

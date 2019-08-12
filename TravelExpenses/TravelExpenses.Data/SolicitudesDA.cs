@@ -191,12 +191,13 @@ namespace TravelExpenses.Data
             }
         }
 
-        public IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus)
+        public IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus,string ID)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@Estatus", estatus);
+                parameters.Add("ID", ID);
                 using (IDbConnection conn = connection)
                 {
                     var reader = connection.Query<Solicitud>("FiltroEstatus", parameters, commandType: CommandType.StoredProcedure);
