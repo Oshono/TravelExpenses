@@ -7,6 +7,7 @@ namespace TravelExpenses.Data
     {
         IEnumerable<CentroCosto> ObtenerCentroCostos();
         int GuardarCentroConstosUsuario(CentroCostoUsuario centroCostoUsuario);
+        IEnumerable<CentroCostoUsuario> ConsultarControCostoPorUsuario(string id);
         int Guardar(CentroCosto centroCosto);
         int Commit();
     }

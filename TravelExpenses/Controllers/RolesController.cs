@@ -68,11 +68,16 @@ namespace TravelExpenses.Controllers
         }
 
  
-        public IActionResult ConsultarPermisos(string Email)
+        public IActionResult ConsultarPermisos(string Email,string Id)
         {
             var roles = _context.Roles.ToList();
             var users = _context.Users.ToList();
             var userRoles = _context.UserRoles.ToList();
+            
+
+            var centroCostos = _centro.ObtenerCentroCostos();
+
+            IEnumerable<CentroCosto> costos = centroCostos;
 
             var convertedUsers = users.Select(x => new UsersViewModel
             {
@@ -85,9 +90,13 @@ namespace TravelExpenses.Controllers
                     })
             });
 
+            var CentroCostoAsociado = _centro.ConsultarControCostoPorUsuario(Id).First();
+          
+
             return View("ConsultarPermisos",new DisplayViewModel
             {
                 Roles = roles.Select(x => x.NormalizedName),
+                CentroCostos = costos.Where(x=>x.ClaveCentroCosto== CentroCostoAsociado.ClaveCentroCosto),
                 Users = convertedUsers.Where(x => x.Email == Email)
             });
         }
@@ -150,7 +159,7 @@ namespace TravelExpenses.Controllers
             if (vm.Consultar)
             {
                 //this.ConsultarPermisos(vm.UserEmail);
-                return RedirectToAction("ConsultarPermisos","Roles", new { Email = vm.UserEmail })
+                return RedirectToAction("ConsultarPermisos","Roles", new { Email = vm.UserEmail,Id=user.Id })
 ;            }
             else
                 return RedirectToAction("Index",new  { Mesaje="Selesione una opcion valida"});
