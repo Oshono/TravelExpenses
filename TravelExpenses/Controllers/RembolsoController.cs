@@ -111,7 +111,7 @@ namespace TravelExpenses.Controllers
             {                 
                 rembolso.Comprobantes = new List<Comprobante>();
                 rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-
+                
                 foreach(Comprobante comp in rembolso.Comprobantes)
                 { 
                     if (comp.FormaPago == "01" && comp.Conceptos.Where(x => x.DescripcionProdServ.ToUpper().Contains("GASOLINA") || x.DescripcionProdServ.ToUpper().Contains("ALIMENTO")).Count() > 0)
@@ -126,7 +126,15 @@ namespace TravelExpenses.Controllers
             }
             var _Gasto = _gastos.ObtenerGastos();
 
+            
+
+            var politicas = _politicadetalle.ObtenerDetalles();
+
             var misGastos = _solicitud.ObtenerGastos(FolioSolicitud);
+            foreach (Gasto miGasto in misGastos)
+            {
+                miGasto.ImportePermitidoPolitica = Double.Parse( politicas.Where(x => x.IdGasto == miGasto.IdGasto).Select(x => x.ImportePermitido).FirstOrDefault().ToString());
+            }
             rembolso.MisGastos = misGastos;
             return View( rembolso);
         }

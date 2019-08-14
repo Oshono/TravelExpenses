@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace TravelExpenses.Core
@@ -18,5 +19,8 @@ namespace TravelExpenses.Core
         public string Nombre { get; set; }
         public string Empresa { get; set; }
         public double CantidadComprobada { get; set; }
+
+        [NotMapped]
+        public double ImportePermitidoPolitica { get; set; }
     }
 }

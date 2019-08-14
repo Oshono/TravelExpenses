@@ -77,6 +77,7 @@
                                         <th>Monto Máximo Permitido</th>
                                         <th>Importe Solicitado </th>
                                         <th>Importe Comprobado </th>
+                                        <th>Excedente </th>
                                         <th>Moneda</th>
                                         <th>Tipo de Cambio </th>
                                     </tr>
@@ -84,26 +85,27 @@
                                 <tbody>
                                     @foreach (var g in @Model.MisGastos)
                                     {
-                                        <tr>
-                                            
-                                            <td>@g.Nombre</td>
+                                    <tr>
+
+                                        <td>@g.Nombre</td>
 
 
-                                            <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
-                                            @if (@g.MontoMaximo < @g.ImporteSolicitado)
-                                            {
-                                                <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
-                                            }
-                                            else
-                                            {
-                                                <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
-                                            }
-                                            <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
-                                            <td>@g.Descripcion</td>
-                                            <td>@g.TipoCambios</td>
-                                            
-                                            
-                                        </tr>
+                                        <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
+                                        @if (@g.ImportePermitidoPolitica < @g.ImporteSolicitado)
+                                        {
+                                            <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                        }
+                                        <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                        <td>@string.Format("{0:C}", @g.CantidadComprobada - @g.ImporteSolicitado) </td>
+                                        <td>@g.Descripcion</td>
+                                        <td>@g.TipoCambios</td>
+
+
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
