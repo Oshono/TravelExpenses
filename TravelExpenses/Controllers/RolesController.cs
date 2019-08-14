@@ -138,7 +138,8 @@ namespace TravelExpenses.Controllers
                 
             if (vm.DeleteUser)
             {
-                await _userManager.DeleteAsync(user);
+                await _userManager.SetLockoutEnabledAsync(user,false);
+                //await _userManager.DeleteAsync(user);
                 //await _userManager.SetLockoutEnabledAsync(user, true);
                 //await _userManager.SetLockoutEndDateAsync(user, DateTime.Now);
                 return RedirectToAction("Index", new { Mesaje = "Eliminacion de Role " + vm.Role + " al usuario" + user.UserName });
