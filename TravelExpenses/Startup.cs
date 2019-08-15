@@ -62,6 +62,8 @@ namespace TravelExpenses
             services.AddScoped<IPoliticaDetalle, PoliticaDetalleDA>();
             services.AddScoped<IObservacionDA, ObservacionDA>();
             services.AddScoped<IFormaPago, FormaPagoDA>();
+            services.AddScoped<IUsuario, UsuarioDA>();
+            
 
             services.Configure<CookiePolicyOptions>(options =>
             {
