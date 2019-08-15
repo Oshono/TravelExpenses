@@ -9,10 +9,13 @@
     <input asp-for="Gasto.Folio" class="form-control" id="IdGasto" hidden />
 
     <label asp-for="IdGasto" class="control-label">Concepto</label>
-    <select asp-for="Politica.IdGasto" class="form-control input-sm concepto"
+    <select asp-for="Politica.IdGasto" class="form-control input-sm concepto" onchange="GetConcepto()"
             asp-items="@(new SelectList(Model.Politicas, "IdGasto", "Nombre"))">
         <option value="0">-- Seleccione un concepto</option>
     </select>
+
+    <label class="control-label">Monto permitido</label>
+    <input class="form-control" readonly asp-for="Gasto.MontoMaximo" id="monto" />
 
     <label asp-for="@Model.Gasto.ImporteSolicitado" class="control-label">Importe</label>
     <input asp-for="Gasto.ImporteSolicitado" class="form-control" id="ImporteGasto" />
@@ -31,15 +34,16 @@
     <div class="row">
         <div class="col">
             <input type="button" class="btn btn-primary" value="Guardar" onclick="RegistrarGasto(this.value)" />
-         
+
             <input type="button" class="btn btn-info" value="Cancelar" onclick="Regresar()" />
-        </div> 
+        </div>
     </div>
-    
-     
+
+
 </form>
 
 <script>
+    var MontoMaximo = 0;
     function Regresar() {
         var urlGet = window.location;
         var url_analizada = /^(\w+):\/\/([^\/]+)([^]+)$/.exec(urlGet);
@@ -67,6 +71,7 @@
         var TipoCambio = $("#TipoCambio").val();
 
         arr.push({
+            MontoMaximo: MontoMaximo,
             ClaveMoneda: ClaveMoneda,
             IdGasto: IdGasto,
             ImporteSolicitado: ImporteGasto,
@@ -94,6 +99,28 @@
 
             });
         }
+    }
+
+    function GetConcepto() {
+        var url = "/Solicitudes/obtenerMonto/";
+        var concepto = $(".concepto").children("option:selected").text();
+        var nombre = concepto;
+        var monto = $("#monto").val();
+        $.ajax({
+            url: url,
+            type: "post",
+            cache: false,
+            data: { nombre: nombre },
+            success: function (response) {
+                console.log(response[0]['importePermitido']);
+                MontoMaximo = response[0]['importePermitido'];
+                monto = $("#monto").val(response[0]['importePermitido']);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        }) 
+
     }
 
 </script>

@@ -186,7 +186,7 @@
                         <form id="formGastos">
                             <br>
                             <h3>Gastos</h3>
-                            <input class="btn" id="Button" type="button" onclick="RegistrarGasto()" value="Agregar" />
+                            <input class="btn" id="Button" type="button" onclick="RegistrarGasto();" value="Agregar" />
                             <hr />
                             <div class="container">
                                 <div class="row">
@@ -323,6 +323,27 @@
     var arrG = [];
     var arrS = [];
     var arrC = [];
+
+    function GetConcepto() {
+        var url = "/Solicitudes/obtenerMonto/";
+        var concepto = $(".concepto").children("option:selected").text();
+        var nombre = concepto;
+        $.ajax({
+            url: url,
+            type: "post",
+            cache: false,
+            data: { nombre: nombre },
+            success: function (response) {
+                console.log(response[0]['importePermitido']);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+        console.log(concepto);
+
+    }
+
     function RegistrarGasto() {
         var IdGasto = $(".concepto").children("option:selected").val();
         var Nombre = $(".concepto").children("option:selected").text();
@@ -333,41 +354,66 @@
         
         var row = "";
         var Importe; 
+
+        var url = "/Solicitudes/obtenerMonto/";
+        var concepto = $(".concepto").children("option:selected").text();
+        var nombre = concepto;
         console.log(IdGasto, ImporteSolicitado, ClaveMoneda);
-        if (IdGasto == 0 || ImporteSolicitado == "" || ClaveMoneda == "" || TipoCambios=="") {
+        if (IdGasto == 0 || ImporteSolicitado == "" || ClaveMoneda == "" || TipoCambios == "") {
             alert("Favor de capturar datos correctamente");
         }
-        else { 
-            
-            arrG.push({
-                IdGasto: IdGasto,
-                Nombre: Nombre,
-                ImporteSolicitado: ImporteSolicitado,
-                ClaveMoneda: ClaveMoneda,
-                Descripcion: Descripcion,
-                TipoCambios: TipoCambios
+        else {
+            $.ajax({
+                url: url,
+                type: "post",
+                cache: false,
+                data: { nombre: nombre },
+                success: function (response) {
+                    var MontoMaximo=response[0]['importePermitido'];
+
+
+                    arrG.push({
+                        MontoMaximo: MontoMaximo,
+                        IdGasto: IdGasto,
+                        Nombre: Nombre,
+                        ImporteSolicitado: ImporteSolicitado,
+                        ClaveMoneda: ClaveMoneda,
+                        Descripcion: Descripcion,
+                        TipoCambios: TipoCambios
+                    });
+                    var res = 0;
+                    for (var i = 0; i <= arrG.length - 1; i++) {
+                        res = res + parseInt(arrG[i]['ImporteSolicitado']);
+                        Importe = $("#Importe").val(res);
+                        console.log("Suma: " + res);
+                    }
+                    arrG.forEach((index, item) => {
+                        debugger;
+                        //row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 111 +
+                        //    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] +
+                        //    "</td><td>" + "<a class='btn btn-lg' id='accion' onclick='Eliminar(" + item + ");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>" + "</td></tr>";
+                        if (arrG[item]["MontoMaximo"] < arrG[item]["ImporteSolicitado"]) {
+                            row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + arrG[item]["MontoMaximo"] +
+                                "</td><td style='color:red;'>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] + "</td></tr>";
+                        }
+                        else {
+                            row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + arrG[item]["MontoMaximo"] +
+                                "</td><td style='color:green;'>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] + "</td></tr>";
+                        }
+                        
+                    });
+
+                    $("#tablaGastos").html(row);
+                    IdGasto = $(".concepto").get(0).selectedIndex = 0;
+                    ImporteSolicitado = $("#ImporteGasto").val("");
+                    ClaveMoneda = $(".MonedaGasto").get(0).selectedIndex = 0;
+                    TipoCambios = $("#TipoCambio").val("");
+                },
+                error: function (error) {
+                    alert(error);
+                }
             });
-            var res = 0; 
-            for (var i = 0; i <= arrG.length - 1; i++) {
-                res = res + parseInt(arrG[i]['ImporteSolicitado']);
-                Importe = $("#Importe").val(res);
-                console.log("Suma: "+res);
-            }
-            arrG.forEach((index, item) => {
-
-                //row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 111 +
-                //    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] +
-                //    "</td><td>" + "<a class='btn btn-lg' id='accion' onclick='Eliminar(" + item + ");'><i class='fas fa-edit'></i></a>" + "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-eraser'></i></a>" + "</td></tr>";
-
-                row += "<tr><td>" + arrG[item]["Nombre"] + "</td><td>" + 5000 +
-                    "</td><td>" + arrG[item]["ImporteSolicitado"] + "</td><td>" + arrG[item]["Descripcion"] + "</td><td>" + arrG[item]['TipoCambios'] + "</td></tr>";
-            });
-
-            $("#tablaGastos").html(row);
-            IdGasto = $(".concepto").get(0).selectedIndex = 0;
-            ImporteSolicitado = $("#ImporteGasto").val("");
-            ClaveMoneda = $(".MonedaGasto").get(0).selectedIndex = 0;
-            TipoCambios = $("#TipoCambio").val("");
+            console.log(concepto);
         }
 
     }
@@ -631,5 +677,25 @@
                 alert("error : " + reponse);
             }
         });
+    }
+
+    function GetConcepto() {
+        var url = "/Solicitudes/obtenerMonto/";
+        var concepto = $(".concepto").children("option:selected").text();
+        var nombre = concepto;
+        $.ajax({
+            url: url,
+            type: "post",
+            cache: false,
+            data: { nombre: nombre },
+            success: function (response) {
+                console.log(response[0]['importePermitido']);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+        console.log(concepto);
+
     }
 </script>
