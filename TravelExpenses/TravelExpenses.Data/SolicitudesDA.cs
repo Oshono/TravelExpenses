@@ -210,6 +210,26 @@ namespace TravelExpenses.Data
             }
         }
 
+        public IEnumerable<Politicas> ObtenerMonto( string ID,string nombre)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add ("@Nombre", nombre);
+                parameters.Add("@ID", ID);
+
+                using (IDbConnection conn = connection)
+                {
+                    var reader = connection.Query<Politicas>("ObtenerMonto", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.ImportePermitido);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public IEnumerable<Estatus> EstatusSolicitudes()
         {
             try
@@ -448,6 +468,7 @@ namespace TravelExpenses.Data
                 parameters.Add("@TipoCambios", _Gastos.TipoCambios); 
                 parameters.Add("@IdGasto", _Gastos.IdGasto);
                 parameters.Add("@ClaveMoneda", _Gastos.ClaveMoneda);
+                parameters.Add("@MontoMaximo", _Gastos.MontoMaximo);
                 using (IDbConnection conn = connection)
                 {
                     var result = conn.Execute("Gastos_upd", parameters, commandType: CommandType.StoredProcedure);

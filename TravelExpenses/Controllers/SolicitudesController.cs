@@ -165,7 +165,21 @@ namespace TravelExpenses.Controllers
             return Json(estados);
         }
 
-        
+        [HttpPost]
+        public ActionResult obtenerMonto(string nombre)
+        {
+            try
+            {
+                var concepto = _SolicitudesData.ObtenerMonto(User.FindFirst(ClaimTypes.NameIdentifier).Value, nombre).ToList();
+
+                return Json(concepto);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         [HttpPost]
         public ActionResult Create(List<Solicitud> _solicitudes, List<Destinos> _Destino, List<Gasto> _Gasto, List<Comentarios> _comentarios)
@@ -211,7 +225,7 @@ namespace TravelExpenses.Controllers
                 _Gasto.ForEach(g =>
                 {
                     gasto.ClaveMoneda = g.ClaveMoneda;
-                    gasto.MontoMaximo = 5000;
+                    gasto.MontoMaximo = g.MontoMaximo;
                     gasto.ImporteSolicitado = g.ImporteSolicitado;
                     gasto.TipoCambios = g.TipoCambios;
                     gasto.Folio = Convert.ToInt32(HttpContext.Session.GetInt32("FolioSol"));
@@ -553,6 +567,7 @@ namespace TravelExpenses.Controllers
                 objDestinos.IdGasto = Gastos_.Gasto.IdGasto;
                 objDestinos.ClaveMoneda = Gastos_.Gasto.ClaveMoneda;
                 objDestinos.IdGastos = Gastos_.Gasto.IdGastos;
+                objDestinos.MontoMaximo = Gastos_.Gasto.MontoMaximo;
                 _SolicitudesData.Gastos_Upd(objDestinos);
                 return Json(objDestinos);
             }
@@ -667,12 +682,13 @@ namespace TravelExpenses.Controllers
 
                 _gastos.ForEach(g =>
                 {
+                    gastos.MontoMaximo = g.MontoMaximo;
                     gastos.ClaveMoneda = g.ClaveMoneda;
                     gastos.IdGasto = g.IdGasto;
                     gastos.ImporteSolicitado = g.ImporteSolicitado;
                     gastos.TipoCambios = g.TipoCambios;
                     gastos.Folio = g.Folio;
-                    gastos.MontoMaximo = 5000;
+                    
                     gastos.RFC = "456777";
                     _SolicitudesData.InsertarGastos(gastos);
 
@@ -682,7 +698,7 @@ namespace TravelExpenses.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             
         }

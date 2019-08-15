@@ -216,6 +216,7 @@
                                                 <th>Monto Máximo</th>
                                                 <th>Importe Solicitado</th>
                                                 <th>Cantidad comprobada</th>
+                                                <th>Excedente / Faltante</th>
                                                 <th>Moneda</th>
                                                 <th>Tipo Cambio</th>
                                                 <th>Editar</th>
@@ -227,53 +228,64 @@
                                         <tbody>
                                             @foreach (var g in @Model.Gastos)
                                             {
-                                                <tr> 
-                                                    <td>@g.Empresa</td>
-                                                    <td>@g.Nombre</td>
+                                            <tr>
+                                                <td>@g.Empresa</td>
+                                                <td>@g.Nombre</td>
 
 
-                                                    <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
-                                                    @if (@g.MontoMaximo < @g.ImporteSolicitado)
+                                                <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
+                                                @if (@g.MontoMaximo < @g.ImporteSolicitado)
+                                                {
+                                                    <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                                }
+                                                <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                                @{
+                                                    double res = @g.ImporteSolicitado - @g.MontoMaximo;
+                                                }
+                                                @if (@res < @g.MontoMaximo)
+                                                {
+                                                    <td style="color:green;"> @string.Format("{0:C}", @res)</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="color:red;"> @string.Format("{0:C}", @res)</td>
+                                                }
+                                                <td>@g.Descripcion</td>
+                                                <td>@g.TipoCambios</td>
+                                                <td>
+                                                    @if (@ViewBag.Deshabilitar == true)
                                                     {
-                                                        <td style="color:red;">@string.Format("{0:C}",  @g.ImporteSolicitado)</td>
+                                                        <a class="btn btn-lg">
+                                                            <i class="fas fa-ban "></i>
+                                                        </a>
                                                     }
                                                     else
                                                     {
-                                                        <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                                        <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
                                                     }
-                                                        <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
-                                                    <td>@g.Descripcion</td>
-                                                    <td>@g.TipoCambios</td>
-                                                    <td>
-                                                        @if (@ViewBag.Deshabilitar == true)
-                                                        {
-                                                            <a class="btn btn-lg">
-                                                                <i class="fas fa-ban "></i>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="btn btn-lg" asp-controller="Solicitudes" asp-action="EditarGastos" asp-route-IdGastos="@g.IdGastos" id="accion">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @if (@ViewBag.Deshabilitar == true)
-                                                        {
-                                                            <a class="btn btn-lg">
-                                                                <i class="fas fa-ban "></i>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion" style="cursor:pointer">
-                                                                <i class="fas fa-eraser"></i>
-                                                            </a>
-                                                        }
+                                                </td>
+                                                <td>
+                                                    @if (@ViewBag.Deshabilitar == true)
+                                                    {
+                                                        <a class="btn btn-lg">
+                                                            <i class="fas fa-ban "></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-lg" onclick="EliminarGasto(@g.IdGastos)" id="accion" style="cursor:pointer">
+                                                            <i class="fas fa-eraser"></i>
+                                                        </a>
+                                                    }
 
-                                                    </td>
-                                                </tr>
+                                                </td>
+                                            </tr>
                                             }
                                         </tbody>
                                     </table>
