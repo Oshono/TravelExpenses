@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
+using TravelExpenses.Services;
 
 namespace TravelExpenses.Controllers
 {
@@ -27,7 +28,10 @@ namespace TravelExpenses.Controllers
         private readonly IFormaPago _formaPago;
         private readonly ICatProdServSATDA _prodserv;
         private readonly IHostingEnvironment _env;
-        
+        private readonly IUsuario Usuario;
+        private readonly IEmailSender Email;
+        private readonly ICentroCosto _centroCosto;
+
         public List<Comprobante> lstComprobantes;
         
         public rembolsoController(  IRembolso rembolso, 
@@ -38,7 +42,10 @@ namespace TravelExpenses.Controllers
                                     IPolitica politica,
                                     IPoliticaDetalle politicadetalle,
                                     IFormaPago formaPago,
-                                    ICatProdServSATDA prodserv
+                                    ICatProdServSATDA prodserv,
+                                    IUsuario usuario,
+                                    IEmailSender email,
+                                    ICentroCosto centroCosto
                                     )
         {
             _rembolso = rembolso;
@@ -50,6 +57,34 @@ namespace TravelExpenses.Controllers
             _politicadetalle = politicadetalle;
             _formaPago = formaPago;
             _prodserv = prodserv;
+            Usuario = usuario;
+            Email = email;
+            _centroCosto = centroCosto;
+
+        }
+
+        public bool ObtenerCorreos(int Folio,
+                                    string subject,
+                                    string message
+                                    )
+        {
+            var username = User.FindFirst(ClaimTypes.Name).Value;
+            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var centroCosto =  _centroCosto.ConsultarControCostoPorUsuario(id).FirstOrDefault().ClaveCentroCosto;
+
+
+
+            var Correos = Usuario.ObtenerCorreos(username, centroCosto, Folio);
+            SendEmail(Correos.Solicitante, subject, message, Correos.Aprobador);
+            SendEmail(Correos.Solicitante, subject, message, Correos.Procesador);
+
+            return true;
+        }
+
+        public Task SendEmail(string email, string subject, string message, string CC)
+        {
+            return Email.SendEmailCCAsync (email,CC, subject, message);
         }
 
         // GET: Centro Costos
@@ -430,8 +465,9 @@ namespace TravelExpenses.Controllers
         
         [Authorize]
         public ActionResult EnviarReembolso(int FolioSolicitud)
-        {
+        {            
             _solicitud.ActualizarEstatus(FolioSolicitud, "Comprobada");
+            ObtenerCorreos(FolioSolicitud, "Solicitud Autorización Solicitud" + FolioSolicitud.ToString(), "Favor de actualizar la solicitud " + FolioSolicitud.ToString() + " Estatus Actual, Comprobada");
             return Redirect("/rembolso/Lista");
         }
 

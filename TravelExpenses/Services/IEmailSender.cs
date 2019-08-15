@@ -10,6 +10,7 @@ namespace TravelExpenses.Services
     public interface IEmailSender
     {
         Task SendEmailAsync(string email, string subject, string htmlMessage);
+        Task SendEmailCCAsync(string email, string ccEmail, string subject, string message);
     }
 
     public class EmailSender : IEmailSender
@@ -58,7 +59,7 @@ namespace TravelExpenses.Services
 
             return Task.CompletedTask;
         }
-        public Task SendEmailAsync(string email,string ccEmail, string subject, string message)
+        public Task SendEmailCCAsync(string email,string ccEmail, string subject, string message)
         {
             try
             {
