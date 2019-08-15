@@ -74,9 +74,25 @@
                             <td>@item.Descripcion</td>
                             <td>@item.UserName</td>
                             <td>@string.Format("{0:C}", @item.ImporteSolicitado)    </td>
-                            <td>@string.Format("{0:C}", @item.ImporteComprobado)</td>
+                            @if (@item.ImporteComprobado > @item.ImporteSolicitado)
+                            {
 
-                            <td>@item.ImporteExcedenteC</td>
+                                <td style="color:red;">@string.Format("{0:C}", @item.ImporteComprobado)</td>
+                            }
+                            else
+                            {
+                                <td style="color:green;">@string.Format("{0:C}", @item.ImporteComprobado)</td>
+                            }
+                            @if (@item.ImporteExcedente > 0)
+                            {
+
+
+                                <td style="color:red;">@item.ImporteExcedenteC</td>
+                            }
+                            else
+                            {
+                                <td style="color:green;">@item.ImporteExcedenteC</td>
+                            }
                             <td>@item.Estatus</td>
 
                             <td>
@@ -100,8 +116,8 @@
                                     </a>
                                 </td>
                             }
-                            @if (@item.Estatus == "Incompleta"|| @item.Estatus == "PorAutorizar" || @item.Estatus == "Cerrada" ||
-                             @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar"|| @item.Estatus == "Rechazada"|| @item.Estatus=="Cancelada"|| @item.Estatus == "Revisada")
+                            @if (@item.Estatus == "Incompleta" || @item.Estatus == "PorAutorizar" || @item.Estatus == "Cerrada" ||
+                           @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar" || @item.Estatus == "Rechazada" || @item.Estatus == "Cancelada" || @item.Estatus == "Revisada")
                             {
                                 <td>
                                     <a class="btn btn-lg">

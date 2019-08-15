@@ -242,9 +242,17 @@
                                                 {
                                                     <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
                                                 }
-                                                <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
+
+                                                @if (@g.CantidadComprobada > @g.MontoMaximo)
+                                                {
+                                                    <td style="color:red;">@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="color:green;">@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                                }
                                                 @{
-                                                    double res = @g.ImporteSolicitado - @g.MontoMaximo;
+                                                    double res = @g.ImporteSolicitado - @g.CantidadComprobada;
                                                 }
                                                 @if (@res < @g.MontoMaximo)
                                                 {
