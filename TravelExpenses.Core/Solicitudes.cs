@@ -50,7 +50,8 @@ namespace TravelExpenses.Core
         public string MonedaNombre { get; set; }
         public string Comentarios { get; set; }
         public string CantidadComprobada { get; set; }
-        
+        public double ImporteExcedente { get; set; }
+        public string ImporteExcedenteC { get { return string.Format("{0:C}", this.ImporteExcedente); } }
     }
 
     public class Politicas
