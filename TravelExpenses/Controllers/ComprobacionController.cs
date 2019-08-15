@@ -57,8 +57,8 @@ namespace TravelExpenses.Controllers
             solicitud.Solicitudes = PorComprobar;
             var Estatus =
                 (from e in SolicitudesData.EstatusSolicitudes()
-                    where e.Status == "Cerrada"
-                    select e
+                    where e.Status == "Cerrada" | e.Status == "PorLiberar" | e.Status == "Revisada" | e.Status== "PorComprobar" | e.Status == "Liberada"
+                 select e
                 );
             solicitud.Estatuses = Estatus;
             return View(solicitud);
@@ -80,11 +80,44 @@ namespace TravelExpenses.Controllers
                 return Json(PorAutorizar);
 
             }
-            else
+            else if (estatus.Equals("PorComprobar"))
+            {
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorComprobar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                solicitud.Solicitudes = PorAutorizar;
+                return Json(PorAutorizar);
+
+            }
+            else if (estatus.Equals("Liberada"))
+            {
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("Liberada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                solicitud.Solicitudes = PorAutorizar;
+                return Json(PorAutorizar);
+
+            }
+            else if (estatus.Equals("Todo"))
             {
                 var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorLiberar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("Revisada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
+                return Json(solicitud.Solicitudes);
+            }
+            else if (estatus.Equals("Cerrada"))
+            {
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("Cerrada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                solicitud.Solicitudes = PorAutorizar;
+                return Json(PorAutorizar);
+
+            }
+            else
+            {
+                var PorLiberar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorLiberar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("Revisada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var result = PorLiberar.Union(PorAutorizar);
+                var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorComprobar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var Liberada = _ObservacionDA.ObtenerSolicitudesXEstatus("Liberada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var result2 = PorComprobar.Union(Liberada);
+                var Cerrada = _ObservacionDA.ObtenerSolicitudesXEstatus("Cerrada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                solicitud.Solicitudes = result.Union(result2).Union(Cerrada);
                 return Json(solicitud.Solicitudes);
             }
 
