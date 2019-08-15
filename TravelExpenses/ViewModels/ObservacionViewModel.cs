@@ -27,6 +27,12 @@ namespace TravelExpenses.ViewModels
         public Estatus Estatus { get; set; }
         public IEnumerable<Comentarios> comentarios { get; set; }
         public Comentarios comentario { get; set; }
+        
+        public IEnumerable<Archivo> Archivos { get; set; }
+        public Archivo miArchivo { get; set; }
+        public Solicitud solicitud { get; set; }
+        public IEnumerable<Gasto> MisGastos { get; set; }
+        public bool DetallesAsociados { get; set; }
 
     }
 }

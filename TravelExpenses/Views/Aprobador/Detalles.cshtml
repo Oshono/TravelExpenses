@@ -37,7 +37,8 @@
                     </div>
                 </div>
 
-                <div class="form-row"><div class="col"></div>
+                <div class="form-row">
+                    <div class="col"></div>
                     <div class="col-md-2 mb-3">
                         <input type="submit" value="Aprobada" onclick="myFunction('1')" class="btn btn-primary" />
                     </div>
@@ -45,12 +46,13 @@
                         <input type="submit" value="Rechazar" onclick="myFunction('0')" class="btn btn-primary" />
                     </div>
                 </div>
-                
+
             </form>
 
         </div>
     </div>
 </div>
+
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -74,7 +76,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#Destinos">Comprobantes </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#Gastos">Gastos</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#Comentarios">Comentarios</a>
                         </li>
@@ -82,74 +86,164 @@
                     </ul>
                     <div id="Destinos" class="container tab-pane active">
                         <div class="table-responsive">
+
                             <table id="data-table-basic" class="table table-striped">
                                 <thead>
-                                <tr>
-                                    <th>
-                                        Folio
-                                    </th>
-                                    <th>
-                                        UUID
-                                    </th>
-                                    <th>
-                                        Fecha
-                                    </th>
-                                    <th>
-                                        RFC
-                                    </th>
-                                    <th>
-                                        Proveedor
-                                    </th>
-                                    <th>
-                                        Moneda
-                                    </th>
-                                    <th>
-                                        Subtotal
-                                    </th>
-                                    <th>
-                                        Impuestos
-                                    </th>
-                                    <th>
-                                        Total
-                                    </th>
-                                    <th>
-                                        Detalles
-                                    </th>
-                                    <th>
-                                        Descargar
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th>
+                                            Folio
+                                        </th>
+                                        <th>
+                                            UUID
+                                        </th>
+                                        <th>
+                                            Fecha
+                                        </th>
+                                        <th>
+                                            RFC
+                                        </th>
+                                        <th>
+                                            Proveedor
+                                        </th>
+                                        <th>
+                                            Moneda
+                                        </th>
+                                        <th>
+                                            Total
+                                        </th>
+                                        <th>
+                                            Importe Comprobado
+                                        </th>
+                                        <th>
+                                            Detalles
+                                        </th>
+                                        <th>
+                                            Descargar
+                                        </th>
+                                        <th>
+                                            Abir PDF
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody id="tblComprobantes">
-                                @if (Model.Comprobantes != null)
-                                {
-                                    foreach (var comprobante in Model.Comprobantes)
+                                    @if (Model.Comprobantes != null)
                                     {
-                                        <tr>
-                                            <td>@comprobante.Folio</td>
-                                            <td>@comprobante.UUID</td>
-                                            <td>@comprobante.Fecha</td>
-                                            <td>@comprobante.RFC</td>
-                                            <td>@comprobante.NombreProveedor</td>
-                                            <td>@comprobante.Moneda</td>
-                                            <td>@string.Format("{0:C}", comprobante.SubTotal)</td>
-                                            <td>@string.Format("{0:C}", comprobante.Impuestos)</td>
-                                            <td>@string.Format("{0:C}", comprobante.Total)</td>
-                                            <td>
-                                                <a class="btn btn-lg" asp-controller="Aprobador" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
-                                                    <i class="fas fa-file-download"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        foreach (var comprobante in Model.Comprobantes)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(comprobante.MensajeError))
+                                                    {
+                                                        <label class="alert-danger">comprobante.MensajeError</label>
+                                                    }
+                                                    @comprobante.Folio
+                                                </td>
+                                                <td>@comprobante.UUID</td>
+                                                <td>@comprobante.Fecha.ToShortDateString()</td>
+                                                <td>@comprobante.RFC</td>
+                                                <td>@comprobante.NombreProveedor</td>
+                                                <td>@comprobante.Moneda</td>
+                                                <td>@string.Format("{0:C}", @comprobante.Total)</td>
+                                                <td>@string.Format("{0:C}", @comprobante.ImporteComprobado)</td>
+                                                <td align="center">
+                                                    <a class="btn btn-lg" asp-controller="Aprobador" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </td>
+                                                <td align="center">
+                                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                                        <i class="fas fa-file-download"></i>
+                                                    </a>
+                                                </td>
+                                                <td align="center">
+                                                    @if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
+                                                    {
+                                                        <a class="btn btn-lg" href="#" onclick="GetClientReport('@comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Ruta.Replace('\\', '/')')">
+                                                            <i class="fas fa-file-download"></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-lg">
+                                                            <i class="fas fa-ban "></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
                                     }
-                                }
                                 </tbody>
                             </table>
+
+
+                            @*<table id="data-table-basic" class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    Folio
+                </th>
+                <th>
+                    UUID
+                </th>
+                <th>
+                    Fecha
+                </th>
+                <th>
+                    RFC
+                </th>
+                <th>
+                    Proveedor
+                </th>
+                <th>
+                    Moneda
+                </th>
+                <th>
+                    Subtotal
+                </th>
+                <th>
+                    Impuestos
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Detalles
+                </th>
+                <th>
+                    Descargar
+                </th>
+            </tr>
+            </thead>
+            <tbody id="tblComprobantes">
+            @if (Model.Comprobantes != null)
+            {
+                foreach (var comprobante in Model.Comprobantes)
+                {
+                    <tr>
+                        <td>@comprobante.Folio</td>
+                        <td>@comprobante.UUID</td>
+                        <td>@comprobante.Fecha</td>
+                        <td>@comprobante.RFC</td>
+                        <td>@comprobante.NombreProveedor</td>
+                        <td>@comprobante.Moneda</td>
+                        <td>@string.Format("{0:C}", comprobante.SubTotal)</td>
+                        <td>@string.Format("{0:C}", comprobante.Impuestos)</td>
+                        <td>@string.Format("{0:C}", comprobante.Total)</td>
+                        <td>
+                            <a class="btn btn-lg" asp-controller="Aprobador" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
+                                <i class="fas fa-file-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>*@
 
                         </div>
                     </div>
@@ -157,30 +251,83 @@
                         <br>
                         <h3>Comentarios</h3>
 
-                            <div class="table table-responsive">
-                                <table class="table table-hover text-center">
-                                    <thead>
+                        <div class="table table-responsive">
+                            <table class="table table-hover text-center">
+                                <thead>
 
                                     <tr>
                                         <th>#</th>
                                         <th>Comentario</th>
 
                                     </tr>
-                                    </thead>
-                                    <tbody>
+                                </thead>
+                                <tbody>
                                     @foreach (var g in @Model.comentarios)
-                                {
-                                    <tr>
-                                        <td>@g.IdComentarios</td>
-                                        <td>@g.Comentario</td>
+                                    {
+                                        <tr>
+                                            <td>@g.IdComentarios</td>
+                                            <td>@g.Comentario</td>
 
-                                    </tr>
-                                }
-                                    </tbody>
-                                </table>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Gastos" class="container tab-pane fade">
+
+                        <br>
+                        <h3>Gastos</h3>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-center">
+                                        <thead>
+
+                                            <tr>
+                                                <th>Concepto </th>
+                                                <th>Monto Máximo Permitido</th>
+                                                <th>Importe Solicitado </th>
+                                                <th>Importe Comprobado </th>
+                                                <th>Moneda</th>
+                                                <th>Tipo de Cambio </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var g in @Model.MisGastos)
+                                            {
+                                                <tr>
+
+                                                    <td>@g.Nombre</td>
+
+
+                                                    <td>@string.Format("{0:C}", @g.MontoMaximo)</td>
+                                                    @if (@g.MontoMaximo < @g.ImporteSolicitado)
+                                                    {
+                                                        <td style="color:red;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="color:green;">@string.Format("{0:C}", @g.ImporteSolicitado)</td>
+                                                    }
+                                                    <td>@string.Format("{0:C}", @g.CantidadComprobada) </td>
+                                                    <td>@g.Descripcion</td>
+                                                    <td>@g.TipoCambios</td>
+
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
                         </div>
-              
+
+                        <br />
+                    </div>
+
 
                 </div>
             </div>
@@ -193,6 +340,13 @@
     function myFunction(a) {
         document.getElementById("Operacion").value = a;
     }
+    function GetClientReport(n) {  
+        window.open('/Aprobador/GetReport?Ruta='+n, "_blank");  
+    }; /*
+    function GetClientReport(n) {
+        debugger;
+        window.open('/Aprobador/GetReport', n);  
+    };  */
 </script>
 
 <script src="~/vendors/dropzone/dropzone.js"></script>

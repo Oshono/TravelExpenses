@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
@@ -24,13 +27,15 @@ namespace TravelExpenses.Controllers
             IComprobante comprobante,
             IGasto gastos,
             IObservacionDA ObservacionDA,
-            IMoneda MonedaData)
+            IMoneda MonedaData,
+            IHostingEnvironment env)
         {
             SolicitudesData = solicitudes;
             _comprobante = comprobante;
             _gastos = gastos;
             _ObservacionDA = ObservacionDA;
             this._MonedaData = MonedaData;
+            _env = env;
         }
 
 
@@ -90,30 +95,74 @@ namespace TravelExpenses.Controllers
         public ActionResult Detalles(string Folio)
         {
             var rembolso = new ObservacionViewModel();
+            int FolioSolicitud = 0;
             try
             {
-                int FolioSolicitud = 0;
-                
                 if (int.TryParse(Folio, out FolioSolicitud))
                 {
                     rembolso.Comprobantes = new List<Comprobante>();
                     rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+
+                    foreach (Comprobante comp in rembolso.Comprobantes)
+                    {
+                        if (comp.FormaPago == "01" && comp.Conceptos.Where(x => x.DescripcionProdServ.ToUpper().Contains("GASOLINA") || x.DescripcionProdServ.ToUpper().Contains("ALIMENTO")).Count() > 0)
+                        {
+                            comp.MensajeError = "La forma de pago para Gasolina o Alimenos debe ser diferente de Efectivo";
+                        }
+                    }
+
                     var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
-                    rembolso.Solicitud = solicitud;
-                    rembolso.Observacion = new Observacion();
-                    rembolso.Observacion.Folio = Convert.ToInt16(Folio);
-                    var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
-                    rembolso.comentarios = comentarios;
-                    rembolso.Observacion = new Observacion();
-                    rembolso.Observacion.Folio = Convert.ToInt32(Folio);
+                    rembolso.solicitud = solicitud;
+                    rembolso.DetallesAsociados = rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) > 0).Count() < 1;
                 }
+                var _Gasto = _gastos.ObtenerGastos();
+
+                var misGastos = SolicitudesData.ObtenerGastos(FolioSolicitud);
+                rembolso.MisGastos = misGastos;
+                var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+                rembolso.comentarios = comentarios;
+                rembolso.Observacion = new Observacion();
+                rembolso.Observacion.Folio = Convert.ToInt32(Folio);
                 return View(rembolso);
             }
             catch (Exception e)
             {
                 return RedirectToAction("AprobarSolicitud", "Aprobador");
             }
+           
 
+            //try
+            //{
+            //    int FolioSolicitud = 0;
+
+            //    if (int.TryParse(Folio, out FolioSolicitud))
+            //    {
+            //        rembolso.Comprobantes = new List<Comprobante>();
+            //        rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+            //        var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+            //        rembolso.Solicitud = solicitud;
+            //        rembolso.Observacion = new Observacion();
+            //        rembolso.Observacion.Folio = Convert.ToInt16(Folio);
+            //        var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+            //        rembolso.comentarios = comentarios;
+            //        rembolso.Observacion = new Observacion();
+            //        rembolso.Observacion.Folio = Convert.ToInt32(Folio);
+            //    }
+            //    return View(rembolso);
+            //}
+            //catch (Exception e)
+            //{
+            //    return RedirectToAction("AprobarSolicitud", "Aprobador");
+            //}
+
+        }
+        private readonly IHostingEnvironment _env;
+        public FileResult GetReport(string Ruta)
+        {
+            string[] rutas = Ruta.Split('/');
+            var path = Path.Combine(_env.ContentRootPath, rutas[1]+"s", rutas[2]);
+            byte[] FileBytes = System.IO.File.ReadAllBytes(path);
+            return File(FileBytes, "application/pdf");
         }
 
         public ActionResult DetallesPorAutorizar(int Folio)
@@ -172,6 +221,7 @@ namespace TravelExpenses.Controllers
         public ActionResult Detalles(ObservacionViewModel viewModel)
         {
             int result = 0;
+            string estatu = "";
             if (viewModel.Operacion == 1)
             {
                 var estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio).Estatus;
@@ -179,20 +229,24 @@ namespace TravelExpenses.Controllers
                 if (estatus.Equals("PorAutorizar"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
+                    estatu = "PorLiberar";
                 }
                 else if (estatus.Equals("Comprobada"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Revisada");
+                    estatu = "Revisada";
                 }
             }
             else
             {
                 result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Rechazada");
+                estatu = "Rechazada";
             }
+
             if (result!= 0)
             {
                 var parametos = new Comentarios
-                    { Comentario = viewModel.Observacion.Descripcion, Folio  = viewModel.Observacion.Folio };
+                    { Comentario = viewModel.Observacion.Descripcion, Folio  = viewModel.Observacion.Folio,estatus = estatu};
                 SolicitudesData.InsertarComentarios(parametos);
             }
             return RedirectToAction("AprobarSolicitud","Aprobador");

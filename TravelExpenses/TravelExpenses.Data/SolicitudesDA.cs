@@ -63,7 +63,7 @@ namespace TravelExpenses.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@Folio", comentarios.Folio);
                 parameters.Add("@Comentario", comentarios.Comentario);
-
+                parameters.Add("@estatus", comentarios.estatus);
                 using (IDbConnection conn = connection)
                 {
                     var result = connection.Execute("Comentarios_Ins", parameters, commandType: CommandType.StoredProcedure);

@@ -94,29 +94,66 @@ namespace TravelExpenses.Controllers
 
         public ActionResult Detalles(string Folio)
         {
+            var rembolso = new ObservacionViewModel();
+            int FolioSolicitud = 0;
             try
             {
-                int FolioSolicitud = 0;
-                var rembolso = new ObservacionViewModel();
                 if (int.TryParse(Folio, out FolioSolicitud))
                 {
                     rembolso.Comprobantes = new List<Comprobante>();
                     rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+
+                    foreach (Comprobante comp in rembolso.Comprobantes)
+                    {
+                        if (comp.FormaPago == "01" && comp.Conceptos.Where(x => x.DescripcionProdServ.ToUpper().Contains("GASOLINA") || x.DescripcionProdServ.ToUpper().Contains("ALIMENTO")).Count() > 0)
+                        {
+                            comp.MensajeError = "La forma de pago para Gasolina o Alimenos debe ser diferente de Efectivo";
+                        }
+                    }
+
                     var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
-                    rembolso.Solicitud = solicitud;
-                    rembolso.Observacion = new Observacion();
-                    rembolso.Observacion.Folio = Convert.ToInt16(Folio);
-                    var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
-                    rembolso.comentarios = comentarios;
-                    rembolso.Observacion = new Observacion();
-                    rembolso.Observacion.Folio = Convert.ToInt32(Folio);
+                    rembolso.solicitud = solicitud;
+                    rembolso.DetallesAsociados = rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) > 0).Count() < 1;
                 }
+                var _Gasto = _gastos.ObtenerGastos();
+
+                var misGastos = SolicitudesData.ObtenerGastos(FolioSolicitud);
+                rembolso.MisGastos = misGastos;
+                var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+                rembolso.comentarios = comentarios;
+                rembolso.Observacion = new Observacion();
+                rembolso.Observacion.Folio = Convert.ToInt32(Folio);
                 return View(rembolso);
             }
             catch (Exception e)
             {
-                return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
+                return RedirectToAction("AprobarSolicitud", "Aprobador");
             }
+
+
+            //try
+            //{
+            //    int FolioSolicitud = 0;
+            //    var rembolso = new ObservacionViewModel();
+            //    if (int.TryParse(Folio, out FolioSolicitud))
+            //    {
+            //        rembolso.Comprobantes = new List<Comprobante>();
+            //        rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
+            //        var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+            //        rembolso.Solicitud = solicitud;
+            //        rembolso.Observacion = new Observacion();
+            //        rembolso.Observacion.Folio = Convert.ToInt16(Folio);
+            //        var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
+            //        rembolso.comentarios = comentarios;
+            //        rembolso.Observacion = new Observacion();
+            //        rembolso.Observacion.Folio = Convert.ToInt32(Folio);
+            //    }
+            //    return View(rembolso);
+            //}
+            //catch (Exception e)
+            //{
+            //    return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
+            //}
             
         }
 
@@ -203,26 +240,30 @@ namespace TravelExpenses.Controllers
         public ActionResult Detalles(ObservacionViewModel viewModel)
         {
             int result = 0;
+            string estatu = "";
             if (viewModel.Operacion == 1)
             {
                 string estatus = SolicitudesData.SolicitudesXFolio(viewModel.Observacion.Folio).Estatus;
                 if (estatus.Equals("PorLiberar"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorComprobar");
+                    estatu = "PorComprobar";
                 }
                 else if (estatus.Equals("Revisada"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Cerrada");
+                    estatu = "Cerrada";
                 }
             }
             else
             {
                 result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Rechazada");
+                estatu = "Rechazada";
             }
             if (result != 0)
             {
                 var parametos = new Comentarios
-                    { Comentario = viewModel.Observacion.Descripcion, Folio = viewModel.Observacion.Folio };
+                    { Comentario = viewModel.Observacion.Descripcion, Folio = viewModel.Observacion.Folio,estatus = estatu};
                 SolicitudesData.InsertarComentarios(parametos);
             }
             return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
