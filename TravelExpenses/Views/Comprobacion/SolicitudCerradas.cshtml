@@ -8,6 +8,7 @@
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
+
         <div class="card-body">
             <div class="col-4">
                 <select asp-for="Estatus.IdEstatus" class="form-control input-sm" id="estatus" onchange="ObtenerSolcitudes()"
@@ -15,33 +16,43 @@
                     <option value="">--Seleccionar estatus</option>
                     <option value="">Todos</option>
                 </select>
-                
             </div>
             <br/>
             <div class="row">
                 <div class="col-2">
                     Fecha Inicio
-                    <input type="date" class="form-control" />
+                    <input type="date" class="form-control" id="inicio" name="inicio" />
                 </div>
                 <div class="col-2">
                     Fecha Fin
-                    <input type="date" class="form-control" />
+                    <input type="date" class="form-control" id="fin" name="fin" />
                 </div>
                 <div class="col-2">
-                    <br/>
-                    <input type="button" class="btn btn-primary" value="Buscar" />
+                    <br />
+                    <input type="button" class="btn btn-primary" value="Buscar" onclick='ObtenerSolcitudesFechas();' />
                 </div>
-                <div class="col-sm-3 col-sm-offset-5">
-                    <button type="button" id="boton_enviar" onclick='fnExcelReport();' class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Exportar</button>
-                </div>
+                @*<div class="col-sm-2">
+            <br />
+            <button type="button" id="boton_enviar" onclick='fnExcelReport();'
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-ok"></span> Exportar opcion 1
+            </button>
+        </div>*@
+                <form method="post" asp-controller="Comprobacion" asp-action="OnPostExport" enctype="multipart/form-data">
+                    <div class="col-sm-2 ">
+                        <br />
+                        <input type="hidden" asp-for=@Model.Array class="form-control" id="Array" name="Array" />
+                        <input type="submit" onclick='ReiniciarPagina();' value="Exportar" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped" id ="tabla2">
+                <table class="table table-striped" id="tabla2">
                     <thead>
                         <tr>
+                            <th>Selecionar</th>
                             <th>Folio</th>
                             <th>Tipo Solicitud</th>
                             <th>Solicitante</th>
@@ -52,159 +63,35 @@
                         </tr>
                     </thead>
                     <tbody id="tblSolicitud">
-                        @foreach (var item in Model.Solicitudes)
-                        {
-                            <tr>
-                                <td>@item.Folio</td>
-                                <td>@item.Descripcion</td>
-                                <td>@item.UserName</td>
-                                <td>@string.Format("{0:C}", item.ImporteSolicitado)</td>
-                                <td>@string.Format("{0:C}", item.ImporteComprobado) </td>
+                    @foreach (var item in Model.Solicitudes)
+                    {
+                        <tr>
+                            <td><input type="checkbox" id="SOLICITIDCHECK" name="SOLICITIDCHECK" onclick="SelecionarSolicitudes()"/></td>
+                            <td>@item.Folio</td>
+                            <td>@item.Descripcion</td>
+                            <td>@item.UserName</td>
+                            <td style="display: none">@item.ImporteSolicitado</td>
+                            <td style="display: none">@item.FechaSolicitud </td>
+                            <td>@string.Format("{0:C}", item.ImporteSolicitado)</td>
+                            <td>@string.Format("{0:C}", item.ImporteComprobado) </td>
+                            <td>@item.Estatus</td>
 
-                                <td>@item.Estatus</td>
-
-                                <td>
-                                    @if (item.Estatus.Equals("Cerrada"))
-                                    {
-                                        <a class="btn btn-lg" asp-controller="Comprobacion" asp-action="DetallesSolicitudCerradas" asp-route-folio="@item.Folio">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    }
-                                </td>
-                            </tr>
-                        }
+                            <td>
+                                @if (item.Estatus.Equals("Cerrada"))
+                                {
+                                    <a class="btn btn-lg" asp-controller="Comprobacion" asp-action="DetallesSolicitudCerradas" asp-route-folio="@item.Folio">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
 <iframe id="txtArea1" style="display:none"></iframe>
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script type="text/javascript">
-
-    function ObtenerSolcitudes() {
-        var estatus = $("#estatus").children("option:selected").text();
-        var row = "";
-        var url = "/Comprobacion/SolicitudesEstatus/";
-        $.ajax({
-            url: url,
-            data: { estatus: estatus },
-            type: "POST",
-            cache: false,
-            success: function (response) {
-                var data = [];
-                data = response;
-
-                var row = "";
-                if (data.length == 0) {
-                    row += "<tr><td colspan='9'>" + "-- No existen registros --" + "</td></tr>";
-                }
-                else {
-                    debugger;
-                    $.each(response, function (index, item) {
-                        if (item.estatus == "PorLiberar") {
-                            row +=
-                                '<tr>'
-                                + '<td>' + item.folio +'</td>'
-                                + '<td>' + item.descripcion +'</td>'
-                                + '<td>' + item.userName +'</td>'
-                                + '<td>' + item.importeSolicitadoC +'</td>'
-                                + '<td>' + item.importeComprobadoC +'</td>'
-                                + '<td>' + item.estatus+'</td>'
-                                + '<td>'
-                                +'<a class="btn btn-lg" href="/Comprobacion/DetallesPorAutorizar?folio=' + item.folio + '">'
-                                + "<i class='fas fa-edit'></i>"
-                                +'</a>'
-                                +'</td>'
-                                +'</tr>';
-                        }
-                        else if (item.estatus == "Revisada") {
-
-                            row +=
-                                '<tr>'
-                                + '<td>' + item.folio +'</td>'
-                                + '<td>' + item.descripcion +'</td>'
-                                + '<td>' + item.userName +'</td>'
-                                + '<td>' + item.importeSolicitadoC +'</td>'
-                                + '<td>' + item.importeComprobadoC +'</td>'
-                                + '<td>' + item.estatus+'</td>'
-                                + '<td>'
-                                +'<a class="btn btn-lg"  href="/Comprobacion/Detalles?folio=' + item.folio + '">'
-                                + "<i class='fas fa-edit'></i>"
-                                +'</a>'
-                                +'</td>'
-                                +'</tr>';
-                        } else if (item.estatus == "Cerrada") {
-
-                            row +=
-                                '<tr>'
-                                + '<td>' + item.folio +'</td>'
-                                + '<td>' + item.descripcion +'</td>'
-                                + '<td>' + item.userName +'</td>'
-                                + '<td>' + item.importeSolicitadoC +'</td>'
-                                + '<td>' + item.importeComprobadoC +'</td>'
-                                + '<td>' + item.estatus+'</td>'
-                                + '<td>'
-                                +'<a class="btn btn-lg"  href="/Comprobacion/DetallesSolicitudCerradas?folio=' + item.folio + '">'
-                                + "<i class='fas fa-edit'></i>"
-                                +'</a>'
-                                +'</td>'
-                                +'</tr>';
-                        }
-                    });
-                }
-                $("#tblSolicitud").html(row);
-
-            },
-            error: function (error) {
-                alert("unknown error: ", error);
-            }
-        });
-    }
-    // Basic example
-    $(document).ready(function () {
-        $('#dtBasicExample').DataTable({
-            "pagingType": "simple", // "simple" option for 'Previous' and 'Next' buttons only
-
-        });
-        $('.dataTables_length').addClass('bs-select');
-    });
-</script>
-
-<script type="text/javascript">
-    function fnExcelReport() {
-        var tab_text = "<table border='2px'><tr>";
-        var textRange; var j = 0;
-        tab = document.getElementById('tabla2'); // id of table
-
-        for (j = 0; j < tab.rows.length; j++) {
-                tab_text = tab_text + "<th>" + tab.rows[j].cells[0].innerHTML + "</th>";
-                tab_text = tab_text + "<th >" + tab.rows[j].cells[1].innerHTML + "</th>";
-                tab_text = tab_text + "<th >" + tab.rows[j].cells[2].innerHTML + "</th></tr>";
-        }
-
-        tab_text = tab_text + "</table>";
-        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf("MSIE ");
-        debugger;
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-        {
-            txtArea1.document.open("txt/html", "replace");
-            txtArea1.document.write(tab_text);
-            txtArea1.document.close();
-            txtArea1.focus();
-            sa = txtArea1.document.execCommand("SaveAs", true, "download.xls");
-        }
-        else                 //other browser not tested on IE 11
-            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-
-
-        return (sa);
-    }
-</script>
+<script src="~/lib/isaias_jasso.js"></script>

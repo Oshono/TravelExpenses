@@ -29,7 +29,24 @@ namespace TravelExpenses.TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-
+        public int SolicitudesExportadas_ins(int Folio)
+        {
+            var list = new List<Empresas>();
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@Folio", Folio);
+                    var reader = Connection.Execute("SolicitudesExportadas_ins", queryParameters, commandType: CommandType.StoredProcedure);
+                    return reader;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public Observacion ObtenerObservacion(int Folio)
         {
             var list = new List<Empresas>();
@@ -70,7 +87,28 @@ namespace TravelExpenses.TravelExpenses.Data
             }
         }
 
+        public IEnumerable<Solicitud> ObtenerSolicitudesFechas(string id,DateTime inicio,DateTime fin)
+        {
 
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                using (IDbConnection conn = Connection)
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@ID", id);
+                    queryParameters.Add("@FechaInicio", inicio);
+                    queryParameters.Add("@Fechafin", fin);
+                    var reader = Connection.Query<Solicitud>("SolicitudesObt_CentrocostoFechas", queryParameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.Folio);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus, string ID)
         {
@@ -93,6 +131,26 @@ namespace TravelExpenses.TravelExpenses.Data
             }
         }
 
+        public IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus, string ID,DateTime inicio , DateTime fin)
+        {
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Estatus))
+                {
+                    return ObtenerSolicitudesFechas(ID, inicio,fin).Where(x => x.Estatus == Estatus);
+                }
+                else
+                {
+                    return ObtenerSolicitudesFechas(ID, inicio, fin);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public Observacion Add(Observacion newRestaurant)
         {
