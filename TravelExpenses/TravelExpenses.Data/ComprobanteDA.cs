@@ -28,7 +28,12 @@ namespace TravelExpenses.Data
                 return new SqlConnection(_configuration.GetConnectionString("TravelExDb"));
             }
         }
-        
+
+        public IEnumerable<Archivo> ObtenerArchivosXNombre(string Nombre)
+        {
+            return db.Archivos.Where(x=>x.NombreArchivo.Replace(x.Extension,"").Contains(Nombre));
+        }
+
         public IEnumerable<Comprobante> ObtenerComprobantes()
         {
             return db.Comprobante;
