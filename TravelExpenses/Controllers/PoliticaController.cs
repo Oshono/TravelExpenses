@@ -115,7 +115,7 @@ namespace TravelExpenses.Controllers
                 politicaModel.Politica.IdGasto = 0;
                 politicaModel.Politica.ImportePermitido = 0;
                 _politica.Guardar(politicaModel.Politica);
-                if (politicaModel.Politica.IdGasto > 0)
+                if (IdGasto > 0)
                 {
                     PoliticaDetalle pDetalle = new PoliticaDetalle();
                     pDetalle.IdGasto = IdGasto;
@@ -125,9 +125,10 @@ namespace TravelExpenses.Controllers
                     _polDetalle.Guardar(pDetalle);                    
                 }
             }
-            catch
+            catch (Exception ex)
             {
 
+                return View();
             }
 
             return RedirectToAction("Edit", "Politica", new { IdPolitica = politicaModel.Politica.IdPolitica });

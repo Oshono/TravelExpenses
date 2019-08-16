@@ -2,226 +2,226 @@
 
 <h1>Detalles del Comprobante</h1>
 
-<form method="post"  asp-action="Details" role="form">
+<form method="post" asp-action="Details" role="form">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @if (!string.IsNullOrEmpty(Model.Error))
                 {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="text-danger">@Model.Error</label>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div class="form-group">
                     <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="text-danger">@Model.Error</label>
+                            <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-route-folio="@Model.Comprobante.FolioSolicitud">
+                                Ir a Listado  <i class="fas fa-long-arrow-alt-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <input type="hidden" asp-for="@Model.Comprobante.FolioSolicitud" />
+                            <label class="control-label">UUID</label>
+                            <input asp-for=@Model.Comprobante.UUID class="form-control" placeholder="UUID" />
+                            <span asp-validation-for=@Model.Comprobante.UUID class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Folio</label>
+                            <input asp-for=@Model.Comprobante.Folio class="form-control" placeholder="Folio" />
+                            <span asp-validation-for=@Model.Comprobante.Folio class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Fecha</label>
+                            <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="RFC de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">RFC</label>
+                            <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <label class="control-label">Nombre Proveedor</label>
+                            <input asp-for=@Model.Comprobante.NombreProveedor class="form-control" placeholder="Nombre o Razón Social" />
+                            <span asp-validation-for=@Model.Comprobante.NombreProveedor class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">SubTotal</label>
+                            <input asp-for=@Model.Comprobante.SubTotal class="form-control" placeholder="SubTotal de la Empresa" />
+                            <span asp-validation-for=@Model.Comprobante.SubTotal class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Impuestos</label>
+                            <input asp-for=@Model.Comprobante.Impuestos class="form-control" placeholder="Impuestos" />
+                            <span asp-validation-for=@Model.Comprobante.Impuestos class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label">Total</label>
+                            <input asp-for=@Model.Comprobante.Total class="form-control" placeholder="Total" />
+                            <span asp-validation-for=@Model.Comprobante.Total class="text-danger"></span>
                         </div>
                     </div>
                 </div>
-                }
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Edit" asp-Folio="@Model.Comprobante.FolioSolicitud">
-                                                    Ir a Listado  <i class="fas fa-long-arrow-alt-left"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <input type="hidden" asp-for="@Model.Comprobante.FolioSolicitud" />
-                                                <label class="control-label">UUID</label>
-                                                <input asp-for=@Model.Comprobante.UUID class="form-control" placeholder="UUID" />
-                                                <span asp-validation-for=@Model.Comprobante.UUID class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Folio</label>
-                                                <input asp-for=@Model.Comprobante.Folio class="form-control" placeholder="Folio" />
-                                                <span asp-validation-for=@Model.Comprobante.Folio class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Fecha</label>
-                                                <input asp-for=@Model.Comprobante.Fecha class="form-control" placeholder="RFC de la Empresa" />
-                                                <span asp-validation-for=@Model.Comprobante.Fecha class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">RFC</label>
-                                                <input asp-for=@Model.Comprobante.RFC class="form-control" placeholder="RFC de la Empresa" />
-                                                <span asp-validation-for=@Model.Comprobante.RFC class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                <label class="control-label">Nombre Proveedor</label>
-                                                <input asp-for=@Model.Comprobante.NombreProveedor class="form-control" placeholder="Nombre o Razón Social" />
-                                                <span asp-validation-for=@Model.Comprobante.NombreProveedor class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">SubTotal</label>
-                                                <input asp-for=@Model.Comprobante.SubTotal class="form-control" placeholder="SubTotal de la Empresa" />
-                                                <span asp-validation-for=@Model.Comprobante.SubTotal class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Impuestos</label>
-                                                <input asp-for=@Model.Comprobante.Impuestos class="form-control" placeholder="Impuestos" />
-                                                <span asp-validation-for=@Model.Comprobante.Impuestos class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Total</label>
-                                                <input asp-for=@Model.Comprobante.Total class="form-control" placeholder="Total" />
-                                                <span asp-validation-for=@Model.Comprobante.Total class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+            </div>
+
+            @if (!Model.Comprobante.ComprobanteXML)
+            {
+                <div class="card-body" id="divConceptos">
+                    <h2>Capturar Conceptos</h2>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Descripcion</label>
+                                <input asp-for=@Model.Concepto.Descripcion class="form-control" placeholder="Descripción" />
+                                <span asp-validation-for=@Model.Concepto.Descripcion class="text-danger"></span>
                             </div>
-
-                            @if (!Model.Comprobante.ComprobanteXML)
-                            {
-                                <div class="card-body" id="divConceptos">
-                                    <h2>Capturar Conceptos</h2>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Descripcion</label>
-                                                <input asp-for=@Model.Concepto.Descripcion class="form-control" placeholder="Descripción" />
-                                                <span asp-validation-for=@Model.Concepto.Descripcion class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Importe</label>
-                                                <input asp-for=@Model.Concepto.Importe class="form-control" placeholder="Importe" />
-                                                <span asp-validation-for=@Model.Concepto.Importe class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Valor Unitario</label>
-                                                <input asp-for=@Model.Concepto.ValorUnitario class="form-control" placeholder="Valor Unitario" />
-                                                <span asp-validation-for=@Model.Concepto.ValorUnitario class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Cantidad</label>
-                                                <input asp-for=@Model.Concepto.Cantidad class="form-control" placeholder="Cantidad" />
-                                                <span asp-validation-for=@Model.Concepto.Cantidad class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Unidad</label>
-                                                <input asp-for=@Model.Concepto.Unidad class="form-control" placeholder="Unidad" />
-                                                <span asp-validation-for=@Model.Concepto.Unidad class="text-danger"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label">Clave Unidad</label>
-                                                <input asp-for=@Model.Concepto.ClaveUnidad class="form-control" placeholder="Clave Unidad" />
-                                                <span asp-validation-for=@Model.Concepto.ClaveUnidad class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label class="control-label">Clave Gasto</label>
-                                                <select asp-for="@Model.Concepto.IdGasto" class="form-control input-sm" title="--Seleccione un gasto"
-                                                        asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))">
-                                                    <option value="">--Seleccione un Gasto</option>
-                                                </select>
-                                                <span asp-validation-for=@Model.Concepto.IdGasto class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            }
-
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
-                                            <input type="submit" value="Guardar" class="btn btn-primary" />
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
-                                            <input type="submit" value="Agregar Concepto" class="btn btn-primary" />
-                                        </div>                                           
-                                        </div>
-                                    </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Importe</label>
+                                <input asp-for=@Model.Concepto.Importe class="form-control" placeholder="Importe" />
+                                <span asp-validation-for=@Model.Concepto.Importe class="text-danger"></span>
                             </div>
-
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">
-                                                    Descripción
-                                                </th>
-                                                <th scope="col">
-                                                    Descripción SAT
-                                                </th>
-                                                <th scope="col">
-                                                    Importe
-                                                </th>                                                 
-                                                <th scope="col">
-                                                    Unidad
-                                                </th>
-                                                <th scope="col">
-                                                    Cantidad
-                                                </th>
-                                                <th scope="col">
-                                                    Gasto
-                                                </th>
-                                                <th scope="col">
-                                                    Borrar
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tblComprobantes">
-                                            @if (Model.Comprobante.Conceptos != null && @Model.Comprobante.Conceptos.Count > 0)
-                                            {
-                                                for (int i = 0; i < Model.Comprobante.Conceptos.Count(); i++)
-                                                {
-
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].NoIdentificacion" />
-
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Descripcion" id="Descripcion" class="control-label" readonly="readonly" />
-                                                        </th>
-                                                        <td>
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveProdServ" />
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].DescripcionProdServ" id="DescripcionProdServ" class="control-label" readonly="readonly" />
-                                                        </td>
-                                                        <td>
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Importe" id="Importe" class="control-label" readonly="readonly" />
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
-                                                            <label class="alert-danger">@Model.Comprobante.Conceptos[i].MensajeError</label>
-                                                        </td> 
-                                                         
-                                                        <td>
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveUnidad" />
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Unidad" id="Unidad" class="control-label" readonly="readonly" />
-                                                        </td>
-                                                        <td>
-                                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].CantidadComprobada" />
-                                                            <input asp-for="@Model.Comprobante.Conceptos[i].Cantidad" id="Cantidad" class="control-label" style="width:100%" readonly="readonly" />
-                                                        </td>
-                                                        <td>
-                                                            <select asp-for="@Model.Comprobante.Conceptos[i].IdGasto" class="form-control" title="--Seleccione un gasto"
-                                                                    asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))" style="width:100%">
-                                                                <option value="">--Seleccione un Gasto</option>
-                                                            </select>
-                                                        </td>
-                                                        <td></td>
-                                                    </tr>
-                                                }
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Valor Unitario</label>
+                                <input asp-for=@Model.Concepto.ValorUnitario class="form-control" placeholder="Valor Unitario" />
+                                <span asp-validation-for=@Model.Concepto.ValorUnitario class="text-danger"></span>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Cantidad</label>
+                                <input asp-for=@Model.Concepto.Cantidad class="form-control" placeholder="Cantidad" />
+                                <span asp-validation-for=@Model.Concepto.Cantidad class="text-danger"></span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Unidad</label>
+                                <input asp-for=@Model.Concepto.Unidad class="form-control" placeholder="Unidad" />
+                                <span asp-validation-for=@Model.Concepto.Unidad class="text-danger"></span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Clave Unidad</label>
+                                <input asp-for=@Model.Concepto.ClaveUnidad class="form-control" placeholder="Clave Unidad" />
+                                <span asp-validation-for=@Model.Concepto.ClaveUnidad class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label">Clave Gasto</label>
+                                <select asp-for="@Model.Concepto.IdGasto" class="form-control input-sm" title="--Seleccione un gasto"
+                                        asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))">
+                                    <option value="">--Seleccione un Gasto</option>
+                                </select>
+                                <span asp-validation-for=@Model.Concepto.IdGasto class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+            }
+
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="float:right">
+                            <input type="submit" value="Agregar Concepto" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Descripción
+                                </th>
+                                <th scope="col">
+                                    Descripción SAT
+                                </th>
+                                <th scope="col">
+                                    Importe
+                                </th>
+                                <th scope="col">
+                                    Unidad
+                                </th>
+                                <th scope="col">
+                                    Cantidad
+                                </th>
+                                <th scope="col">
+                                    Gasto
+                                </th>
+                                <th scope="col">
+                                    Borrar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprobantes">
+                            @if (Model.Comprobante.Conceptos != null && @Model.Comprobante.Conceptos.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Comprobante.Conceptos.Count(); i++)
+                                {
+
+                                    <tr>
+                                        <th scope="row">
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].NoIdentificacion" />
+
+                                            <input asp-for="@Model.Comprobante.Conceptos[i].Descripcion" id="Descripcion" class="control-label" readonly="readonly" />
+                                        </th>
+                                        <td>
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveProdServ" />
+                                            <input asp-for="@Model.Comprobante.Conceptos[i].DescripcionProdServ" id="DescripcionProdServ" class="control-label" readonly="readonly" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.Comprobante.Conceptos[i].Importe" id="Importe" class="control-label" readonly="readonly" />
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].IdConcepto" />
+                                            <label class="alert-danger">@Model.Comprobante.Conceptos[i].MensajeError</label>
+                                        </td>
+
+                                        <td>
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].ClaveUnidad" />
+                                            <input asp-for="@Model.Comprobante.Conceptos[i].Unidad" id="Unidad" class="control-label" readonly="readonly" />
+                                        </td>
+                                        <td>
+                                            <input type="hidden" asp-for="@Model.Comprobante.Conceptos[i].CantidadComprobada" />
+                                            <input asp-for="@Model.Comprobante.Conceptos[i].Cantidad" id="Cantidad" class="control-label" style="width:100%" readonly="readonly" />
+                                        </td>
+                                        <td>
+                                            <select asp-for="@Model.Comprobante.Conceptos[i].IdGasto" class="form-control" title="--Seleccione un gasto"
+                                                    asp-items="@(new SelectList(Model.Gastos, "IdGasto", "Nombre"))" style="width:100%">
+                                                <option value="">--Seleccione un Gasto</option>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </form>

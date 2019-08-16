@@ -31,6 +31,27 @@ namespace TravelExpenses.Data
         {
             return db.CatGastos;
         }
+
+        public IEnumerable<Gastos> ObtenerGastosPoliticas(string IDUser)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                using (IDbConnection conn = Connection)
+                {
+                    parameters.Add("@ID", IDUser);
+                    var reader = Connection.Query<Gastos>("CatGastosPoliticas_Obt", parameters, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdGasto);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
         public int Guardar(Gastos Gasto)
         {
             try

@@ -31,6 +31,7 @@ namespace TravelExpenses.Controllers
         private readonly IUsuario Usuario;
         private readonly IEmailSender Email;
         private readonly ICentroCosto _centroCosto;
+        private string Mensaje;
 
         public List<Comprobante> lstComprobantes;
         
@@ -183,10 +184,11 @@ namespace TravelExpenses.Controllers
                 var polDetalle = _politicadetalle.ObtenerDetalles();
                 rembolso.Comprobante = _comprobante.ObtenerComprobantesXID(UUID);
 
-           
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
                 rembolso.Comprobante.ComprobanteXML = rembolso.Comprobante.Archivos.FirstOrDefault().Extension.Contains("xml");
-                var gastos = _gastos.ObtenerGastos();
+                var gastos = _gastos.ObtenerGastosPoliticas(userId);
 
                 var result = gastos.Where(a => polDetalle.Any(b => a.IdGasto == b.IdGasto));
 
@@ -293,6 +295,14 @@ namespace TravelExpenses.Controllers
             var NombreArchivo = Path.GetFileNameWithoutExtension(file.FileName);
 
             var filePath = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName);
+
+            if (Extension.Equals("xml"))
+            {
+                var filePath2 = Path.Combine(_env.ContentRootPath, "UploadFiles", InputFileName.Replace("xml","pdf"));
+                Mensaje = "ERROR - Debe subir primero la factura en formato pdf y después el XML";
+                return !((System.IO.File.Exists(filePath2)) && _rembolso.Exists(NombreArchivo, "pdf"));
+            }           
+
             return ((System.IO.File.Exists(filePath)) && _rembolso.Exists(NombreArchivo, Extension));
         }
 
@@ -382,6 +392,7 @@ namespace TravelExpenses.Controllers
                 var filePath = Path.GetTempFileName();
                 var comprobantes = new List<Comprobante>();
                 
+                Mensaje = "ERROR - El archivo ya se encuentra registrado";
 
                 foreach (var formFile in files)
                 {
@@ -394,7 +405,7 @@ namespace TravelExpenses.Controllers
                         }
                         else
                         {
-                            return Json("ERROR-El archivo ya se encuentra registrado");
+                            return Json(Mensaje);
                         }
                     }
                 }
@@ -465,7 +476,13 @@ namespace TravelExpenses.Controllers
         
         [Authorize]
         public ActionResult EnviarReembolso(int FolioSolicitud)
-        {            
+        {
+            var comentarios = new Comentarios();
+            comentarios.Comentario = "Solicitud Enviada para Autorización";
+            comentarios.estatus = "Comprobada";
+            comentarios.Folio = FolioSolicitud;
+            _solicitud.InsertarComentarios(comentarios);
+
             _solicitud.ActualizarEstatus(FolioSolicitud, "Comprobada");
             ObtenerCorreos(FolioSolicitud, "Solicitud Autorización Solicitud" + FolioSolicitud.ToString(), "Favor de actualizar la solicitud " + FolioSolicitud.ToString() + " Estatus Actual, Comprobada");
             return Redirect("/rembolso/Lista");
