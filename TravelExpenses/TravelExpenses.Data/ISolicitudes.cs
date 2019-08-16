@@ -35,5 +35,6 @@ namespace TravelExpenses.Data
         IEnumerable<Comentarios> ObtenerComentario(int Folio);
         IEnumerable<Politicas> ObtenerPoliticas(string ID);
         IEnumerable<Politicas> ObtenerMonto(string ID, string nombre);
+        IEnumerable<Politicas> ValidarSolicitudes(string ID);
     }
 }
