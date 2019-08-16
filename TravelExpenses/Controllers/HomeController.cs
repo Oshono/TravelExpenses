@@ -22,7 +22,14 @@ namespace TravelExpenses.Controllers
         private readonly ICentroCosto _centroCosto;
         private readonly IUsuario Usuario;
         private readonly IEmailSender Email;
-        public HomeController(ISolicitudes SolicitudesData, IDestinos DestinosData, IUbicacion UbicacionData, ICentroCosto centroCosto, IUsuario usuario, IEmailSender email)
+        private readonly IPolitica _Politica;
+        public HomeController(ISolicitudes SolicitudesData,
+            IDestinos DestinosData,
+            IUbicacion UbicacionData,
+            ICentroCosto centroCosto,
+            IUsuario usuario,
+            IEmailSender email,
+            IPolitica _politica)
         {
             this._SolicitudesData = SolicitudesData;
             this._DestinosData = DestinosData;
@@ -30,6 +37,7 @@ namespace TravelExpenses.Controllers
             this._centroCosto = centroCosto;
             this.Usuario = usuario;
             this.Email = email;
+            this._Politica = _politica;
         }
             //public IActionResult Index()
         [Authorize]
@@ -97,15 +105,14 @@ namespace TravelExpenses.Controllers
 
         }
         
-         
+         [HttpPost]
         public ActionResult ModificarEstatus(int Folio)
         {
 
             try
             {
-                //SendEmail(emailS,emalAp, "Solicitud de autorización, Folio: "+Folio,"Se solicitó autorización para la solicitud con Folio: '"+Folio+"'");
-                 
-                _SolicitudesData.ModificarEstatus(Folio);
+               
+                //_SolicitudesData.ModificarEstatus(Folio);
                 ObtenerCorreos(Folio, "Solicitud de Autorización Solicitud " + Folio.ToString(), "Se solicita autorización para la solicitud con Folio: " + Folio.ToString());
                 return Redirect("./ListarSolicitudes");
             }
@@ -124,6 +131,14 @@ namespace TravelExpenses.Controllers
         [Authorize]
         public IActionResult ListarSolicitudes()
         {
+            var validar = _SolicitudesData.ValidarSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).ToList();
+            int result = validar[0].result;
+            if (result == 0)
+            {
+                ViewBag.Enviar = 0;
+            }
+
+            var politicas = _Politica.ObtenerPoliticas().ToList();
             var SolicitudesModel = new SolicitudesViewModel();
             var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var Estatus = _SolicitudesData.EstatusSolicitudes();

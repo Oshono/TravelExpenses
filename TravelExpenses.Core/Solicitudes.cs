@@ -62,6 +62,7 @@ namespace TravelExpenses.Core
         public double ImportePermitido { get; set; }
         public string ClaveCentroCosto { get; set; }
         public int NumSolicitudes { get; set; }
+        public int result { get; set; }
     }
 
     public class Usuarios

@@ -190,6 +190,27 @@ namespace TravelExpenses.Data
                 throw ex;
             }
         }
+
+        public IEnumerable<Politicas> ValidarSolicitudes(string ID)
+        {
+
+            try
+            {
+                var parameters = new DynamicParameters();
+
+                using (IDbConnection conn = connection)
+                {
+                    parameters.Add("@ID", ID);
+                    var reader = connection.Query<Politicas>("Solicitudes_Validar", parameters, null, commandType: CommandType.StoredProcedure);
+                    return reader.OrderBy(x => x.IdGasto);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public IEnumerable<Solicitud> ObtenerSolicitudesEstatus(string estatus, string ID)
         {
             try

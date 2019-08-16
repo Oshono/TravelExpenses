@@ -51,6 +51,11 @@
                 <br />
             </div>
             <div class="table-responsive">
+                @if (@ViewBag.Enviar == 0)
+                {
+                    <h3 style="color:red;">Ya no puedes enviar a autorizar solicitudes, excediste el número</h3>
+                }
+                <input type="text" value="@ViewBag.Enviar" id="ValidarAut" hidden/>
                 <table class="table table-striped" >
                     <thead>
                         <tr>
@@ -117,7 +122,15 @@
                                 </td>
                             }
                             @if (@item.Estatus == "Incompleta" || @item.Estatus == "PorAutorizar" || @item.Estatus == "Cerrada" ||
-                           @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar" || @item.Estatus == "Rechazada" || @item.Estatus == "Cancelada" || @item.Estatus == "Revisada")
+                         @item.Estatus == "PorComprobar" || @item.Estatus == "PorLiberar" || @item.Estatus == "Rechazada" || @item.Estatus == "Cancelada" || @item.Estatus == "Revisada")
+                            {
+                                <td>
+                                    <a class="btn btn-lg">
+                                        <i class="fas fa-ban "></i>
+                                    </a>
+                                </td>
+                            }
+                            else if (ViewBag.Enviar == 0)
                             {
                                 <td>
                                     <a class="btn btn-lg">
@@ -148,8 +161,10 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
-
+   
     function ObtenerSolcitudes() {
+        var ValidarAut = $("#ValidarAut").val();
+        var num = parseInt(ValidarAut);
         var estatus = $("#estatus").children("option:selected").text();
         var row = "";
         var url = "/Home/SolicitudesEstatus/";
@@ -168,33 +183,82 @@
                 }
                 else {
                     $.each(response, function (index, item) {
-                        if (item.estatus == "Incompleta" ) {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC+ "</td><td>" + item.estatus +
-                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" +
-                                "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                        if (item.estatus == "Incompleta") {
+                            if (item.importeComprobado > item.importeSolicitado)
+                            {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:red;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" +
+                                    "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            }
+                            else {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:green;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" +
+                                    "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            }
+                           
                         }
                         else if (item.estatus == "PorAutorizar" || item.estatus == "PorComprobar" ||
                             item.estatus == "PorLiberar" || item.estatus == "Rechazada" || item.estatus == "Cancelada" || item.estatus =="Revisada" || item.estatus == "Cerrada")
                         {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
-                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg' > <i class='fas fa-ban'></i></a >" +
-                                "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            if (item.importeComprobado > item.importeSolicitado) {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:red;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg' > <i class='fas fa-ban'></i></a >" +
+                                    "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            }
+                            else {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:green;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg' > <i class='fas fa-ban'></i></a >" +
+                                    "</td><td>" + "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            }
                         }
-                        else if (item.estatus == "Capturada") {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
-                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                        else if (item.estatus == "Capturada" && num == 0 ) {
+                            if (item.importeComprobado > item.importeSolicitado) {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:red;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>"+ "</td></tr>";
+                            }
+                            else {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:green;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td></tr>";
+                            }
                         }
                         
 
+                        else if (item.estatus == "Capturada"){
+                            if (item.importeComprobado > item.importeSolicitado) {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:red;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                            }
+                            else {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:green;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/EliminarSolicitud?Folio=" + item.folio + "'><i class='fas fa-eraser'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                            }
+                        }
+
                         else {
-                            row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitado + "</td><td>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>"  + item.estatus +
-                                "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td><td>" +
-                                "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                            if (item.importeComprobado > item.importeSolicitado) {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:red;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                            }
+                            else {
+                                row += "<tr><td>" + item.folio + "</td><td>" + item.descripcion + "</td><td>" + item.userName + "</td><td>" + item.importeSolicitadoC + "</td><td style='color:green;'>" + item.importeComprobadoC + "</td><td>" + item.importeExcedenteC + "</td><td>" + item.estatus +
+                                    "</td><td>" + "<a class='btn btn-lg' href='/Solicitudes/Edit?Folio=" + item.folio + "'><i class='fas fa-edit'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'><i class='fas fa-ban'></i></a>" + "</td><td>" +
+                                    "<a class='btn btn-lg'  href='/Home/ModificarEstatus?Folio=" + item.folio + "'><i class='fas fa-paper-plane'></i></a>" + "</td></tr>";
+                            }
                         }
                     });
                 }
