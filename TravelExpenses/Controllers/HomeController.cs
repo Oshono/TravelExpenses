@@ -111,8 +111,8 @@ namespace TravelExpenses.Controllers
 
             try
             {
-               
-                //_SolicitudesData.ModificarEstatus(Folio);
+
+                _SolicitudesData.ModificarEstatus(Folio);
                 ObtenerCorreos(Folio, "Solicitud de Autorización Solicitud " + Folio.ToString(), "Se solicita autorización para la solicitud con Folio: " + Folio.ToString());
                 return Redirect("./ListarSolicitudes");
             }
