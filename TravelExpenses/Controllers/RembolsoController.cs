@@ -14,6 +14,7 @@ using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
 using TravelExpenses.Services;
+using System.IO.Compression;
 
 namespace TravelExpenses.Controllers
 {
@@ -158,7 +159,7 @@ namespace TravelExpenses.Controllers
 
                 var solicitud = _solicitud.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
                 rembolso.solicitud = solicitud;
-                rembolso.DetallesAsociados = (rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) >= 1 ).Count () > 0);
+                rembolso.DetallesAsociados = (rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) >= 0 ).Count () > 0);
             }
             var _Gasto = _gastos.ObtenerGastos();
 
@@ -417,27 +418,71 @@ namespace TravelExpenses.Controllers
                 return View();
             }
         }
+
+        private void AddToArchive(ZipArchive ziparchive, string fileName, byte[] attach)
+        {
+            var zipEntry = ziparchive.CreateEntry(fileName, CompressionLevel.Optimal);
+            using (var zipStream = zipEntry.Open())
+            using (var streamIn = new MemoryStream(attach))
+            {
+                streamIn.CopyTo(zipStream);
+            }
+        }
+        
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Download(string UUID)
         {
-            var comprobante =_comprobante.ObtenerComprobantesXID(UUID);            
+            var comprobante =_comprobante.ObtenerComprobantesXID(UUID);
 
-            string filename = comprobante.Archivos.FirstOrDefault().NombreArchivo;
-            if (filename == null)
-                return Content("Archivo no encontrado");
+            var Archivos = _comprobante.ObtenerArchivosXNombre(comprobante.Archivos.FirstOrDefault().NombreArchivo.Replace(comprobante.Archivos.FirstOrDefault().Extension, ""));
 
-            var path = Path.Combine(
-                           _env.ContentRootPath,
-                           "UploadFiles", filename);
-            
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            if (Archivos.Count() > 1)
             {
-                await stream.CopyToAsync(memory);
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var ziparchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                    {
+                        foreach(Archivo miArchivo in Archivos)
+                        {
+                            var path = Path.Combine(
+                               _env.ContentRootPath,
+                               "UploadFiles", miArchivo.NombreArchivo);
+
+                            var memory = new MemoryStream();
+                            using (var stream = new FileStream(path, FileMode.Open))
+                            {
+                                await stream.CopyToAsync(memory);
+                            }
+                            memory.Position = 0;
+
+                            AddToArchive(ziparchive, miArchivo.NombreArchivo, memory.ToArray());                            
+                        }
+                    }
+                    return File(memoryStream.ToArray(), "application/zip", "FacturaAdjunta.zip");
+                }
             }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
+
+            else
+            { 
+                string filename = comprobante.Archivos.FirstOrDefault().NombreArchivo;
+                if (filename == null)
+                    return Content("Archivo no encontrado");
+
+                var path = Path.Combine(
+                               _env.ContentRootPath,
+                               "UploadFiles", filename);
+            
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                
+                return File(memory, GetContentType(path), Path.GetFileName(path));
+            }
         }
 
         private string GetContentType(string path)
