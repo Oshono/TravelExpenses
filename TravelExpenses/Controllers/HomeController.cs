@@ -43,7 +43,7 @@ namespace TravelExpenses.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Default", "Home");
         }
         [Authorize]
         public IActionResult Default()
