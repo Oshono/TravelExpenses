@@ -10,6 +10,8 @@ using TravelExpenses.Core;
 using TravelExpenses.Data;
 using TravelExpenses.ViewModels;
 using System.Security.Claims;
+using TravelExpenses.Services;
+
 namespace TravelExpenses.Controllers
 {
     public class HomeController : Controller
@@ -17,12 +19,17 @@ namespace TravelExpenses.Controllers
         private readonly ISolicitudes _SolicitudesData;
         private readonly IDestinos _DestinosData;
         private readonly IUbicacion _UbicacionData;
-
-        public HomeController(ISolicitudes SolicitudesData, IDestinos DestinosData, IUbicacion UbicacionData)
+        private readonly ICentroCosto _centroCosto;
+        private readonly IUsuario Usuario;
+        private readonly IEmailSender Email;
+        public HomeController(ISolicitudes SolicitudesData, IDestinos DestinosData, IUbicacion UbicacionData, ICentroCosto centroCosto, IUsuario usuario, IEmailSender email)
         {
             this._SolicitudesData = SolicitudesData;
             this._DestinosData = DestinosData;
             this._UbicacionData = UbicacionData;
+            this._centroCosto = centroCosto;
+            this.Usuario = usuario;
+            this.Email = email;
         }
             //public IActionResult Index()
         [Authorize]
@@ -41,6 +48,27 @@ namespace TravelExpenses.Controllers
             return View();
         }
 
+        public bool ObtenerCorreos(int Folio,
+                                    string subject,
+                                    string message
+                                    )
+        {
+            var username = User.FindFirst(ClaimTypes.Name).Value;
+            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var centroCosto = _centroCosto.ConsultarControCostoPorUsuario(id).FirstOrDefault().ClaveCentroCosto; 
+            var Correos = Usuario.ObtenerCorreos(username, centroCosto, Folio);
+            SendEmail(Correos.Solicitante, subject, message, Correos.Aprobador);
+            //SendEmail(Correos.Solicitante, subject, message, Correos.Procesador);
+
+            return true;
+        }
+
+        public Task SendEmail(string email, string subject, string message, string CC)
+        {
+            return Email.SendEmailCCAsync(email, CC, subject, message);
+        }
+
         public IActionResult SolicitudesEstatus(string estatus)
         {
             try
@@ -50,8 +78,7 @@ namespace TravelExpenses.Controllers
                 {
                     var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                    //var Solicitud = _SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                    SolicitudesModel.Solicitudes = Solicitud;
+                     SolicitudesModel.Solicitudes = Solicitud;
                     return Json(Solicitud);
                 }
                 else
@@ -69,12 +96,24 @@ namespace TravelExpenses.Controllers
 
 
         }
-
+        
+         
         public ActionResult ModificarEstatus(int Folio)
         {
 
-            _SolicitudesData.ModificarEstatus(Folio);
-            return Redirect("./ListarSolicitudes");
+            try
+            {
+                //SendEmail(emailS,emalAp, "Solicitud de autorización, Folio: "+Folio,"Se solicitó autorización para la solicitud con Folio: '"+Folio+"'");
+                 
+                _SolicitudesData.ModificarEstatus(Folio);
+                ObtenerCorreos(Folio, "Solicitud de Autorización Solicitud " + Folio.ToString(), "Se solicita autorización para la solicitud con Folio: " + Folio.ToString());
+                return Redirect("./ListarSolicitudes");
+            }
+            catch (Exception ex)
+            {
+
+                return Redirect("./ListarSolicitudes");
+            }
         }
 
         public ActionResult EliminarSolicitud(int Folio)
