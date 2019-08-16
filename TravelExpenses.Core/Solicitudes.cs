@@ -63,4 +63,11 @@ namespace TravelExpenses.Core
         public string ClaveCentroCosto { get; set; }
         public int NumSolicitudes { get; set; }
     }
+
+    public class Usuarios
+    {
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string Aprobador { get; set; }
+    }
 }
