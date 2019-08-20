@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using TravelExpenses.Core;
 using TravelExpenses.Data;
+using TravelExpenses.Services;
 using TravelExpenses.TravelExpenses.Data;
 using TravelExpenses.ViewModels;
 
@@ -23,12 +24,18 @@ namespace TravelExpenses.Controllers
         private readonly IGasto _gastos;
         private readonly IObservacionDA _ObservacionDA;
         private readonly IMoneda _MonedaData;
+        private readonly IEmailSender Email;
+        private readonly ICentroCosto _centroCosto;
+        private readonly IUsuario Usuario;
         public AprobadorController(ISolicitudes solicitudes,
             IComprobante comprobante,
             IGasto gastos,
             IObservacionDA ObservacionDA,
             IMoneda MonedaData,
-            IHostingEnvironment env)
+            IHostingEnvironment env,
+            IEmailSender email,
+            ICentroCosto centroCosto,
+            IUsuario usuario)
         {
             SolicitudesData = solicitudes;
             _comprobante = comprobante;
@@ -36,6 +43,9 @@ namespace TravelExpenses.Controllers
             _ObservacionDA = ObservacionDA;
             this._MonedaData = MonedaData;
             _env = env;
+            Email = email;
+            _centroCosto = centroCosto;
+            Usuario = usuario;
         }
 
 
@@ -230,11 +240,16 @@ namespace TravelExpenses.Controllers
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "PorLiberar");
                     estatu = "PorLiberar";
+                    ObtenerCorreos(viewModel.Observacion.Folio, "Solicitud Autorización Solicitud" + viewModel.Observacion.Folio.ToString(),
+                        "Favor de actualizar la solicitud " + viewModel.Observacion.Folio.ToString() + " Estatus Actual, PorLiberar");
+
                 }
                 else if (estatus.Equals("Comprobada"))
                 {
                     result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Revisada");
                     estatu = "Revisada";
+                    ObtenerCorreos(viewModel.Observacion.Folio, "Solicitud Autorización Solicitud" + viewModel.Observacion.Folio.ToString(),
+                        "Favor de actualizar la solicitud " + viewModel.Observacion.Folio.ToString() + " Estatus Actual, Revisada");
                 }
             }
             else
@@ -252,5 +267,26 @@ namespace TravelExpenses.Controllers
             return RedirectToAction("AprobarSolicitud","Aprobador");
         }
 
+
+        public bool ObtenerCorreos(int Folio,
+            string subject,
+            string message
+        )
+        {
+            var username = User.FindFirst(ClaimTypes.Name).Value;
+            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var centroCosto = _centroCosto.ConsultarControCostoPorUsuario(id).FirstOrDefault().ClaveCentroCosto;
+
+            var Correos = Usuario.ObtenerCorreos(username, centroCosto, Folio);
+            SendEmail(Correos.Solicitante, subject, message, Correos.Aprobador);
+            SendEmail(Correos.Solicitante, subject, message, Correos.Procesador);
+
+            return true;
+        }
+        public Task SendEmail(string email, string subject, string message, string CC)
+        {
+            return Email.SendEmailCCAsync(email, CC, subject, message);
+        }
     }
 }

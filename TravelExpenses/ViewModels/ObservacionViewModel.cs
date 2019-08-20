@@ -34,5 +34,7 @@ namespace TravelExpenses.ViewModels
         public IEnumerable<Gasto> MisGastos { get; set; }
         public bool DetallesAsociados { get; set; }
 
+         public string Array { get; set; }
+
     }
 }

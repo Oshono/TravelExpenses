@@ -12,5 +12,7 @@ namespace TravelExpenses.TravelExpenses.Data
         Observacion Add(Observacion newRestaurant);
         int Guardar(Observacion Observacion);
         IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus, string ID);
+        IEnumerable<Solicitud> ObtenerSolicitudesXEstatus(string Estatus, string ID,DateTime inicio,DateTime fin);
+        int SolicitudesExportadas_ins(int Folio);
     }
 }
