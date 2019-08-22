@@ -158,8 +158,11 @@
                                     Detalles
                                 </th>
                                 <th>
+                                    Archivo(s)
+                                </th>
+                                <th>
                                     Descargar
-                                </th>                               
+                                </th>
                                 <th>
                                     Eliminar
                                 </th>
@@ -186,15 +189,28 @@
                                 <td>@string.Format("{0:C}", @comprobante.Total)</td>
                                 <td>@string.Format("{0:C}", @comprobante.ImporteComprobado)</td>
                                 <td align="center">
-                                    <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    @if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
+                                    {
+                                        <a class="btn btn-lg">
+                                            <i class="fas fa-ban "></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Details" asp-route-UUID="@comprobante.UUID">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                    }
+                                </td>
+                                <td align="center">
+                                    @String.Join(",", comprobante.Archivos.Select(x => x.NombreArchivo))
                                 </td>
                                 <td align="center">
                                     <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Download" asp-route-UUID="@comprobante.UUID">
                                         <i class="fas fa-file-download"></i>
                                     </a>
-                                </td>                                
+                                </td>
                                 <td align="center">
                                     <a class="btn btn-lg" asp-controller="Rembolso" asp-action="Delete" asp-route-UUID="@comprobante.UUID">
                                         <i class="fas fa-eraser"></i>
