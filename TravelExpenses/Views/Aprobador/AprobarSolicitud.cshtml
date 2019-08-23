@@ -22,15 +22,16 @@
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
-                        <tr>
-                            <th>Folio</th>
-                            <th>Tipo Solicitud</th>
-                            <th>Solicitante</th>
-                            <th>Cantidad Solicitada</th>
-                            <th>Cantidad Comprobada</th>
-                            <th>Estatus</th>
-                            <th>Editar</th>
-                        </tr>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Tipo Solicitud</th>
+                                <th>Solicitante</th>
+                                <th>Cantidad Solicitada</th>
+                                <th>Cantidad Comprobada</th>
+                                <th>Total</th>
+                                <th>Estatus</th>
+                                <th>Editar</th>
+                            </tr>
                         </thead>
                         <tbody id="tblSolicitud">
                         @foreach (var item in Model.Solicitudes)
@@ -40,8 +41,8 @@
                                 <td>@item.Descripcion</td>
                                 <td>@item.UserName</td>
                                 <td>@string.Format("{0:C}", item.ImporteSolicitado) </td>
-                                <td>@string.Format("{0:C}", item.ImporteComprobado )</td>
-
+                                <td>@string.Format("{0:C}", item.ImporteComprobado)</td>
+                                <td>@string.Format("{0:C}", item.Total) </td>
                                 <td>@item.Estatus</td>
 
                                 <td>
@@ -98,7 +99,8 @@
                                     + '<td>' + item.descripcion +'</td>'
                                     + '<td>' + item.userName +'</td>'
                                     + '<td>' + item.importeSolicitadoC +'</td>'
-                                    + '<td>' + item.importeComprobadoC +'</td>'
+                            + '<td>' + item.importeComprobadoC + '</td>'
+                            + '<td>' + item.totalC + '</td>'
                                     + '<td>' + item.estatus+'</td>'
                                     + '<td>'
                                         +'<a class="btn btn-lg" href="/Aprobador/DetallesPorAutorizar?folio=' + item.folio + '">' 
@@ -115,7 +117,8 @@
                                 + '<td>' + item.descripcion +'</td>'
                                 + '<td>' + item.userName +'</td>'
                                 + '<td>' + item.importeSolicitadoC +'</td>'
-                                + '<td>' + item.importeComprobadoC +'</td>'
+                            + '<td>' + item.importeComprobadoC + '</td>'
+                            + '<td>' + item.totalC + '</td>'
                                 + '<td>' + item.estatus+'</td>'
                                 + '<td>'
                                     +'<a class="btn btn-lg"  href="/Aprobador/Detalles?folio=' + item.folio + '">' 

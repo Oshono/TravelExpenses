@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using TravelExpenses.ViewModels;
 
 namespace TravelExpenses.Controllers
 {
+    [Authorize]
     public class AprobadorController : Controller
     {
         private readonly ISolicitudes SolicitudesData;
@@ -255,6 +257,8 @@ namespace TravelExpenses.Controllers
             else
             {
                 result = SolicitudesData.ActualizarEstatus(viewModel.Observacion.Folio, "Rechazada");
+                ObtenerCorreos(viewModel.Observacion.Folio, "Solicitud Rechazada Solicitud" + viewModel.Observacion.Folio.ToString(),
+                    "Favor de actualizar la solicitud " + viewModel.Observacion.Folio.ToString() + " Estatus Actual, Rechazada");
                 estatu = "Rechazada";
             }
 

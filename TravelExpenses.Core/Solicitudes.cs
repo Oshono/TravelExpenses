@@ -54,7 +54,10 @@ namespace TravelExpenses.Core
         public string ImporteExcedenteC { get { return string.Format("{0:C}", this.ImporteExcedente); } }
         public bool Exportar { get; set; }
         public bool ExportarRealizada { get; set; }
-        
+
+        public double Total { get; set; }
+        public string TotalC { get { return string.Format("{0:C}", this.Total); } }
+
     }
 
     public class Politicas
