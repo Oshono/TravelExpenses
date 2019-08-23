@@ -187,7 +187,7 @@
                                 <td>@comprobante.NombreProveedor</td>
                                 <td>@comprobante.Moneda</td>
                                 <td>@string.Format("{0:C}", @comprobante.Total)</td>
-                                <td>@string.Format("{0:C}", @comprobante.ImporteComprobado)</td>
+                                <td>@string.Format("{0:C}", @comprobante.Impuestos + @comprobante.SubTotal)</td>
                                 <td align="center">
                                     @if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
                                     {

@@ -148,20 +148,23 @@ namespace TravelExpenses.Controllers
             {                 
                 rembolso.Comprobantes = new List<Comprobante>();
                 rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-                
-                foreach(Comprobante comp in rembolso.Comprobantes)
+
+                var solicitud = _solicitud.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
+                rembolso.solicitud = solicitud;
+                rembolso.DetallesAsociados = (rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) >= 0).Count() > 0);
+
+                foreach (Comprobante comp in rembolso.Comprobantes)
                 { 
                     if (comp.FormaPago == "01" && comp.Conceptos.Where(x => x.DescripcionProdServ.ToUpper().Contains("GASOLINA") || x.DescripcionProdServ.ToUpper().Contains("ALIMENTO")).Count() > 0)
                     {
                         comp.MensajeError = "La forma de pago para Gasolina o Alimenos debe ser diferente de Efectivo";
                     }
+                    comp.ImporteComprobado = rembolso.solicitud.ImporteComprobado;
                 }
-
-                var solicitud = _solicitud.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x=>x.Folio == FolioSolicitud).FirstOrDefault();
-                rembolso.solicitud = solicitud;
-                rembolso.DetallesAsociados = (rembolso.Comprobantes.Where(x => x.Conceptos.Count(y => y.IdGasto == 0) >= 0 ).Count () > 0);
+                
             }
             var _Gasto = _gastos.ObtenerGastos();
+
 
             
 
@@ -577,6 +580,7 @@ namespace TravelExpenses.Controllers
 
                 comprobante[0].Conceptos = listaConceptos;
                 var conceptos = from c in archivoXML.Descendants()
+                               // let r = c.Element(nsCFDi + "Impuestos")
                                 where c.Name.LocalName == "Conceptos"
                                 select c.Elements();
 
