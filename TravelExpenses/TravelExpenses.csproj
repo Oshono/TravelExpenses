@@ -29,7 +29,7 @@
 
 
   <ItemGroup>
-    <Folder Include="bin\Debug\netcoreapp2.2\" />
+    <Folder Include="bin\" />
     <Folder Include="TravelExpenses.Data\ObservacionR\" />
     <Folder Include="UploadFiles\" />
   </ItemGroup>

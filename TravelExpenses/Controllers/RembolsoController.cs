@@ -330,28 +330,28 @@ namespace TravelExpenses.Controllers
             }
             else
             {
+                var miFolioSolicitud = FolioSolicitud;
+                if (FolioSolicitud == 0)
+                {
+                    //Generar solicitud
+                    var miSolicitud = new Solicitud();
 
-                //Generar solicitud
-                var miSolicitud = new Solicitud();
-                
-                miSolicitud.FechaSolicitud = DateTime.Now;
-                miSolicitud.IdTipoSolicitud = 2;
-                miSolicitud.Departamento = "TI";
-                miSolicitud.Empresa = "CAP000101";  //Leer empresa de Usuario
-                miSolicitud.ImporteSolicitado = 0;
-                miSolicitud.ImporteComprobado = 0;
-                miSolicitud.Estatus = "PorComprobar";
-                miSolicitud.IdEstado = 0;
-                miSolicitud.Id = userId;
-                miSolicitud.RFC = "CAP000101";
-                miSolicitud.ClaveMoneda = "MXN";
+                    miSolicitud.FechaSolicitud = DateTime.Now;
+                    miSolicitud.IdTipoSolicitud = 2;
+                    miSolicitud.Departamento = "TI";
+                    miSolicitud.Empresa = "CAP000101";  //Leer empresa de Usuario
+                    miSolicitud.ImporteSolicitado = 0;
+                    miSolicitud.ImporteComprobado = 0;
+                    miSolicitud.Estatus = "PorComprobar";
+                    miSolicitud.IdEstado = 0;
+                    miSolicitud.Id = userId;
+                    miSolicitud.RFC = "CAP000101";
+                    miSolicitud.ClaveMoneda = "MXN";
 
+                    miFolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
+                }
 
-                var miFolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
-                FolioSolicitud = miFolioSolicitud;
-
-
-                comprobante.Add (new Comprobante());
+                comprobante.Add(new Comprobante());
                 comprobante.FirstOrDefault().UUID = Guid.NewGuid().ToString();
                 comprobante.FirstOrDefault().Fecha = DateTime.Now;
                 comprobante.FirstOrDefault().Folio = "Sin Folio";
@@ -363,7 +363,7 @@ namespace TravelExpenses.Controllers
             }
 
             comprobante.FirstOrDefault().Archivos = new List<Archivo>();
-            comprobante.FirstOrDefault().Archivos.Add(new Archivo()) ;
+            comprobante.FirstOrDefault().Archivos.Add(new Archivo());
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().Extension = Extension;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().NombreArchivo = InputFileName;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().Ruta = "\\UploadFile\\" + InputFileName;
@@ -371,7 +371,7 @@ namespace TravelExpenses.Controllers
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().Usuario = userId;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().FechaAlta = DateTime.Now;
             comprobante.FirstOrDefault().Archivos.FirstOrDefault().UUID = comprobante.FirstOrDefault().UUID;
-            
+
 
             SaveDB(comprobante.FirstOrDefault());
 

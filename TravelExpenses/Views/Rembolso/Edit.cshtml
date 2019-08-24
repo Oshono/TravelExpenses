@@ -270,7 +270,8 @@
                                     + item.moneda + "</td><td>"
                                     + item.total + "</td><td>"
                                     + item.importeComprobado + "</td><td><a class='btn btn - lg' href = '/Rembolso/Details?UUID=" + item.uuid
-                                    + "'><i class='fas fa-info-circle'></i></a></td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid
+                                    + "'><i class='fas fa-info-circle'></i></a></td><td>" + item.archivos[0].nombreArchivo
+                                    + "</td><td><a class='btn btn - lg' href='/Rembolso/Download?UUID=" + item.uuid
                                     + "'><i class='fas fa-download'></i></a></td><td><a class='btn btn-lg' href='/Rembolso/Delete?UUID=" + item.uuid
                                     + "'><i class='fas fa-eraser'></i></a></td></tr>";
                             });
