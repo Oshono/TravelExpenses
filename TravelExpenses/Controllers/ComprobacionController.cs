@@ -237,30 +237,6 @@ namespace TravelExpenses.Controllers
                 return RedirectToAction("AprobarSolicitud", "Aprobador");
             }
 
-
-            //try
-            //{
-            //    int FolioSolicitud = 0;
-            //    var rembolso = new ObservacionViewModel();
-            //    if (int.TryParse(Folio, out FolioSolicitud))
-            //    {
-            //        rembolso.Comprobantes = new List<Comprobante>();
-            //        rembolso.Comprobantes = _comprobante.ObtenerComprobantes(FolioSolicitud);
-            //        var solicitud = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value).Where(x => x.Folio == FolioSolicitud).FirstOrDefault();
-            //        rembolso.Solicitud = solicitud;
-            //        rembolso.Observacion = new Observacion();
-            //        rembolso.Observacion.Folio = Convert.ToInt16(Folio);
-            //        var comentarios = SolicitudesData.ObtenerComentario(Convert.ToInt32(Folio));
-            //        rembolso.comentarios = comentarios;
-            //        rembolso.Observacion = new Observacion();
-            //        rembolso.Observacion.Folio = Convert.ToInt32(Folio);
-            //    }
-            //    return View(rembolso);
-            //}
-            //catch (Exception e)
-            //{
-            //    return RedirectToAction("ComprobacionSolicitud", "Comprobacion");
-            //}
             
         }
 

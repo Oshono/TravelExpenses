@@ -144,7 +144,7 @@
                                                 <td>@comprobante.NombreProveedor</td>
                                                 <td>@comprobante.Moneda</td>
                                                 <td>@string.Format("{0:C}", @comprobante.Total)</td>
-                                                <td>@string.Format("{0:C}", @comprobante.ImporteComprobado)</td>
+                                                <td>@string.Format("{0:C}", @comprobante.SubTotal)</td>
                                                 <td align="center">
                                                     <a class="btn btn-lg" asp-controller="Comprobacion" asp-action="DetallesComprobacion" asp-route-UUID="@comprobante.UUID">
                                                         <i class="fas fa-edit"></i>
@@ -156,18 +156,24 @@
                                                     </a>
                                                 </td>
                                                 <td align="center">
-                                                    @*@if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
-                                                    {*@
+                                                    @if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
+                                                    {
                                                         <a class="btn btn-lg" href="#" onclick="GetClientReport('@comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Ruta.Replace('\\', '/')')">
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
-                                                    @*}
+                                                    }
+                                                    else if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".jpg"))
+                                                    {
+                                                        <a class="btn btn-lg" href="#" onclick="GetClientReport('@comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Ruta.Replace('\\', '/')')">
+                                                            <i class="fas fa-file-download"></i>
+                                                        </a>
+                                                    }
                                                     else
                                                     {
                                                         <a class="btn btn-lg">
                                                             <i class="fas fa-ban "></i>
                                                         </a>
-                                                    }*@
+                                                    }
                                                 </td>
                                             </tr>
                                         }
