@@ -330,7 +330,6 @@ namespace TravelExpenses.Controllers
             }
             else
             {
-                var miFolioSolicitud = FolioSolicitud;
                 if (FolioSolicitud == 0)
                 {
                     //Generar solicitud
@@ -348,7 +347,7 @@ namespace TravelExpenses.Controllers
                     miSolicitud.RFC = "CAP000101";
                     miSolicitud.ClaveMoneda = "MXN";
 
-                    miFolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
+                    FolioSolicitud = _solicitud.InsertarSolicitud(miSolicitud);
                 }
 
                 comprobante.Add(new Comprobante());
@@ -357,7 +356,7 @@ namespace TravelExpenses.Controllers
                 comprobante.FirstOrDefault().Folio = "Sin Folio";
                 comprobante.FirstOrDefault().RFC = "XXXX000000XXX";
                 comprobante.FirstOrDefault().NombreProveedor = "Sin Proveedor";
-                comprobante.FirstOrDefault().FolioSolicitud = miFolioSolicitud;
+                comprobante.FirstOrDefault().FolioSolicitud = FolioSolicitud;
                 comprobante.FirstOrDefault().Impuestos = 0;
 
             }
