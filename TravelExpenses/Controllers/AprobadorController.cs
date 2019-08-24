@@ -60,15 +60,15 @@ namespace TravelExpenses.Controllers
             var PorComprobar = _ObservacionDA.ObtenerSolicitudesXEstatus("Comprobada", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var PorAutorizar = _ObservacionDA.ObtenerSolicitudesXEstatus("PorAutorizar", User.FindFirst(ClaimTypes.NameIdentifier).Value);
             solicitud.Solicitudes = PorComprobar.Union(PorAutorizar);
-            var Estatus = 
+            var Estatus =
                     (from e in SolicitudesData.EstatusSolicitudes()
-                    where e.Status == "Comprobada" | e.Status == "PorAutorizar"
-                           select e
+                     where e.Status == "Comprobada" | e.Status == "PorAutorizar"
+                     select e
                         );
             solicitud.Estatuses = Estatus;
             return View(solicitud);
         }
- 
+
         public IActionResult SolicitudesEstatus(string estatus)
         {
             ObservacionViewModel solicitud = new ObservacionViewModel();
@@ -102,7 +102,7 @@ namespace TravelExpenses.Controllers
             ObservacionViewModel solicitud = new ObservacionViewModel();
             solicitud.Solicitudes = SolicitudesData.ObtenerSolicitudes(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            return View("AprobarSolicitud",solicitud);
+            return View("AprobarSolicitud", solicitud);
         }
         public ActionResult Detalles(string Folio)
         {
@@ -141,7 +141,7 @@ namespace TravelExpenses.Controllers
             {
                 return RedirectToAction("AprobarSolicitud", "Aprobador");
             }
-           
+
 
             //try
             //{
@@ -169,12 +169,76 @@ namespace TravelExpenses.Controllers
 
         }
         private readonly IHostingEnvironment _env;
+
+        string[] contentType = new string []{".aac|audio/aac"
+,".abw|application/x-abiword"
+,".arc|application/octet-stream"
+,".avi|video/x-msvideo"
+,".azw|application/vnd.amazon.ebook"
+,".bin|application/octet-stream"
+,".bz|application/x-bzip"
+,".bz2|application/x-bzip2"
+,".csh|application/x-csh"
+,".css|text/css"
+,".csv|text/csv"
+,".doc|application/msword"
+,".epub|application/epub+zip"
+,".gif|image/gif"
+,".htm|text/html"
+,".html|text/html"
+,".ico|image/x-icon"
+,".ics|text/calendar"
+,".jar|application/java-archive"
+,".jpeg|image/jpeg"
+,".jpg|image/jpeg"
+,".js|application/javascript"
+,".json|application/json"
+,".mpeg|Video MPEG	video/mpeg"
+,".odp|application/vnd.oasis.opendocument.presentation"
+,".ods|application/vnd.oasis.opendocument.spreadsheet"
+,".odt|application/vnd.oasis.opendocument.text"
+,".oga|audio/ogg"
+,".ogv|video/ogg"
+,".ogx|application/ogg"
+,".pdf|application/pdf"
+,".ppt|application/vnd.ms-powerpoint"
+,".rar|application/x-rar-compressed"
+,".rtf|application/rtf"
+,".sh|application/x-sh"
+,".svg|image/svg+xml"
+,".swf|application/x-shockwave-flash"
+,".tar|application/x-tar"
+,".tiff|image/tiff"
+,".ttf|font/ttf"
+,".vsd|application/vnd.visio"
+,".wav|audio/x-wav"
+,".weba|audio/webm"
+,".webm|video/webm"
+,".webp|image/webp"
+,".woff|font/woff"
+,".woff2|font/woff2"
+,".xhtml|application/xhtml+xml"
+,".xls|application/vnd.ms-excel"
+,".xml|application/xml"
+,".xul|application/vnd.mozilla.xul+xml"};
+
         public FileResult GetReport(string Ruta)
         {
             string[] rutas = Ruta.Split('/');
             var path = Path.Combine(_env.ContentRootPath, rutas[1]+"s", rutas[2]);
             byte[] FileBytes = System.IO.File.ReadAllBytes(path);
-            return File(FileBytes, "application/pdf");
+            string contentTypemini = "";
+            string extencion = Path.GetExtension(Ruta);
+            for (int i = 0; i < contentType.Length; i++)
+            {
+                string[] ca = contentType[i].Split('|');
+                if (ca[0].ToLower().Equals(extencion.ToLower()))
+                {
+                    contentTypemini = ca[1];
+                    break;
+                }
+            }
+            return File(FileBytes, contentTypemini);
         }
 
         public ActionResult DetallesPorAutorizar(int Folio)

@@ -156,18 +156,18 @@
                                                     </a>
                                                 </td>
                                                 <td align="center">
-                                                    @if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
-                                                    {
+                                                    @*@if (comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Extension.Equals(".pdf"))
+                                                    {*@
                                                         <a class="btn btn-lg" href="#" onclick="GetClientReport('@comprobante.Archivos.Find(archivo => archivo.UUID.Equals(comprobante.UUID)).Ruta.Replace('\\', '/')')">
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
-                                                    }
+                                                    @*}
                                                     else
                                                     {
                                                         <a class="btn btn-lg">
                                                             <i class="fas fa-ban "></i>
                                                         </a>
-                                                    }
+                                                    }*@
                                                 </td>
                                             </tr>
                                         }
@@ -341,6 +341,13 @@
     function myFunction(a) {
         document.getElementById("Operacion").value = a;
     }
+    function GetClientReport(n) {
+        window.open('/Aprobador/GetReport?Ruta=' + n);
+    }; /*
+    function GetClientReport(n) {
+        debugger;
+        window.open('/Aprobador/GetReport', n);
+    };  */
 </script>
 
 <script src="~/vendors/dropzone/dropzone.js"></script>
