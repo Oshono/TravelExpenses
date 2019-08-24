@@ -232,9 +232,9 @@ namespace TravelExpenses.Controllers
             for (int i = 0; i < contentType.Length; i++)
             {
                 string[] ca = contentType[i].Split('|');
-                if (ca[1].ToLower().Equals(extencion.ToLower()))
+                if (ca[0].ToLower().Equals(extencion.ToLower()))
                 {
-                    contentTypemini = ca[0];
+                    contentTypemini = ca[1];
                     break;
                 }
             }
